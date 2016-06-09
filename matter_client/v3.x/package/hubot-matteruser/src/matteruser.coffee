@@ -6,6 +6,7 @@ class Matteruser extends Adapter
 
     @mmUser = null;
     @mmPassword = null;
+    @profile = null;
 
     run: ()->
         mmHost = process.env.MATTERMOST_HOST
@@ -64,6 +65,8 @@ class Matteruser extends Adapter
             real_name: "#{user.first_name} #{user.last_name}"
             email_address: user.email
             mm: {}
+        if user.email is @mmUser
+            @emit 'userProfile', user
         for key, value of user
             newUser.mm[key] = value
         if user.id of @robot.brain.data.users

@@ -26,7 +26,7 @@ var processPrologMessage = function (id, text, robot, socket, self, room) {
     room = id;
   }
 
-  logger.debug('deliver message to room===' + room + 'with ID===' + id);
+  logger.debug('deliver message to room===' + room + ' with ID===' + id);
 
   ep.fail(function (err) {
     logger.error('Failed to retreive data from Redis server', err);
@@ -38,6 +38,24 @@ var processPrologMessage = function (id, text, robot, socket, self, room) {
 
   ep.all('sessionReturned', function (value) {
     logger.debug('cached session value=' + JSON.stringify(value));
+
+    // only when engagement setup, allow agent to set engagement mode
+    if(value && value.engagement && value.engagementAgent) {
+      if (text === '@@toall') {
+        value.TO = 'ALL';
+        cache.set(id, value, config.redis_expire);
+        return;
+      } else if (text === '@@toagent') {
+        value.TO = 'AGENT';
+        cache.set(id, value, config.redis_expire);
+        return;
+      } else if (text == '@@tocustomer') {
+        value.TO = 'CUSTOMER';
+        cache.set(id, value, config.redis_expire);
+        return;
+      }
+    }
+
     if (text.toLowerCase() === 'quit') {
       if (!_.isEmpty(value)) {
         //TODO:
@@ -48,6 +66,7 @@ var processPrologMessage = function (id, text, robot, socket, self, room) {
           //    delete value[key].engagement;
           //  });
           //});
+          cache.remove(id);
         } else {
           cache.remove(id);
         }
@@ -64,7 +83,7 @@ var processPrologMessage = function (id, text, robot, socket, self, room) {
         .then(function (result) {
           logger.debug('conversation output===' + JSON.stringify(result));
           if (value.engagement) {
-            logger.debug('In process of engagement' + value.engageWith);
+            logger.debug('In process of engagement=' + value.engageWith);
             robot.messageRoom(value.engageWithRoom, result.message);  //to customer
             robot.messageRoom(room, result.message);   //to self
             return;
@@ -99,7 +118,7 @@ var processPrologMessage = function (id, text, robot, socket, self, room) {
             }
           }
           //only monitor the id that emit the engage event register when id login successfully
-          dispatcher.once(id, function (data) {
+          dispatcher.on(id, function (data) {
             logger.debug('engagement data===' + JSON.stringify(data));
             var userid = data.userid;
             var agentid = data.agentid;
@@ -120,14 +139,16 @@ var processPrologMessage = function (id, text, robot, socket, self, room) {
               cached.engageWith = agentid;
               cached.engageWithRoom = channelId;
               cached.engagement = true;
+              cached.engagementCustomer = true;
               cache.set(userid, cached, config.redis_expire);
               // have one agent support multiple engagement
-              cache.get(agentid+'@@prolog', function (value) {
-                if (value) {
-
-                } else {
-                  cache.set(agentid+'@@prolog', {'engagement': true, 'engageWithRoom': cached.room, 'sessionid': sessionid }, config.redis_expire);
-                }
+              cache.get(agentid, function (value) {
+                //if (value) {
+                //
+                //} else {
+                //
+                //}
+                cache.set(agentid, {'engagement': true, 'engageWithRoom': cached.room, 'sessionid': sessionid , 'engagementAgent': true}, config.redis_expire);
 
               });
             });

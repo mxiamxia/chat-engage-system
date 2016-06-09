@@ -12,8 +12,9 @@ var config = require('./config');
 var app = express();
 
 //init robot instance
-require('./bots/botinstance')('dev_test@cyberobject.com', '123456');
-//require('./bots/botinstance')('mxia@cyberobject.com', '123456');
+require('./bots/botinstance')('dev_test@cyberobject.com', '123456', 'APP', function(){});
+//require('./bots/botinstance')('cust_s1@cyberobject.com', '123456', 'CUSTOMER');
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
