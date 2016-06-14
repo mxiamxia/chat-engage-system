@@ -112,6 +112,7 @@ class Client extends EventEmitter
                 @channels = data.members
                 @logger.debug 'Found '+Object.keys(@channels).length+' channels.'
                 @channel_details = data.channels
+                @emit 'channelsLoaded'
             else
                 @logger.error 'Failed to get subscribed channels list from server.'
                 @emit 'error', { msg: 'failed to get channel list'}

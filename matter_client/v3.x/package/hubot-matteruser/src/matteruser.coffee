@@ -39,6 +39,9 @@ class Matteruser extends Adapter
         @client.on 'user_removed', @.userRemoved
         @client.on 'error', @.error
 
+        @client.on 'channelsLoaded', @.channelsLoaded
+
+
         @robot.brain.on 'loaded', @.brainLoaded
 
         @robot.on 'slack-attachment', @.slackAttachmentMessage
@@ -87,6 +90,9 @@ class Matteruser extends Adapter
             @robot.logger.debug 'Adding user '+id
             @userChange user
 
+    channelsLoaded: =>
+        @emit 'userChannel'
+
     brainLoaded: =>
         @robot.logger.info 'Brain loaded'
         for id, user of @client.users
@@ -110,7 +116,7 @@ class Matteruser extends Adapter
         mmUser = @client.getUserByID msg.user_id
         mmPost = JSON.parse msg.props.post
 
-        @robot.logger.debug 'Received message from '+mmUser.username+': ' + mmPost.message
+       # @robot.logger.debug 'Received message from '+mmUser.username+': ' + mmPost.message
         user = @robot.brain.userForId msg.user_id
         user.room = msg.channel_id
 
