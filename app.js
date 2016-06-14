@@ -12,7 +12,7 @@ var config = require('./config');
 var app = express();
 
 //init robot instance
-require('./bots/botinstance')('dev_test@cyberobject.com', '123456', 'APP', function(){});
+require('./bots/botInstance')(process.env.MATTERMOST_USER, process.env.MATTERMOST_PASSWORD, 'APP', function(){});
 //require('./bots/botinstance')('cust_s1@cyberobject.com', '123456', 'CUSTOMER');
 
 // view engine setup

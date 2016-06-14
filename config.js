@@ -29,7 +29,7 @@ var config = {
   },
   houndy_url: 'https://api.houndify.com/v1/text?query=',
   callback_url: 'http://192.168.254.122:4011/engagement',
-  ENGAGE_MODE: '1TEST'
+  ENGAGE_MODE: 'TEST'
 };
 
 process.env.MATTERMOST_HOST = 'http://192.168.0.55:8065';
@@ -37,5 +37,7 @@ process.env.MATTERMOST_GROUP = 'cyber';
 process.env.MATTERMOST_USER = 'dev_test@cyberobject.com';
 process.env.MATTERMOST_PASSWORD = '123456';
 process.env.PORT = 4012;
+process.env.MATTERMOST_INVITETOKEN = 'ikfb5ynuhfrtjpfi1u9hi948ur';
+process.env.MATTERMOST_AGENT_GROUP = 'hcfstbeietrbik88xhtfp5pkur';
 
 module.exports = config;

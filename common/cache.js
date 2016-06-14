@@ -50,3 +50,21 @@ var remove = function (key) {
 
 exports.remove = remove;
 
+var getSessionById = function (id, callback) {
+  get(id, function (err, value) {
+    if (value) {
+      get(value.sessionId, function(err, sessionData) {
+        if (sessionData) {
+          callback(null, sessionData);
+        } else {
+          callback('no session data found');
+        }
+      });
+    } else {
+      callback('no session data found');
+    }
+  });
+};
+
+exports.getSessionById = getSessionById;
+

@@ -14,7 +14,7 @@
     "express": "~4.13.1",
     "ejs": "*",
     "hubot": "^2.19.0",
-    "hubot-matteruser": "file:hubot-matteruserv3_0_3.tgz",
+    "hubot-matteruser": "file:hubot-matteruserv3_0_4.tgz",
     "morgan": "~1.6.1",
     "serve-favicon": "~2.3.0",
     "ioredis": "^1.15.1",
