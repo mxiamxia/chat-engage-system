@@ -121,8 +121,11 @@ class Matteruser extends Adapter
         user.room = msg.channel_id
 
         text = mmPost.message
-        text = "#{@robot.name} #{text}" if msg.props.channel_type == 'D' and !///^#{@robot.name} ///i.test(text) # Direct message
+        #TODO: add prop field here
+        text = {message: text, prop: {test:'11111'}}
+        text = JSON.stringify text
 
+        text = "#{@robot.name} #{text}" if msg.props.channel_type == 'D' and !///^#{@robot.name} ///i.test(text) # Direct message
         @receive new TextMessage user, text, msg.id
         @robot.logger.debug "Message sent to hubot brain."
         return true

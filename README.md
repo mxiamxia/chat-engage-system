@@ -33,3 +33,10 @@ Stop the forever process using the command. We can find the pid from forever lis
 forever stop <pid>
 ```
 
+### Mattermost server
+1. ssh 进入 192.168.0.55;  账号 : mattermost, 密码：asdqwe
+2. cd /opt/mattermost
+3. ./shutdown.sh
+4. ./startup.sh
+
+nohup npm start &

@@ -283,8 +283,8 @@ class Client extends EventEmitter
     _apiCall: (method, path, params, callback) ->
       post_data = ''
       post_data = JSON.stringify(params) if params?
-      console.log 'post data=' + post_data
-      console.log 'full url=' + @host + apiPrefix + path + '==='
+    #  console.log 'post data=' + post_data
+     # console.log 'full url=' + @host + apiPrefix + path + '==='
       options = {
         uri: @host + apiPrefix + path,
         method: method,
@@ -296,13 +296,11 @@ class Client extends EventEmitter
       }
       options.headers['Authorization'] = 'BEARER ' + @token if @token
 
-      console.log 'login host token=' + @token
       request options, (error, res, value) ->
-        console.log 'api call body==' + JSON.stringify value
+       # console.log 'api call body==' + JSON.stringify value
         if not error
           if callback?
             if res.statusCode is 200
-              console.log 'api call body=' + JSON.stringify value
               callback(value, res.headers)
             else
               callback({'id': null, 'error': 'API response: ' + res.statusCode}, res.headers)
