@@ -10,7 +10,6 @@ poll = require '../common/poll'
 io_socket = require 'socket.io'
 cm = require '../core/conversation'
 prologCm = require '../core/prologCm'
-engage = require '../core/engageAction'
 fs = require 'fs'
 path = require 'path'
 url = require 'url'
@@ -39,16 +38,21 @@ module.exports = (robot) ->
 
   robot.respond /(.*)/i, (msg) ->
     text = msg.match[1]
+    logger.debug 'recieved of text = ' + text
+    if _.isEmpty text
+      robot.reply 'Invalid message format'
+    text = JSON.parse text
+    message = text.message
     id = msg.envelope.user?.id
     room = msg.envelope.room
+    logger.debug 'recieved of message = ' + message
     logger.debug 'room of message = ' + room
     self = true
     if config.CM is 'PROLOG'
-      id = id
-      prologCm.processPrologMessage id, text, robot, null, self, room
+      prologCm.processPrologMessage id, message, robot, null, self, room
     else
       id = id + '@@mq'
-      cm.processMessage id, text, robot, null, self, room
+      cm.processMessage id, message, robot, null, self, room
 
   robot.error (err, res) ->
     robot.logger.error "DOES NOT COMPUTE"

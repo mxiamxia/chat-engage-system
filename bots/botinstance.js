@@ -61,7 +61,7 @@ var initHubot = function (id, password, type, cb) {
 //type value could be "APP" or "CUSTOMER"
 var storeRobot = function (id, robot, type) {
     if(type === 'APP') {
-        robotManager.setRobot(robot);
+        robotManager.setRobot('APP', robot);
     }
 };
 

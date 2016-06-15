@@ -100,8 +100,7 @@ var processPrologMessage = function (id, text, robot, socket, self, room) {
                   'sessionId': session,
                   'realId': id,
                   'realChannelId': room,
-                  'appId': robot.adapter.profile.id,
-                  'channels': robot.adapter.client.channel_details
+                  'appId': robot.adapter.profile.id
                 };
                 cache.set(id, customCache, config.redis_expire);
                 cache.set(session, sessionInfo, config.redis_expire);
@@ -131,40 +130,35 @@ var processPrologMessage = function (id, text, robot, socket, self, room) {
 
       // when session is established
       if (!_.isEmpty(value)) {
-
         //if message came from agent and intends to send customer directly
         cache.get(id, function (err, c_value) {
           if (c_value.type === 'SHADOW') {
-            if(value.TO === 'CUSTOMER') {
-              robot.messageRoom(value.realChannelId, text);
-              return;
+            switch (value.TO) {
+              case 'CUSTOMER' :
+                robot.messageRoom(value.realChannelId, text);
+                break;
+              case 'AGENT' :
+                cmHelper.appToAgent(text, value, c_value, robot, self, socket);
+                break;
+              case 'ALL' :
+                cmHelper.appToAll(text, value, c_value.type, robot, self, socket);
+                break;
             }
-
-            if(value.TO === 'AGENT') {
-              cmHelper.appToAgent(text, value, c_value, robot, self, socket);
-              return;
-            }
-
-            if(value.TO === 'ALL') {
-              logger.debug('Message to shadow and To ALL');
-              cmHelper.appToAll(text, value, c_value.type, robot, self, socket);
-              return;
-            }
+            return;
           } else {  // from real customer
             if(value.engagement) {
-              if(value.TO === 'CUSTOMER') {
-                robot.messageRoom(value.appAndShadowChannelId, text);
-                return;
+              switch (value.TO) {
+                case 'CUSTOMER' :
+                  robot.messageRoom(value.appAndShadowChannelId, text);
+                  break;
+                case 'AGENT' :
+                  cmHelper.appToAgent(text, value, c_value.type, robot, self, socket);  // if type is from real customer, send text and app answer to agent
+                  break;
+                case 'ALL' :
+                  cmHelper.appToAll(text, value, c_value.type, robot, self, socket);
+                  break;
               }
-
-              if(value.TO === 'AGENT') {
-                cmHelper.appToAgent(text, value, c_value.type, robot, self, socket);  // if type is from real customer, send text and app answer to agent
-                return;
-              }
-
-              if(value.TO === 'ALL') {
-                cmHelper.appToAll(text, value, c_value.type, robot, self, socket);
-              }
+              return;
             } else {
               cmHelper.sendMsgToApp(value, text)
                   .then(function (result) {

@@ -7,7 +7,6 @@ var EventEmitter = require('events').EventEmitter;
 var EventProxy = require('eventproxy');
 
 var pubsub = new EventEmitter();
-
 var ep = new EventProxy();
 
 pubsub.on('loggedIn', function(msg) {

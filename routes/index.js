@@ -13,6 +13,7 @@ router.get('/about', function(req, res, next) {
 
 router.get('/engagement', engageController.index);
 
+//for testing
 router.get('/api/createUser', mattermostController.createUser);
 
 module.exports = router;

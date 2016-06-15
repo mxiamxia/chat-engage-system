@@ -50,6 +50,15 @@ var remove = function (key) {
 
 exports.remove = remove;
 
+//var promise = redis.pipeline().set('foo', 'bar').get('foo').exec();
+//promise.then(function (result) {
+//  // result === [[null, 'OK'], [null, 'bar']]
+//});
+var pipeline = function() {
+  return redis.pipeline();
+};
+exports.pipeline = pipeline;
+
 var getSessionById = function (id, callback) {
   get(id, function (err, value) {
     if (value) {

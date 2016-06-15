@@ -24,43 +24,66 @@ var transferStart = function (input) {
     parser.parseString(input, function (err, result) {
       if (err) {
         //TODO: err
+        logger.debug('Engagement failed, transfer request is not valid');
+        return;
       }
       if (result && result.message && result.message.header && result.message.header[0].action) {
         var action = result.message.header[0].action[0].$.value;
         if (action === 'transfer_start') {
           var sessionid = result.message.header[0].sessionid[0].$.value;
           var userid = result.message.header[0].userid[0].$.value;
-          console.log('Engagement request user id=' + userid);
           cache.getSessionById(userid, function(err, sessionData) {
-            if (sessionData.sessionId !== sessionid) {
+            if (!sessionData && sessionData.sessionId !== sessionid) {
               logger.debug('Engagement failed, session id from request does not match customer session id');
               return;
             }
+            //if engagement in processing
+            if(sessionData.engagement) {
+              logger.debug('Continue on engagement processing');
+              cache.get(sessionData.shadowCustId, function(err, data) {
+                var shadowRobot = robotManager.getRobot(sessionData.shadowCustId);
+                if(shadowRobot) {
+                  var agentChannelId = data.agentChannelId;
+                  sendEngagementMessages(sessionData, agentChannelId, shadowRobot);
+                }
+              });
+              return;
+            }
+
             getAvailableAgent(function (err, agentId) {
               var shadowName = 'shadow_customer_' + Date.now().toString(16);
-              var shadowEmail = shadowName+'@cyberobject.com';
+              var shadowEmail = shadowName + '@cyberobject.com';
               createShadowUser(shadowEmail, '123456', shadowName, function (err, response) {
                 logger.debug('Create shadow user = ' + JSON.stringify(response));
+                // if create shadow customer successfully
                 if (response.username === shadowName) {
+                  //Login shadow customer with email and password
                   initHubot(shadowEmail, '123456', 'CUSTOMER', function (err, robot) {
                     var appId = sessionData.appId;
                     logger.debug('Engagement Channel Info=' + JSON.stringify(robot.adapter.client.channel_details));
                     //TODO: make here parallel processing
-                    getChannelIdById(agentId, robot, function(err, agentChannelId) {
-                      getChannelIdById(appId, robot, function(err, appChannelId) {
+                    getChannelIdById(agentId, robot, function (err, agentChannelId) {
+                      getChannelIdById(appId, robot, function (err, appChannelId) {
                         processEngagement(userid, agentChannelId, agentId, sessionid);
-                        var customerShadowCache = {'sessionId': sessionid, 'agentChannelId': agentChannelId, 'appChannelId': appChannelId, 'type': 'SHADOW'};
+                        var customerShadowCache = {
+                          'sessionId': sessionid,
+                          'agentChannelId': agentChannelId,
+                          'appChannelId': appChannelId,
+                          'type': 'SHADOW'
+                        };
                         customerShadowCache[agentId] = 'AGENT';
                         customerShadowCache[appId] = 'APP';
-                        cache.set(robot.adapter.profile.id, customerShadowCache, config.redis_expire);
+
                         sessionData.agentId = agentId;
-                        //sessionData.agentChannelId = channelId;
                         sessionData.TO = 'ALL';
                         sessionData.shadowCustId = robot.adapter.profile.id;
                         sessionData.appAndShadowChannelId = appChannelId;
                         sessionData.engagement = true;
+                        //cache.pipeline().set(robot.adapter.profile.id, customerShadowCache, config.redis_expire).set(sessionid, sessionData, config.redis_expire).exec();
+                        cache.set(robot.adapter.profile.id, customerShadowCache, config.redis_expire);
                         cache.set(sessionid, sessionData, config.redis_expire);
-                        logger.debug('Agent Channel ID=' + agentChannelId);
+                        robotManager.setRobot(sessionData.shadowCustId, robot);
+
                         sendEngagementMessages(sessionData, agentChannelId, robot);
                         //notify app get shadowCustomChannel ID
                         //dispatcher.emit(userid, sessionData);
@@ -78,7 +101,7 @@ var transferStart = function (input) {
       }
     });
   }
-}
+};
 
 var createShadowUser = function (email, password, name, cb) {
   mattermostApi.createUser(email, password, name, cb);
@@ -100,8 +123,7 @@ var sendEngagementMessages = function (sessionData, channelId, robot) {
 
 var getAvailableAgent = function (callback) {
   //TODO: get available online agents from Mattermost
-
-  getAgentList(robotManager.getRobot(), function(err, result) {
+  getAgentList(robotManager.getRobot('APP'), function(err, result) {
     logger.debug('Available Engagement Agent List=' + result);
     result = JSON.parse(result);
     var members = result.members;

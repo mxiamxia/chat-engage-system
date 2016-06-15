@@ -102,6 +102,7 @@ var cleanCache = function (room, text, value, robot, self, socket) {
             if(value.engagement) {
                 var shadowCustomerId = value.shadowCustId;
                 cache.remove(shadowCustomerId);
+                robotManager.delRobot(shadowCustomerId);
             }
         }
         if (self) {
