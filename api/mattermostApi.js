@@ -41,6 +41,14 @@ var getEngagementAgentList = function (teamId, token, cb) {
 };
 exports.getEngagementAgentList = getEngagementAgentList;
 
+//http://192.168.0.55:8065/api/v3/users/logout
+var logoutUser = function (token, cb) {
+    var path = '/api/v3/users/logout';
+    apiCall('POST', path, null, token, cb);
+
+}
+exports.logoutUser = logoutUser;
+
 
 var apiCall = function (method, path, data, token, cb) {
     logger.debug('Mattermost api request = ' + JSON.stringify(data));

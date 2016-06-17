@@ -12,6 +12,9 @@ router.get('/about', function(req, res, next) {
 });
 
 router.get('/engagement', engageController.index);
+router.get('/engagement/accept', engageController.engageAccept);
+router.get('/engagement/reject', engageController.engageReject);
+router.get('/engagement/logout', engageController.engageLeave);
 
 //for testing
 router.get('/api/createUser', mattermostController.createUser);

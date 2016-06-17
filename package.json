@@ -16,7 +16,7 @@
     "eventproxy": "^0.3.4",
     "express": "~4.13.1",
     "hubot": "^2.19.0",
-    "hubot-matteruser": "file:hubot-matteruserv3_0_4.tgz",
+    "hubot-matteruser": "file:hubot-matteruserv3_0_6.tgz",
     "ioredis": "^1.15.1",
     "lodash": "^4.11.0",
     "log4js": "^0.6.33",

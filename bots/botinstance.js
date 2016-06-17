@@ -10,7 +10,6 @@ var fs    = require('fs');
 var logger = require('../common/logger');
 var robotManager = require('../core/robotManager');
 var EventProxy = require('eventproxy');
-var dispatcher = require('../event/dispatchEvent').pubsub;
 
 var initHubot = function (id, password, type, cb) {
     var ep = new EventProxy();
@@ -32,7 +31,7 @@ var initHubot = function (id, password, type, cb) {
         robot.load(scriptsPath);
     };
 
-    robot.adapter.on('userProfile', function (user) {
+    robot.adapter.once('userProfile', function (user) {
         logger.debug('The current profile= ' + JSON.stringify(user));
         if (user && user.id) {
             var userId = user.id;
@@ -42,7 +41,7 @@ var initHubot = function (id, password, type, cb) {
         ep.emit('doneProfile', 'done');
     });
 
-    robot.adapter.on('userChannel', function() {
+    robot.adapter.once('userChannel', function() {
         logger.debug('The current profile channel is ready');
         ep.emit('doneChannel', 'done');
         //dispatcher.emit('refreshChannel', 'done');

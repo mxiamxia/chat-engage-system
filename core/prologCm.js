@@ -20,7 +20,10 @@ var dispatcher = require('../event/dispatchEvent').pubsub;
 var consts = require('../common/consts');
 var cmHelper = require('./prologCmHelper');
 
-var processPrologMessage = function (id, text, robot, socket, self, room) {
+var processPrologMessage = function (id, message, robot, socket, self, room) {
+
+  var text  = message.message;
+  var prop = message.prop;
 
   var ep = new EventProxy();
   if (typeof room == 'undefined' || room == null) {
@@ -61,6 +64,10 @@ var processPrologMessage = function (id, text, robot, socket, self, room) {
     //Shadow Customer only forward message to either App or Agent
     if (robot.adapter.profile.type == 'CUSTOMER') {
       logger.debug('Shadow Custom ID =' + robot.adapter.profile.id);
+      if(prop.msg_type === 'leave_engage') {
+        dispatcher.emit(robot.adapter.profile.id+'engageleave', prop);
+        return;
+      }
       cache.get(robot.adapter.profile.id, function (err, c_value) {
         if (_.isEmpty(c_value)) {
           return;
@@ -87,6 +94,15 @@ var processPrologMessage = function (id, text, robot, socket, self, room) {
     }
 
     if (robot.adapter.profile.type == 'APP') {
+
+      //if agent requests back on engagement answer to APP, app emit to engageAction
+      if (!_.isEmpty(prop) && prop.msg_type) {
+        if(prop.msg_type === 'engage_request_answer') {
+          dispatcher.emit(room+'engagerequest', prop);
+          return;
+        }
+      }
+
       // login Prolog CM if session is not established
       if (_.isEmpty(value)) {
         loginAction(id, robot)

@@ -1,6 +1,6 @@
 {
   "name": "hubot-matteruser",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "main": "./src/matteruser",
   "devDependencies": {
     "babel-preset-es2015": "latest",

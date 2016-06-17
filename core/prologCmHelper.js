@@ -51,6 +51,7 @@ var sendMsgToApp = function (value, sentence) {
     request (options, function (err, response, body) {
         if (err) {
             logger.debug ('conversation request err=' + err);
+            return;
         }
         logger.debug('Prolog CM conversation output=' + body);
         if(body.indexOf('<xul>') > -1) {

@@ -42,17 +42,15 @@ module.exports = (robot) ->
     if _.isEmpty text
       robot.reply 'Invalid message format'
     text = JSON.parse text
-    message = text.message
     id = msg.envelope.user?.id
     room = msg.envelope.room
-    logger.debug 'recieved of message = ' + message
     logger.debug 'room of message = ' + room
     self = true
     if config.CM is 'PROLOG'
-      prologCm.processPrologMessage id, message, robot, null, self, room
+      prologCm.processPrologMessage id, text, robot, null, self, room
     else
       id = id + '@@mq'
-      cm.processMessage id, message, robot, null, self, room
+      cm.processMessage id, text, robot, null, self, room
 
   robot.error (err, res) ->
     robot.logger.error "DOES NOT COMPUTE"

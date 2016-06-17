@@ -256,12 +256,21 @@ class Client extends EventEmitter
             return true
 
     postMessage: (msg, channelID) ->
+
         postData =
             message: msg
             filenames: []
             create_at: Date.now()
             user_id: @self.id
             channel_id: channelID
+
+        if msg is 'engage_request_message'
+            postData.props = {msg_type: 'engage_request'}
+
+        if msg is 'engage_request_claim'
+            postData.props = {msg_type: 'engage_request_claim'}
+
+        console.log '=======postMessage data =======' + JSON.stringify postData
 
         @_apiCall 'POST', @channelRoute(channelID) + '/posts/create', postData, (data, header) =>
             @logger.debug 'Posted message.'
