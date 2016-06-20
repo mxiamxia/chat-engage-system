@@ -6,27 +6,27 @@ var Q = require('q');
 var logger = require('../common/logger');
 var request = require('request');
 var config = require('../config');
-var util = require ('util');
+var util = require('util');
 var _ = require('lodash');
 var cache = require('../common/cache');
 var consts = require('../common/consts');
 var TEMP = require('../common/template');
-var xml2js = require ('xml2js');
+var xml2js = require('xml2js');
 var robotManager = require('./robotManager');
 var parser = new xml2js.Parser();
 
 // only when engagement setup, allow agent to set engagement mode
-var check3Way = function (text, value) {
-    if(value && value.engagement) {
-        if (text === '@@toall') {
+var check3Way = function (prop, text, value) {
+    if (value && prop && prop.msg_dest) {
+        if (text === '@@toall' || prop.msg_dest === 'TOALL') {
             value.TO = 'ALL';
             cache.set(value.sessionId, value, config.redis_expire);
             return true;
-        } else if (text === '@@toagent') {
+        } else if (text === '@@toagent' || prop.msg_dest === 'TOCUST') {
             value.TO = 'AGENT';
             cache.set(value.sessionId, value, config.redis_expire);
             return true;
-        } else if (text == '@@tocustomer') {
+        } else if (text == '@@tocustomer' || prop.msg_dest == 'TOCM') {
             value.TO = 'CUSTOMER';
             cache.set(value.sessionId, value, config.redis_expire);
             return true;
@@ -40,29 +40,29 @@ exports.check3Way = check3Way;
 var sendMsgToApp = function (value, sentence) {
     addCacheData(value.sessionId, consts.ANSWER, sentence);
     var deferred = Q.defer();
-    var input = util.format (TEMP.conversationReq, value.sessionId, value.realId, sentence);
+    var input = util.format(TEMP.conversationReq, value.sessionId, value.realId, sentence);
     logger.debug('Prolog CM conversation input===' + input);
     var options = {
         uri: config.CM_PROLOG,
         method: 'POST',
         qs: {request: input},
-        headers: {'Content-Type' : 'application/xml'}
+        headers: {'Content-Type': 'application/xml'}
     };
-    request (options, function (err, response, body) {
+    request(options, function (err, response, body) {
         if (err) {
-            logger.debug ('conversation request err=' + err);
+            logger.debug('conversation request err=' + err);
             return;
         }
         logger.debug('Prolog CM conversation output=' + body);
-        if(body.indexOf('<xul>') > -1) {
+        if (body.indexOf('<xul>') > -1) {
             body = body.replace(/\r?\n|\r/g, '');
             deferred.resolve({'type': 'xul', 'message': body, 'code': 1000});
             addCacheData(value.sessionId, consts.QUESTION, body);
         } else {
-            parser.parseString(body, function(err, result) {
-                try{
+            parser.parseString(body, function (err, result) {
+                try {
                     var statement = 'no valid answer returned';
-                    if(_.isEmpty(result.response.body[0].question)) {
+                    if (_.isEmpty(result.response.body[0].question)) {
                         if (!_.isEmpty(result.response.body[0].statement)) {
                             statement = result.response.body[0].statement[0];
                         }
@@ -75,7 +75,7 @@ var sendMsgToApp = function (value, sentence) {
                     var data = {'type': 'message', 'message': statement, 'code': 1000};
                     addCacheData(value.sessionId, consts.QUESTION, statement);
                     deferred.resolve(data);
-                } catch(e) {
+                } catch (e) {
                     deferred.resolve({'code': 9999});
                 }
             });
@@ -100,7 +100,7 @@ var cleanCache = function (room, text, value, robot, self, socket) {
             var customerId = value.realId;
             cache.remove(sessionId);
             cache.remove(customerId);
-            if(value.engagement) {
+            if (value.engagement) {
                 var shadowCustomerId = value.shadowCustId;
                 cache.remove(shadowCustomerId);
                 robotManager.delRobot(shadowCustomerId);
@@ -120,7 +120,7 @@ var cleanCache = function (room, text, value, robot, self, socket) {
 exports.cleanCache = cleanCache;
 
 var addCacheData = function (id, key, value) {
-    if(key === consts.QUESTION && value ==='I don\'t understand.') {
+    if (key === consts.QUESTION && value === 'I don\'t understand.') {
         return;
     }
 

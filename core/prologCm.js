@@ -78,7 +78,7 @@ var processPrologMessage = function (id, message, robot, socket, self, room) {
             logger.debug('Message to shadow customer came from =' + msgFrom);
             logger.debug('Message to shadow customer  =' + text);
             // check if agent try to set engagement mode
-            if(cmHelper.check3Way(text, value)) {
+            if(cmHelper.check3Way(prop, text, value)) {
               return;
             }
             robot.messageRoom(c_value.appChannelId, text);
@@ -160,7 +160,6 @@ var processPrologMessage = function (id, message, robot, socket, self, room) {
                 cmHelper.appToAll(text, value, c_value.type, robot, self, socket);
                 break;
             }
-            return;
           } else {  // from real customer
             if(value.engagement) {
               switch (value.TO) {
@@ -174,7 +173,6 @@ var processPrologMessage = function (id, message, robot, socket, self, room) {
                   cmHelper.appToAll(text, value, c_value.type, robot, self, socket);
                   break;
               }
-              return;
             } else {
               cmHelper.sendMsgToApp(value, text)
                   .then(function (result) {
@@ -235,79 +233,5 @@ var loginAction = function (id) {
   return deferred.promise;
 };
 
-var conversationAction = function (value, sentence) {
-  addCacheData(value.sessionId, consts.ANSWER, sentence);
-  var deferred = Q.defer();
-  var input = util.format (TEMP.conversationReq, value.sessionId, value.realId, sentence);
-  logger.debug('Prolog CM conversation input===' + input);
-  var options = {
-    uri: config.CM_PROLOG,
-    method: 'POST',
-    qs: {request: input},
-    headers: {'Content-Type' : 'application/xml'}
-  };
-  request (options, function (err, response, body) {
-    if (err) {
-      logger.debug ('conversation request err=' + err);
-    }
-    logger.debug('Prolog CM conversation output=' + body);
-    if(body.indexOf('<xul>') > -1) {
-      body = body.replace(/\r?\n|\r/g, '');
-      deferred.resolve({'type': 'xul', 'message': body, 'code': 1000});
-      addCacheData(value.sessionId, consts.QUESTION, body);
-    } else {
-      parser.parseString(body, function(err, result) {
-        try{
-          var statement = 'no valid answer returned';
-          if(_.isEmpty(result.response.body[0].question)) {
-            if (!_.isEmpty(result.response.body[0].statement)) {
-              statement = result.response.body[0].statement[0];
-            }
-          } else {
-            if (typeof result.response.body[0].question[0] === 'string') {
-              statement = result.response.body[0].question[0]
-            }
-          }
-          statement = statement.replace(/\r?\n|\r/g, '');
-          var data = {'type': 'message', 'message': statement, 'code': 1000};
-          addCacheData(value.sessionId, consts.QUESTION, statement);
-          deferred.resolve(data);
-        } catch(e) {
-          deferred.resolve({'code': 9999});
-        }
-      });
-    }
-  });
-  return deferred.promise;
-};
-
-var addCacheData = function (id, key, value) {
-  if(key === consts.QUESTION && value ==='I don\'t understand.') {
-    return;
-  }
-
-  //TODO: may not need to retrieve cache here,
-  cache.get(id, function (err, data) {
-    if (!_.isEmpty(data)) {
-      data[key] = value;
-      cache.set(id, data, config.redis_expire)
-    }
-  });
-};
-
-
-var postMessage = function (id, self, robot, socket, message) {
-  if (id.indexOf('@@') > -1) {
-    id = id.substring(0, id.indexOf('@@'));
-  }
-
-  if (self) {
-    logger.debug('engage message self=' + id + '||' + message);
-    robot.messageRoom(id, message);
-  } else {
-    logger.debug('engage message=' + id + '||' + message);
-    socket.emit('response', {'userid': id, 'input': message});
-  }
-}
 
 exports.processPrologMessage = processPrologMessage;

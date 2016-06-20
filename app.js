@@ -4,7 +4,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-
+var fs = require('fs');
 var routes = require('./routes/index');
 
 var config = require('./config');
@@ -60,5 +60,14 @@ app.use(function (err, req, res, next) {
     });
 });
 
+
+process.on('uncaughtException', function(err) {
+    fs.appendFileSync(path.join(__dirname, '/exceptions.err'), new Date() + ' ' + err + '\n');
+});
+
+process.on('SIGINT', function() {
+    fs.appendFileSync(path.join(__dirname, '/exceptions.err'), new Date() + ' ctrl-c trigger\n');
+    process.exit();
+});
 
 module.exports = app;

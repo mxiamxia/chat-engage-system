@@ -87,7 +87,7 @@ var transferStart = function (input) {
                     getChannelIdById(agentId, robot, function (err, agentChannelId) {
                       getChannelIdById(appId, robot, function (err, appChannelId) {
                         engageApi.engageAccept(sessionid, agentId, function(err, res_value) {
-                          logger.debug('Engagement Acception result= '+  res_value);
+                          logger.debug('Engagement Acceptation result= '+  res_value);
                         });
                         //processEngagement(userid, agentChannelId, agentId, sessionid);
                         var customerShadowCache = {

@@ -11,13 +11,13 @@ var engageLeave = function (sessionId, agentId, cb) {
     var req = util.format(template.engageLeave, sessionId, agentId);
 
     apiCall('POST', req, cb);
-}
+};
 
 var engageAccept = function (sessionId, agentId, cb) {
     var req = util.format(template.transferAcceptReq, sessionId, agentId);
 
     apiCall('POST', req, cb);
-}
+};
 
 var apiCall = function(method, data, cb) {
     logger.debug('Request sent to Prolog CM=' + data);
@@ -36,7 +36,7 @@ var apiCall = function(method, data, cb) {
         cb(null, body);
     });
 
-}
+};
 
 
 exports.engageLeave = engageLeave;
