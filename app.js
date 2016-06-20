@@ -12,7 +12,8 @@ var config = require('./config');
 var app = express();
 
 //init robot instance
-require('./bots/botInstance')(process.env.MATTERMOST_USER, process.env.MATTERMOST_PASSWORD, 'APP', function(){});
+require('./bots/botInstance')(process.env.MATTERMOST_USER, process.env.MATTERMOST_PASSWORD, 'APP', function () {
+});
 //require('./bots/botinstance')('cust_s1@cyberobject.com', '123456', 'CUSTOMER');
 
 // view engine setup
@@ -61,11 +62,11 @@ app.use(function (err, req, res, next) {
 });
 
 
-process.on('uncaughtException', function(err) {
+process.on('uncaughtException', function (err) {
     fs.appendFileSync(path.join(__dirname, '/exceptions.err'), new Date() + ' ' + err + '\n');
 });
 
-process.on('SIGINT', function() {
+process.on('SIGINT', function () {
     fs.appendFileSync(path.join(__dirname, '/exceptions.err'), new Date() + ' ctrl-c trigger\n');
     process.exit();
 });

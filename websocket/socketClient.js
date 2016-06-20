@@ -12,13 +12,13 @@ var secure_socket = ioClientS.connect(config.HUBOT_MATTER_ROOT, {
     query: 'token=' + jwt
 });
 
-socket.on('connect', function() {
+socket.on('connect', function () {
     logger.debug("Connected to socket server: " + config.HUBOT_MATTER_ROOT);
 }).on('disconnect', function () {
     console.log('disconnected');
 });
 
-secure_socket.on('connect', function() {
+secure_socket.on('connect', function () {
     logger.debug("Connected to socket server: " + config.HUBOT_MATTER_ROOT);
 }).on('disconnect', function () {
     console.log('disconnected');

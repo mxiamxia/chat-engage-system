@@ -3,12 +3,11 @@
  */
 
 
-var request = require ('request');
+var request = require('request');
 var config = require('../config');
 var TextEncoder = require('text-encoding');
 var logger = require('../common/logger');
 var robotManager = require('../core/robotManager');
-
 
 
 //http://192.168.0.55:8065/api/v3/users/create?d=&iid=ikfb5ynuhfrtjpfi1u9hi948ur
@@ -62,7 +61,7 @@ var apiCall = function (method, path, data, token, cb) {
         }
     };
 
-    if(token) {
+    if (token) {
         options.headers['Authorization'] = 'BEARER ' + token;
     }
 
@@ -70,7 +69,7 @@ var apiCall = function (method, path, data, token, cb) {
     logger.debug('Mattermost api request options= ' + JSON.stringify(options));
 
     request(options, function (err, response, body) {
-        if(err) {
+        if (err) {
             logger.debug('Mattermost request failed: ' + path);
             cb(err);
         }

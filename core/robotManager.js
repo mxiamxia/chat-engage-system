@@ -10,7 +10,7 @@ var getCustomerShadow = function () {
         {'name': 'cust_s1@cyberobject.com', 'password': '123456', 'type': 'CUSTOMER'},
         {'name': 'cust_s2@cyberobject.com', 'password': '123456', 'type': 'CUSTOMER'}
     ];
-    if(shadowCount < shadow_info.length) {
+    if (shadowCount < shadow_info.length) {
         var profile = shadow_info[shadowCount];
         shadowCount++;
         return profile;

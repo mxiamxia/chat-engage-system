@@ -10,11 +10,8 @@ var pubsub = new EventEmitter();
 pubsub.setMaxListeners(0);  //unlimited listener events max number
 var ep = new EventProxy();
 
-
-//pubsub.listenerCount(eventName)
-
-pubsub.on('loggedIn', function(msg) {
-  console.log(msg);
+pubsub.on('loggedIn', function (msg) {
+    console.log(msg);
 });
 
 exports.pubsub = pubsub;

@@ -5,8 +5,8 @@
 // init hubot main automation robot
 require('coffee-script/register');
 var hubot = require('hubot');
-var path  = require('path');
-var fs    = require('fs');
+var path = require('path');
+var fs = require('fs');
 var logger = require('../common/logger');
 var robotManager = require('../core/robotManager');
 var EventProxy = require('eventproxy');
@@ -27,7 +27,7 @@ var initHubot = function (id, password, type, cb) {
 
     var loadScripts = function (robot) {
         var scriptsPath = path.resolve(".", "scripts");
-        console.log('script path=' + scriptsPath );
+        console.log('script path=' + scriptsPath);
         robot.load(scriptsPath);
     };
 
@@ -41,7 +41,7 @@ var initHubot = function (id, password, type, cb) {
         ep.emit('doneProfile', 'done');
     });
 
-    robot.adapter.once('userChannel', function() {
+    robot.adapter.once('userChannel', function () {
         logger.debug('The current profile channel is ready');
         ep.emit('doneChannel', 'done');
         //dispatcher.emit('refreshChannel', 'done');
@@ -51,7 +51,7 @@ var initHubot = function (id, password, type, cb) {
         logger.error('Failed to init hubot instance', err);
     });
 
-    ep.all('doneConnect', 'doneProfile', 'doneChannel', function() {
+    ep.all('doneConnect', 'doneProfile', 'doneChannel', function () {
         logger.debug('The new Hubot instance is ready');
         cb(null, robot);
     });
@@ -59,7 +59,7 @@ var initHubot = function (id, password, type, cb) {
 
 //type value could be "APP" or "CUSTOMER"
 var storeRobot = function (id, robot, type) {
-    if(type === 'APP') {
+    if (type === 'APP') {
         robotManager.setRobot('APP', robot);
     }
 };
