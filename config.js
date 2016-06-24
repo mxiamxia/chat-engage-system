@@ -12,6 +12,8 @@ var config = {
     CM_PROLOG: 'http://192.168.254.116:3030/cm',
     HUBOT_SKY: 'http://localhost:8092/skype/message',
     HUBOT_ROCKET: 'http://localhost:8093/rocket/message',
+    // mongodb
+    db: 'mongodb://localhost/co_engage',
     redis_host: 'localhost',
     redis_port: 6379,
     redis_db: 1,

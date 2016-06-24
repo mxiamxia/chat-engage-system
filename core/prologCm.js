@@ -19,6 +19,7 @@ var parser = new xml2js.Parser();
 var dispatcher = require('../event/dispatchEvent').pubsub;
 var consts = require('../common/consts');
 var cmHelper = require('./prologCmHelper');
+var sessionDao = require('../dao/').Session;
 
 var processPrologMessage = function (id, message, robot, socket, self, room) {
 
@@ -75,11 +76,14 @@ var processPrologMessage = function (id, message, robot, socket, self, room) {
                 cache.get(c_value.sessionId, function (err, value) {
                     var msgFrom = c_value[id];
                     if (msgFrom === 'AGENT') { //Message came from agent to app
-                        logger.debug('Message to shadow customer came from =' + msgFrom);
+                        logger.debug('Message to shadow customer `came from =' + msgFrom);
                         logger.debug('Message to shadow customer  =' + text);
                         // check if agent try to set engagement mode
                         if (cmHelper.check3Way(prop, text, value)) {
-                            return;
+                            //TODO:
+                            if(_.isEmpty(text)) {
+                                return;
+                            }
                         }
                         robot.messageRoom(c_value.appChannelId, text);
 
@@ -93,10 +97,11 @@ var processPrologMessage = function (id, message, robot, socket, self, room) {
             return;
         }
 
-        if (robot.adapter.profile.type == 'APP') {
+        if (robot.adapter.profile.type === 'APP') {
 
             //if agent requests back on engagement answer to APP, app emit to engageAction
             if (!_.isEmpty(prop) && prop.msg_type) {
+
                 if (prop.msg_type === 'engage_request_answer') {
                     dispatcher.emit(room + 'engagerequest', prop);
                     return;
@@ -111,16 +116,19 @@ var processPrologMessage = function (id, message, robot, socket, self, room) {
                         if (result.code == 1000) {
                             var session = result.session;
                             var statement = result.statement;
-                            var customCache = {'sessionId': session, 'type': 'REAL'};
+                            var customCache = {sessionId: session, type: 'REAL'};
                             var sessionInfo = {
                                 'sessionId': session,
                                 'realId': id,
                                 'realChannelId': room,
                                 'appId': robot.adapter.profile.id
                             };
+
+                            sessionDao.newAndSave(session, robot.adapter.profile.id, id, function(err, session) {
+                                logger.debug('Create new session info into mongo db=' + JSON.stringify(session));
+                            });
                             cache.set(id, customCache, config.redis_expire);
                             cache.set(session, sessionInfo, config.redis_expire);
-
                             if (self) {
                                 robot.messageRoom(room, statement);
                             } else {
@@ -178,8 +186,14 @@ var processPrologMessage = function (id, message, robot, socket, self, room) {
                                 .then(function (result) {
                                     logger.debug('conversation output===' + JSON.stringify(result));
                                     if (self) {
-                                        if (result.code == 9999) {
+                                        if (result.code === 9999) {
                                             robot.messageRoom(room, 'Did not find a proper answer');
+                                        }
+                                        else if (result.code === 1801) {
+                                            //clean cache and do login again
+                                            robot.messageRoom(room, 'The current session expired. Ready to init a new session.');
+                                            cmHelper.cleanCache('', 'quit', value, robot, self, socket);
+
                                         } else {
                                             robot.messageRoom(room, result.message);
                                         }

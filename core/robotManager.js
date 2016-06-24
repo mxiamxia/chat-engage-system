@@ -32,19 +32,23 @@ var getRobot = function (id) {
     return id in appRobot ? appRobot[id] : null;
 };
 
+var getAllRobot = function () {
+    return appRobot;
+};
+
 var delRobot = function (id) {
     delete appRobot[id];
-}
+};
 
 var setToken = function (value) {
     token.token = value;
-}
+};
 
 var getToken = function () {
     return token.token;
-}
+};
 
-module.exports = {setRobot, getRobot, delRobot, getToken, setToken, getCustomerShadow, releaseCustomerShadow};
+module.exports = {setRobot, getRobot, getAllRobot, delRobot, getToken, setToken, getCustomerShadow, releaseCustomerShadow};
 
 //exports.setRobot = setRobot;
 //exports.getRobot = getRobot;

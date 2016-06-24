@@ -13,6 +13,7 @@ var consts = require('../common/consts');
 var TEMP = require('../common/template');
 var xml2js = require('xml2js');
 var robotManager = require('./robotManager');
+var engageAction = require('./engageAction');
 var parser = new xml2js.Parser();
 
 // only when engagement setup, allow agent to set engagement mode
@@ -22,11 +23,11 @@ var check3Way = function (prop, text, value) {
             value.TO = 'ALL';
             cache.set(value.sessionId, value, config.redis_expire);
             return true;
-        } else if (text === '@@toagent' || prop.msg_dest === 'TOCUST') {
+        } else if (text === '@@toagent' || prop.msg_dest === 'TOCM') {
             value.TO = 'AGENT';
             cache.set(value.sessionId, value, config.redis_expire);
             return true;
-        } else if (text == '@@tocustomer' || prop.msg_dest == 'TOCM') {
+        } else if (text == '@@tocustomer' || prop.msg_dest == 'TOCUST') {
             value.TO = 'CUSTOMER';
             cache.set(value.sessionId, value, config.redis_expire);
             return true;
@@ -76,7 +77,11 @@ var sendMsgToApp = function (value, sentence) {
                     addCacheData(value.sessionId, consts.QUESTION, statement);
                     deferred.resolve(data);
                 } catch (e) {
-                    deferred.resolve({'code': 9999});
+                    if(body.indexOf('existance error: [session') > -1) {
+                        deferred.resolve({'code': 1801});
+                    } else {
+                        deferred.resolve({'code': 9999});
+                    }
                 }
             });
         }
@@ -103,10 +108,16 @@ var cleanCache = function (room, text, value, robot, self, socket) {
             if (value.engagement) {
                 var shadowCustomerId = value.shadowCustId;
                 cache.remove(shadowCustomerId);
+                var shadowRobot = robotManager.getRobot(shadowCustomerId);
+                if (shadowRobot) {
+                    engageAction.logoutShadowUser(shadowRobot, function (err, body) {
+                        logger.debug('Logout shadow user response from quit action=' + JSON.stringify(body));
+                    });
+                }
                 robotManager.delRobot(shadowCustomerId);
             }
         }
-        if (self) {
+        if (self && !_.isEmpty(room)) {
             robot.messageRoom(room, 'Session is terminated');
         }
         else {

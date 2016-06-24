@@ -18,6 +18,7 @@ var initHubot = require('../bots/botInstance');
 var mattermostApi = require('../api/mattermostApi');
 var EventProxy = require('eventproxy');
 var engageApi = require('./engageApi');
+var sessionDao = require('../dao/').Session;
 
 var appIdList = ['wgwwqx5ei789fngx86osp6bzmo'];
 
@@ -87,7 +88,7 @@ var transferStart = function (input) {
                                         getChannelIdById(agentId, robot, function (err, agentChannelId) {
                                             getChannelIdById(appId, robot, function (err, appChannelId) {
                                                 engageApi.engageAccept(sessionid, agentId, function (err, res_value) {
-                                                    logger.debug('Engagement Acceptation result= ' + res_value);
+                                                    logger.debug('Engagement Accepted result= ' + res_value);
                                                 });
                                                 //processEngagement(userid, agentChannelId, agentId, sessionid);
                                                 var customerShadowCache = {
@@ -110,6 +111,10 @@ var transferStart = function (input) {
                                                 robotManager.setRobot(sessionData.shadowCustId, robot);
                                                 ep.unbind();
                                                 sendEngagementMessages(sessionData, agentChannelId, robot);
+
+                                                sessionDao.updateSession(sessionid, true, true, agentId, function (err, session) {
+                                                    logger.debug('Update the session info mongo db accept=' + JSON.stringify(session));
+                                                });
                                                 //notify app get shadowCustomChannel ID
                                                 //dispatcher.emit(userid, sessionData);
 
@@ -152,6 +157,9 @@ var transferStart = function (input) {
                                 logger.debug('No available engagement agent found');
                                 ep.unbind(); //to avoid the same session id trigger multiple accept event later
                                 sessionEngaged.splice(sessionEngaged.indexOf(sessionid), 1);
+                                sessionDao.updateSession(sessionid, true, false, '', function (err, session) {
+                                    logger.debug('Update the session info mongo db reject =' + JSON.stringify(session));
+                                });
                                 return;
                             }
                             // find next available agent
@@ -364,21 +372,6 @@ var getChannelIdById = function (id, robot, cb) {
     }
 };
 
-var processEngagement = function (userid, channelId, agentid, sessionid) {
-    var req = util.format(template.transferAcceptReq, sessionid, agentid);
-    var options = {
-        uri: config.CM_PROLOG,
-        method: 'POST',
-        qs: {request: req},
-        headers: {'Content-Type': 'application/xml'}
-    };
-    request(options, function (err, response, body) {
-        logger.debug("");
-        if (err || response.statusCode !== 200) {
-
-        }
-    });
-}
-
 exports.transferStart = transferStart;
 exports.getChannelIdById = getChannelIdById;
+exports.logoutShadowUser = logoutShadowUser;

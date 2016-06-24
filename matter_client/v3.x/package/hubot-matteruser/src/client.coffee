@@ -266,9 +266,11 @@ class Client extends EventEmitter
 
         if msg is 'engage_request_message'
             postData.props = {msg_type: 'engage_request'}
+            postData.message = ''
 
         if msg is 'engage_request_claim'
             postData.props = {msg_type: 'engage_request_claim'}
+            postData.message = ''
 
         console.log '=======postMessage data =======' + JSON.stringify postData
 

@@ -26,7 +26,7 @@ var engageAccept = function (req, res) {
     logger.debug('engagement request query=' + JSON.stringify(querystring.parse(resOjb.query)));
     var channelId = querystring.parse(resOjb.query).channel;
     var data = {msg_type: 'engage_request_answer', answer: 'accept'};
-    dispatcher.emit(channelId+'engagerequest', data);
+    dispatcher.emit(channelId + 'engagerequest', data);
     res.send('Emit accept event to ' + channelId);
 }
 
@@ -36,7 +36,7 @@ var engageReject = function (req, res) {
     logger.debug('engagement request query=' + JSON.stringify(querystring.parse(resOjb.query)));
     var channelId = querystring.parse(resOjb.query).channel;
     var data = {msg_type: 'engage_request_answer', answer: 'reject'};
-    dispatcher.emit(channelId+'engagerequest', data);
+    dispatcher.emit(channelId + 'engagerequest', data);
     res.send('Emit reject event to ' + channelId);
 }
 //http://localhost:4012/engagement/logout?userid=8es9dxujeibtdnsjqpm74z8faw
@@ -45,7 +45,7 @@ var engageLeave = function (req, res) {
     logger.debug('engagement request query=' + JSON.stringify(querystring.parse(resOjb.query)));
     var userid = querystring.parse(resOjb.query).userid;
     var data = {msg_type: 'leave_engage'};
-    dispatcher.emit(userid+'engageleave', data);
+    dispatcher.emit(userid + 'engageleave', data);
     res.send('Emit logout shadow user event to ' + userid);
 }
 

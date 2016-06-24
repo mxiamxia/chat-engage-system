@@ -59,6 +59,8 @@ var pipeline = function () {
 };
 exports.pipeline = pipeline;
 
+
+//move out of redis util file
 var getSessionById = function (id, callback) {
     get(id, function (err, value) {
         if (value) {
@@ -76,4 +78,22 @@ var getSessionById = function (id, callback) {
 };
 
 exports.getSessionById = getSessionById;
+
+var getKeys = function (pattern, cb) {
+    var stream = redis.scanStream({
+        match: pattern//'ss*'
+    });
+    var keys = [];
+    stream.on('data', function (resultKeys) {
+        for (var i = 0; i < resultKeys.length; i++) {
+            keys.push(resultKeys[i]);
+        }
+    });
+    stream.on('end', function () {
+        logger.debug('done with the keys: ', keys);
+        cb(null, keys);
+    });
+};
+
+exports.getKeys = getKeys;
 

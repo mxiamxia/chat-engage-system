@@ -38,7 +38,7 @@ module.exports = (robot) ->
 
   robot.respond /(.*)/i, (msg) ->
     text = msg.match[1]
-    logger.debug 'recieved of text = ' + text
+    logger.debug robot.adapter.profile.type + ' received message text='  + text
     if _.isEmpty text
       robot.reply 'Invalid message format'
     text = JSON.parse text

@@ -124,6 +124,8 @@ class Matteruser extends Adapter
         #TODO: add prop field here
         if mmPost.props and mmPost.props.msg_type
             text = {message: text, prop: mmPost.props}
+        else if mmPost.props and mmPost.props.msg_dest
+            text = {message: text, prop: mmPost.props}
         else
             text = {message: text, prop: {}}
         text = JSON.stringify text

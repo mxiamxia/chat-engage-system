@@ -3,12 +3,14 @@ var router = express.Router();
 var engageController = require('../controller/engagementController');
 var mattermostController = require('../controller/mattermostController');
 
+
+var filePath = __dirname.replace('routes', 'dist/');
+
 router.get('/', function (req, res, next) {
-    res.render('index');
+    res.sendFile(filePath + 'index.html');
 });
 
 router.get('/about', function (req, res, next) {
-    res.render('about');
 });
 
 router.get('/engagement', engageController.index);
@@ -18,5 +20,12 @@ router.get('/engagement/logout', engageController.engageLeave);
 
 //for testing
 router.get('/api/createUser', mattermostController.createUser);
+
+router.get('/api/getActiveSession', mattermostController.getSessionByRange);
+
+router.get('/api/getHistorySession', mattermostController.getAllSessions);
+
+router.get('/api/getAllRobot', mattermostController.getAllRobot);
+router.get('/api/getAllSessionKey', mattermostController.getAllSessionKey);
 
 module.exports = router;

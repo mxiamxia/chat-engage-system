@@ -1,0 +1,124 @@
+<div class="row">
+	<div class="col-lg-6 col-md-6 col-xs-12">
+		<rd-widget>
+			<rd-widget-body>
+				<div class="widget-icon green pull-left">
+					<i class="fa fa-users"></i>
+				</div>
+				<div class="title">80</div>
+				<div class="comment">Conversations</div>
+			</rd-widget-body>
+		</rd-widget>
+	</div>
+
+	<div class="col-lg-6 col-md-6 col-xs-12">
+		<rd-widget>
+			<rd-widget-body>
+				<div class="widget-icon blue pull-left">
+					<i class="fa fa-support"></i>
+				</div>
+				<div class="title">62</div>
+				<div class="comment">Tickets</div>
+			</rd-widget-body>
+		</rd-widget>
+	</div>
+</div>
+
+
+<div class="row">
+    <div class="col-lg-12">
+        <rd-widget>
+            <rd-widget-header icon="fa-tasks" title="Current Session">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search for...">
+                    <span class="input-group-btn">
+                        <button class="btn btn-primary" type="button" ng-click="refreshCurrentSessions()">Refresh!</button>
+                    </span>
+                </div>
+            </rd-widget-header>
+            <rd-widget-body classes="medium no-padding">
+                <div class="table-responsive">
+                    <table class="table table-fixed">
+                        <thead>
+                        <tr>
+                            <th>Session ID</th>
+                            <th>Delete</th>
+                        </tr>
+                        </thead>
+                        <tbody ng-repeat="session in currentSession">
+                        <tr>
+                            <td>{{session}}</td>
+                            <td><button class="btn btn-sm btn-primary" ng-click="deleteSession(session.sessionId)">Delete</button></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </rd-widget-body>
+            <rd-widget-footer>
+                <ul class="pagination pagination-sm pull-right">
+                    <li><a href="#">&laquo;</a></li>
+                    <li><a href="#">1</a></li>
+                    <li><a href="#">2</a></li>
+                    <li><a href="#">3</a></li>
+                    <li><a href="#">&raquo;</a></li>
+                </ul>
+                <div class="clearfix"></div>
+            </rd-widget-footer>
+        </rd-widget>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <rd-widget>
+            <rd-widget-header icon="fa-tasks" title="Session History">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search for...">
+                    <span class="input-group-btn">
+                        <button class="btn btn-primary" type="button" ng-click="refreshSessions()">Refresh!</button>
+                    </span>
+                </div>
+            </rd-widget-header>
+            <rd-widget-body classes="medium no-padding">
+                <div class="table-responsive">
+                    <table class="table table-fixed">
+                        <thead>
+                        <tr>
+                            <th>Session ID</th>
+                            <th>Customer ID</th>
+                            <th>Engaged</th>
+                            <th>Engage Success</th>
+                            <th>Agent ID</th>
+                            <th>Start Time</th>
+                        </tr>
+                        </thead>
+                        <tbody ng-repeat="session in sessionData">
+                        <tr>
+                            <td>{{session.sessionId}}</td>
+                            <td>{{session.customerId}}</td>
+                            <td><span class="text-success"><i
+                                    ng-class="{'fa fa-check':session.engage, 'fa fa-close':!session.engage}"></i></span>
+                            </td>
+                            <td><span class="text-success"><i
+                                    ng-class="{'fa fa-check':session.engage_accept, 'fa fa-close':!session.engage_accept}"></i></span>
+                            </td>
+                            <td>{{session.agentId}}</td>
+                            <td>{{session.create_at}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </rd-widget-body>
+            <rd-widget-footer>
+                <ul class="pagination pagination-sm pull-right">
+                    <li><a href="#">&laquo;</a></li>
+                    <li><a href="#">1</a></li>
+                    <li><a href="#">2</a></li>
+                    <li><a href="#">3</a></li>
+                    <li><a href="#">&raquo;</a></li>
+                </ul>
+                <div class="clearfix"></div>
+            </rd-widget-footer>
+        </rd-widget>
+    </div>
+</div>
