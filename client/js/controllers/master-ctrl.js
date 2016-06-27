@@ -76,6 +76,13 @@ function MasterCtrl($scope, $cookieStore, $http, Session) {
     
     $scope.deleteSession = function (sessionId) {
         console.log('delete session=' + sessionId);
+        Session.deleteSession(sessionId)
+            .success(function() {
+                console.log('delete session=' + sessionId);
+            })
+            .error(function(data) {
+                console.log('Error: ' + data);
+            });
     };
 
     $scope.refreshCurrentSessions = function () {

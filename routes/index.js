@@ -28,4 +28,7 @@ router.get('/api/getHistorySession', mattermostController.getAllSessions);
 router.get('/api/getAllRobot', mattermostController.getAllRobot);
 router.get('/api/getAllSessionKey', mattermostController.getAllSessionKey);
 
+router.post('/api/deleteSession', mattermostController.deleteSession);
+
+
 module.exports = router;

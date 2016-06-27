@@ -7,7 +7,7 @@ var log4js = require('log4js');
 log4js.configure({
     appenders: [
         {type: 'console'},
-        {type: 'file', filename: 'logs/co-engagement.log', category: 'co-engagement'}
+        {type: 'file', filename: 'logs/co-engagement.log', maxLogSize: 2048000, backups:5, category: 'co-engagement'}
     ]
 });
 

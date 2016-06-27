@@ -69,3 +69,12 @@ var getAllSessionKey = function (req, res) {
     });
 };
 exports.getAllSessionKey = getAllSessionKey;
+
+var deleteSession = function (req, res) {
+    //var resOjb = req.body;
+    logger.debug('delete session id=' + JSON.stringify(req));
+    //logger.debug('delete session id=' + JSON.stringify(querystring.parse(resOjb)));
+    var sessionId = querystring.parse(resOjb.query).sessionId;
+    res.send(sessionId);
+}
+exports.deleteSession = deleteSession;

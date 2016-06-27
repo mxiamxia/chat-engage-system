@@ -39,4 +39,7 @@ forever stop <pid>
 3. ./shutdown.sh
 4. ./startup.sh
 
-nohup npm start &
+### Git URL
+```bash
+ssh://gitadmin@192.168.254.196/co-engagement
+```

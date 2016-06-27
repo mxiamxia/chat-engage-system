@@ -24,6 +24,18 @@ app.factory('Session', ['$http', function ($http) {
                 url: '/api/getAllSessionKey',
             };
             return $http(req);
+        },
+        deleteSession: function (id) {
+            var input = {sessionId: id};
+            var req = {
+                method: 'POST',
+                url: '/api/deleteSession',
+                json: input,
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            };
+            return $http(req);
         }
     }
 }]);
