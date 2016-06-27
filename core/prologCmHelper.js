@@ -121,7 +121,9 @@ var cleanCache = function (room, text, value, robot, self, socket) {
             robot.messageRoom(room, 'Session is terminated');
         }
         else {
-            socket.emit('response', {'userid': id, 'input': 'Session is terminated'});
+            if (socket) {
+                socket.emit('response', {'userid': id, 'input': 'Session is terminated'});
+            }
         }
         return true;
     }

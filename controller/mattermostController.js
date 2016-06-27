@@ -10,6 +10,7 @@ var mattermostApi = require('../api/mattermostApi');
 var sessionDao = require('../dao/session');
 var robotManager = require('../core/robotManager');
 var cache = require('../common/cache');
+var cmHelper = require('../core/prologCmHelper');
 
 
 //http://localhost:4012/api/createUser?email=cust_test@cyberobject.com&name=cust_test&password=123456
@@ -71,10 +72,18 @@ var getAllSessionKey = function (req, res) {
 exports.getAllSessionKey = getAllSessionKey;
 
 var deleteSession = function (req, res) {
-    //var resOjb = req.body;
-    logger.debug('delete session id=' + JSON.stringify(req));
-    //logger.debug('delete session id=' + JSON.stringify(querystring.parse(resOjb)));
-    var sessionId = querystring.parse(resOjb.query).sessionId;
-    res.send(sessionId);
+    var result = {};
+    logger.debug('delete session id=' + JSON.stringify(req.body));
+    var sessionId = req.body.sessionId;
+    cache.get(sessionId, function (err, value) {
+       if (err || _.isEmpty(value)) {
+           result.code = 9999;
+       }
+        cmHelper.cleanCache('', 'quit', value, null, null, null);
+        result.code = 1000;
+        result.id = sessionId;
+        res.send(result);
+    });
+
 }
 exports.deleteSession = deleteSession;

@@ -6,7 +6,7 @@ app.factory('Session', ['$http', function ($http) {
         getActiveSessions: function () {
             var req = {
                 method: 'GET',
-                url: '/api/getActiveSession',
+                url: '/api/getActiveSession'
             };
             return $http(req);
         },
@@ -14,14 +14,14 @@ app.factory('Session', ['$http', function ($http) {
         getHistorySession: function () {
             var req = {
                 method: 'GET',
-                url: '/api/getHistorySession',
+                url: '/api/getHistorySession'
             };
             return $http(req);
         },
         getCurrentSessions: function () {
             var req = {
                 method: 'GET',
-                url: '/api/getAllSessionKey',
+                url: '/api/getAllSessionKey'
             };
             return $http(req);
         },
@@ -30,10 +30,7 @@ app.factory('Session', ['$http', function ($http) {
             var req = {
                 method: 'POST',
                 url: '/api/deleteSession',
-                json: input,
-                headers: {
-                    'Content-Type': 'application/json'
-                }
+                data: input
             };
             return $http(req);
         }
