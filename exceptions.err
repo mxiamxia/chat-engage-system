@@ -84,3 +84,17 @@ Fri Jun 24 2016 12:14:40 GMT-0400 (EDT) Error: Can't set headers after they are 
 Fri Jun 24 2016 12:16:48 GMT-0400 (EDT) ctrl-c trigger
 Fri Jun 24 2016 12:16:56 GMT-0400 (EDT) ReferenceError: res is not defined
 Fri Jun 24 2016 13:04:24 GMT-0400 (EDT) ctrl-c trigger
+Mon Jun 27 2016 09:49:08 GMT-0400 (EDT) ctrl-c trigger
+Mon Jun 27 2016 09:50:10 GMT-0400 (EDT) TypeError: msg.subString is not a function
+Mon Jun 27 2016 09:52:45 GMT-0400 (EDT) ctrl-c trigger
+Mon Jun 27 2016 09:54:57 GMT-0400 (EDT) ctrl-c trigger
+Mon Jun 27 2016 09:56:52 GMT-0400 (EDT) ctrl-c trigger
+Mon Jun 27 2016 10:09:27 GMT-0400 (EDT) ctrl-c trigger
+Mon Jun 27 2016 10:11:22 GMT-0400 (EDT) ctrl-c trigger
+Mon Jun 27 2016 10:18:49 GMT-0400 (EDT) ctrl-c trigger
+Mon Jun 27 2016 10:27:10 GMT-0400 (EDT) ctrl-c trigger
+Mon Jun 27 2016 10:27:27 GMT-0400 (EDT) ctrl-c trigger
+Mon Jun 27 2016 10:28:17 GMT-0400 (EDT) ctrl-c trigger
+Mon Jun 27 2016 10:41:21 GMT-0400 (EDT) ctrl-c trigger
+Mon Jun 27 2016 10:43:03 GMT-0400 (EDT) ctrl-c trigger
+Mon Jun 27 2016 12:09:58 GMT-0400 (EDT) ctrl-c trigger

@@ -264,12 +264,16 @@ class Client extends EventEmitter
             user_id: @self.id
             channel_id: channelID
 
-        if msg is 'engage_request_message'
-            postData.props = {msg_type: 'engage_request'}
+        idx = msg.indexOf('engage_request_message')
+        if idx > -1
+            sessionId = msg.substring(idx + 'engage_request_message'.length)
+            postData.props = {msg_type: 'engage_request', session_id: sessionId}
             postData.message = ''
 
-        if msg is 'engage_request_claim'
-            postData.props = {msg_type: 'engage_request_claim'}
+        idx = msg.indexOf('engage_request_claim')
+        if idx > -1
+            sessionId = msg.substring(idx + 'engage_request_claim'.length)
+            postData.props = {msg_type: 'engage_request_claim', session_id: sessionId}
             postData.message = ''
 
         console.log '=======postMessage data =======' + JSON.stringify postData

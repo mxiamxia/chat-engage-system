@@ -100,10 +100,11 @@ var processPrologMessage = function (id, message, robot, socket, self, room) {
         if (robot.adapter.profile.type === 'APP') {
 
             //if agent requests back on engagement answer to APP, app emit to engageAction
-            if (!_.isEmpty(prop) && prop.msg_type) {
+            if (!_.isEmpty(prop) && prop.msg_type && prop.session_id) {
 
-                if (prop.msg_type === 'engage_request_answer') {
-                    dispatcher.emit(room + 'engagerequest', prop);
+                if (prop.msg_type === 'engage_request_answer' ) {
+                    logger.debug('Emit engagement event sessinos=' + room + prop.session_id + 'engagerequest');
+                    dispatcher.emit(room + prop.session_id + 'engagerequest', prop);
                     return;
                 }
             }

@@ -213,13 +213,13 @@ var sendEngagementMessages = function (sessionData, channelId, robot) {
 
 var sendEngagement = function (list, appRobot, sessionid, ep) {
 
-    sendEngagementRequest(list, appRobot, function (err, data) {
+    sendEngagementRequest(list, appRobot, sessionid, function (err, data) {
         //add timeout event if no response from agent with 30 seconds
         var timerId = setEngagementTimer(sessionid, ep);
         ep.all(sessionid + 'timeout', function () {
             logger.debug('Agent does not response engagement in 30 seconds and list=' + list.length + '==' + data.agentIdx);
             logger.debug('Agent does not response engagement in 30 seconds=' + data.agentId);
-            appRobot.messageRoom(data.agentChannelId, 'engage_request_claim');
+            appRobot.messageRoom(data.agentChannelId, 'engage_request_claim'+sessionid);
             clearTimeout(timerId);
             ep.unbind(sessionid + 'timeout');
             list.splice(data.agentIdx, 1);
@@ -227,7 +227,8 @@ var sendEngagement = function (list, appRobot, sessionid, ep) {
         });
 
         logger.debug('Register engagement event data=' + JSON.stringify(data));
-        dispatcher.once(data.agentChannelId + 'engagerequest', function (engage_data) {
+        logger.debug('Register engagement event sessinos=' + data.agentChannelId + sessionid + 'engagerequest');
+        dispatcher.once(data.agentChannelId + sessionid + 'engagerequest', function (engage_data) {
             logger.debug('Received engagement response from agent=' + JSON.stringify(engage_data));
             if (engage_data.msg_type === 'engage_request_answer' && engage_data.answer == 'accept') {
                 logger.debug('Agent accept engagement=' + sessionid + ', agentId=' + data.agentId);
@@ -249,13 +250,13 @@ var sendEngagement = function (list, appRobot, sessionid, ep) {
     });
 }
 
-var sendEngagementRequest = function (agentList, appRobot, cb) {
+var sendEngagementRequest = function (agentList, appRobot, sessionId, cb) {
     //var agentIdx = getMember(agentList);
     var agentIdx = 0;
     var member = agentList[agentIdx];
     var availAgentId = member.id;
     getChannelIdById(availAgentId, appRobot, function (err, agentChannelId) {
-        sendEngageAccept(agentChannelId, appRobot);
+        sendEngageAccept(agentChannelId, sessionId, appRobot);
         var data = {agentId: availAgentId, agentChannelId: agentChannelId, agentIdx: agentIdx};
         cb(null, data);
     });
@@ -274,8 +275,8 @@ var getAvailableAgentList = function (appRobot, cb) {
     });
 };
 
-var sendEngageAccept = function (agentChannelId, appRobot) {
-    appRobot.messageRoom(agentChannelId, 'engage_request_message');
+var sendEngageAccept = function (agentChannelId, sessionId, appRobot) {
+    appRobot.messageRoom(agentChannelId, 'engage_request_message'+sessionId);
 };
 
 
