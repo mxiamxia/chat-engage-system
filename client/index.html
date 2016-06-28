@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-	<title>RDash AngularJS</title>
+	<title>Engagement Service Admin</title>
   <!-- STYLES -->
   <!-- build:css lib/css/main.min.css -->
   <link rel="stylesheet" type="text/css" href="components/bootstrap/dist/css/bootstrap.min.css">
@@ -17,6 +17,7 @@
   <script type="text/javascript" src="components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
   <script type="text/javascript" src="components/angular-cookies/angular-cookies.min.js"></script>
   <script type="text/javascript" src="components/angular-ui-router/release/angular-ui-router.min.js"></script>
+  <script type="text/javascript" src="components/angularUtils-pagination/dirPagination.js"></script>
   <!-- endbuild -->
   <!-- Custom Scripts -->
   <script type="text/javascript" src="js/dashboard.min.js"></script>
@@ -29,7 +30,7 @@
       <ul class="sidebar">
         <li class="sidebar-main">
           <a ng-click="toggleSidebar()">
-            Dashboard
+            CO Admin
             <span class="menu-icon glyphicon glyphicon-transfer"></span>
           </a>
         </li>
@@ -42,17 +43,7 @@
         </li>
       </ul>
       <div class="sidebar-footer">
-        <div class="col-xs-4">
-          <a href="https://github.com/rdash/rdash-angular" target="_blank">
-            Github
-          </a>
-        </div>
-        <div class="col-xs-4">
-          <a href="https://github.com/rdash/rdash-angular/blob/master/README.md" target="_blank">
-            About
-          </a>
-        </div>
-        <div class="col-xs-4">
+        <div class="col-xs-12">
           <a href="#">
             Support
           </a>
@@ -117,7 +108,7 @@
             </div>
             <div class="meta">
               <div class="page">
-                Dashboard
+                Engagement Admin
               </div>
               <div class="breadcrumb-links">
                 Home / Dashboard

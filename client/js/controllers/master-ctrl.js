@@ -3,9 +3,9 @@
  */
 
 app
-    .controller('MasterCtrl', ['$scope', '$cookieStore', '$http', 'Session', MasterCtrl]);
+    .controller('MasterCtrl', ['$scope', '$cookieStore', 'Session', MasterCtrl]);
 
-function MasterCtrl($scope, $cookieStore, $http, Session) {
+function MasterCtrl($scope, $cookieStore, Session) {
     /**
      * Sidebar Toggle & Cookie Control
      */
@@ -14,6 +14,12 @@ function MasterCtrl($scope, $cookieStore, $http, Session) {
     $scope.sessionData = [];
 
     $scope.currentSession = [];
+    $scope.searchText = {text: ''};
+
+    $scope.search = {text: ''};
+
+    $scope.sessionOfToday = 0;
+    $scope.engageOfToday = 0;
 
     $scope.getWidth = function() {
         return window.innerWidth;
@@ -51,8 +57,6 @@ function MasterCtrl($scope, $cookieStore, $http, Session) {
             });
     };
 
-    getSessions();
-
     var getCurrentSession = function () {
         Session.getCurrentSessions()
             .success(function(sessions) {
@@ -62,7 +66,6 @@ function MasterCtrl($scope, $cookieStore, $http, Session) {
                 console.log('Error: ' + data);
             });
     };
-    getCurrentSession();
 
     $scope.refreshSessions = function () {
         Session.getHistorySession()
@@ -91,5 +94,42 @@ function MasterCtrl($scope, $cookieStore, $http, Session) {
 
     $scope.refreshCurrentSessions = function () {
         getCurrentSession();
-    }
+    };
+
+    var getSessionOfToday = function () {
+        Session.getSessionOfToday()
+            .success(function(value) {
+                $scope.sessionOfToday = value.number;
+            })
+            .error(function(data) {
+                console.log('Error: ' + data);
+            });
+    };
+
+    $scope.getSessionOfToday = function () {
+        getSessionOfToday();
+    };
+
+    var getEngageOfToday = function () {
+        Session.getEngageOfToday()
+            .success(function(value) {
+                $scope.engageOfToday = value.number;
+            })
+            .error(function(data) {
+                console.log('Error: ' + data);
+            });
+    };
+    $scope.getEngageOfToday = function () {
+        getEngageOfToday();
+    };
+
+    var init = function () {
+        getCurrentSession();
+        getSessions();
+        getSessionOfToday();
+        getEngageOfToday();
+    };
+    init();
+
+
 }

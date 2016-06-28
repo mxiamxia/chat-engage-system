@@ -33,6 +33,20 @@ app.factory('Session', ['$http', function ($http) {
                 data: input
             };
             return $http(req);
+        },
+        getSessionOfToday: function () {
+            var req = {
+                method: 'GET',
+                url: '/api/getTodaySession'
+            };
+            return $http(req);
+        },
+        getEngageOfToday: function () {
+            var req = {
+                method: 'GET',
+                url: '/api/getTodayEngage'
+            };
+            return $http(req);
         }
     }
 }]);

@@ -80,15 +80,24 @@ var transferStart = function (input) {
                                 if ((response.message === 'An account with that username already exists.' || response.message === 'An account with that email already exists.')
                                     || (response.username && (response.username.toLowerCase() === shadowName.toLowerCase()))) {
                                     //Login shadow customer with email and password
-                                    logger.debug('Init new mattermost user');
+                                    logger.debug('Init new mattermost user' + JSON.stringify(response));
                                     initHubot(shadowEmail, '123456', 'CUSTOMER', function (err, robot) {
+                                        if(err) {
+                                            logger.debug('Init hubot error=' + err);
+                                        }
                                         var appId = sessionData.appId;
                                         logger.debug('Engagement Channel Info=' + JSON.stringify(robot.adapter.client.channel_details));
                                         //TODO: make here parallel processing
                                         getChannelIdById(agentId, robot, function (err, agentChannelId) {
                                             getChannelIdById(appId, robot, function (err, appChannelId) {
                                                 engageApi.engageAccept(sessionid, agentId, function (err, res_value) {
-                                                    logger.debug('Engagement Accepted result= ' + res_value);
+                                                    if (err) {
+                                                        sendEngagementMessages('Failed to retrieve engagement message from CM', agentChannelId, robot);
+
+                                                    } else {
+                                                        logger.debug('Engagement Accepted result= ' + res_value);
+                                                        sendEngagementMessages(res_value, agentChannelId, robot);
+                                                    }
                                                 });
                                                 //processEngagement(userid, agentChannelId, agentId, sessionid);
                                                 var customerShadowCache = {
@@ -110,7 +119,7 @@ var transferStart = function (input) {
                                                 cache.set(sessionid, sessionData, config.redis_expire);
                                                 robotManager.setRobot(sessionData.shadowCustId, robot);
                                                 ep.unbind();
-                                                sendEngagementMessages(sessionData, agentChannelId, robot);
+                                                //sendEngagementMessages(sessionData, agentChannelId, robot);
 
                                                 sessionDao.updateSession(sessionid, true, true, agentId, function (err, session) {
                                                     logger.debug('Update the session info mongo db accept=' + JSON.stringify(session));
@@ -196,18 +205,19 @@ var logoutShadowUser = function (robot, cb) {
     mattermostApi.logoutUser(token, cb);
 }
 
-var sendEngagementMessages = function (sessionData, channelId, robot) {
-    var q = consts.QUESTION;
-    var a = consts.ANSWER;
-
-    if (!_.isEmpty(sessionData[q])) {
-        var question = sessionData[q];
-        robot.messageRoom(channelId, question);
-    }
-    if (!_.isEmpty(sessionData[a])) {
-        var answer = sessionData[a];
-        robot.messageRoom(channelId, answer);
-    }
+var sendEngagementMessages = function (text, channelId, robot) {
+    robot.messageRoom(channelId, text);
+    //var q = consts.QUESTION;
+    //var a = consts.ANSWER;
+    //
+    //if (!_.isEmpty(sessionData[q])) {
+    //    var question = sessionData[q];
+    //    robot.messageRoom(channelId, question);
+    //}
+    //if (!_.isEmpty(sessionData[a])) {
+    //    var answer = sessionData[a];
+    //    robot.messageRoom(channelId, answer);
+    //}
 };
 
 

@@ -32,13 +32,6 @@ exports.createUser = createUser;
 
 var getSessionByRange = function (req, res) {
     sessionDao.getSessionByRange('', function (err, sessions) {
-        //if(sessions.length > 0) {
-        //    sessions.forEach(function (session) {
-        //        logger.debug('List MongoDB create time = ' + session.create_at);
-        //        var time = session.create_at;
-        //        result.push({typeof:typeof session.create_at, createAt: time});
-        //    })
-        //}
         res.send(sessions);
     })
 };
@@ -85,5 +78,29 @@ var deleteSession = function (req, res) {
         res.send(result);
     });
 
-}
+};
 exports.deleteSession = deleteSession;
+
+var getSessionOfToday = function (req, res) {
+    sessionDao.getSessionOfToday(function (err, nums) {
+        if(err) {
+            logger.debug('Today\'s session number err=' + err);
+            return res.send([]);
+        }
+        var result = {number: nums};
+        res.json(result);
+    })
+};
+exports.getSessionOfToday = getSessionOfToday;
+
+var getEngageOfToday = function (req, res) {
+    sessionDao.getEngageOfToday(function (err, nums) {
+        if(err) {
+            logger.debug('Today\'s engage number err=' + err);
+            return res.send([]);
+        }
+        var result = {number: nums};
+        res.json(result);
+    })
+};
+exports.getEngageOfToday = getEngageOfToday;

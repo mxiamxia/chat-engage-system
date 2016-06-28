@@ -194,6 +194,12 @@ class Client extends EventEmitter
         if @ws
             @ws.close()
 
+        # only attempt to  reconnect 6 times
+        if @_connAttempts is 6
+            @logger.info 'Attempting reconnects up to maximum 6 times, failed to reconnect'
+            @_connAttempts = 0
+            return
+
         @_connAttempts++
 
         timeout = @_connAttempts * 1000

@@ -1,1 +1,1 @@
-var app = angular.module('RDash', ['ui.bootstrap', 'ui.router', 'ngCookies']);
+var app = angular.module('RDash', ['ui.bootstrap', 'ui.router', 'ngCookies', 'angularUtils.directives.dirPagination']);

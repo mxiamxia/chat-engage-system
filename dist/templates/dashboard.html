@@ -5,8 +5,8 @@
 				<div class="widget-icon green pull-left">
 					<i class="fa fa-users"></i>
 				</div>
-				<div class="title">80</div>
-				<div class="comment">Conversations</div>
+				<div class="title">{{sessionOfToday}}</div>
+				<div class="comment">Conversations Today</div>
 			</rd-widget-body>
 		</rd-widget>
 	</div>
@@ -17,8 +17,8 @@
 				<div class="widget-icon blue pull-left">
 					<i class="fa fa-support"></i>
 				</div>
-				<div class="title">62</div>
-				<div class="comment">Tickets</div>
+				<div class="title">{{engageOfToday}}</div>
+				<div class="comment">Engagements Today</div>
 			</rd-widget-body>
 		</rd-widget>
 	</div>
@@ -30,7 +30,7 @@
         <rd-widget>
             <rd-widget-header icon="fa-tasks" title="Current Session">
                 <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Search for...">
+                    <input type="text" class="form-control" ng-model="search.text" placeholder="Search for...">
                     <span class="input-group-btn">
                         <button class="btn btn-primary" type="button" ng-click="refreshCurrentSessions()">Refresh!</button>
                     </span>
@@ -45,8 +45,8 @@
                             <th>Delete</th>
                         </tr>
                         </thead>
-                        <tbody ng-repeat="session in currentSession">
-                        <tr>
+                        <tbody>
+                        <tr ng-repeat="session in currentSession | filter:search.text ">
                             <td>{{session}}</td>
                             <td><button class="btn btn-sm btn-primary" ng-click="deleteSession(session)">Delete</button></td>
                         </tr>
@@ -54,16 +54,6 @@
                     </table>
                 </div>
             </rd-widget-body>
-            <rd-widget-footer>
-                <ul class="pagination pagination-sm pull-right">
-                    <li><a href="#">&laquo;</a></li>
-                    <li><a href="#">1</a></li>
-                    <li><a href="#">2</a></li>
-                    <li><a href="#">3</a></li>
-                    <li><a href="#">&raquo;</a></li>
-                </ul>
-                <div class="clearfix"></div>
-            </rd-widget-footer>
         </rd-widget>
     </div>
 </div>
@@ -73,7 +63,7 @@
         <rd-widget>
             <rd-widget-header icon="fa-tasks" title="Session History">
                 <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Search for...">
+                    <input type="text" class="form-control" placeholder="Search for..." ng-model="searchText.text">
                     <span class="input-group-btn">
                         <button class="btn btn-primary" type="button" ng-click="refreshSessions()">Refresh!</button>
                     </span>
@@ -92,8 +82,8 @@
                             <th>Start Time</th>
                         </tr>
                         </thead>
-                        <tbody ng-repeat="session in sessionData">
-                        <tr>
+                        <tbody>
+                        <tr dir-paginate="session in sessionData | filter:searchText.text | itemsPerPage:5">
                             <td>{{session.sessionId}}</td>
                             <td>{{session.customerId}}</td>
                             <td><span class="text-success"><i ng-class="{'fa fa-check':session.engage, 'fa fa-close':!session.engage}"></i></span>
@@ -101,22 +91,24 @@
                             <td><span class="text-success"><i ng-class="{'fa fa-check':session.engage_accept, 'fa fa-close':!session.engage_accept}"></i></span>
                             </td>
                             <td>{{session.agentId}}</td>
-                            <td>{{session.create_at}}</td>
+                            <td>{{session.create_at | date:'yyyy-MM-dd HH:mm:ss EST'}}</td>
                         </tr>
                         </tbody>
                     </table>
                 </div>
             </rd-widget-body>
-            <rd-widget-footer>
-                <ul class="pagination pagination-sm pull-right">
-                    <li><a href="#">&laquo;</a></li>
-                    <li><a href="#">1</a></li>
-                    <li><a href="#">2</a></li>
-                    <li><a href="#">3</a></li>
-                    <li><a href="#">&raquo;</a></li>
-                </ul>
-                <div class="clearfix"></div>
-            </rd-widget-footer>
+            <dir-pagination-controls max-size="10" direction-links="true" boundary-links="true">
+            </dir-pagination-controls>
+            <!--<rd-widget-footer>-->
+                <!--<ul class="pagination pagination-sm pull-right">-->
+                    <!--<li><a href="#">&laquo;</a></li>-->
+                    <!--<li><a href="#">1</a></li>-->
+                    <!--<li><a href="#">2</a></li>-->
+                    <!--<li><a href="#">3</a></li>-->
+                    <!--<li><a href="#">&raquo;</a></li>-->
+                <!--</ul>-->
+                <!--<div class="clearfix"></div>-->
+            <!--</rd-widget-footer>-->
         </rd-widget>
     </div>
 </div>
