@@ -79,7 +79,9 @@ function MasterCtrl($scope, $cookieStore, $http, Session) {
         Session.deleteSession(sessionId)
             .success(function(resp) {
                 if (resp.code === 1000) {
+                    console.log('cur session length' + $scope.currentSession.length);
                     $scope.currentSession.splice($scope.currentSession.indexOf(resp.id), 1);
+                    console.log('cur session length1' + $scope.currentSession.length);
                 }
             })
             .error(function(data) {
