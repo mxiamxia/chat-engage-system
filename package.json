@@ -17,6 +17,7 @@
     "ejs": "*",
     "eventproxy": "^0.3.4",
     "express": "~4.13.1",
+    "forever-monitor": "^1.7.0",
     "hubot": "^2.19.0",
     "hubot-matteruser": "file:plugins/hubot-matteruser-0.0.9.tgz",
     "ioredis": "^1.15.1",

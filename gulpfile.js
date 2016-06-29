@@ -9,7 +9,9 @@ var gulp = require('gulp'),
     less = require('gulp-less'),
     rename = require('gulp-rename'),
     minifyHTML = require('gulp-htmlmin'),
-    server = require('gulp-express');
+    fs = require('fs'),
+    server = require('gulp-express'),
+    forever = require('forever-monitor');
 
 var paths = {
     scripts: 'client/js/**/*.*',
@@ -19,6 +21,8 @@ var paths = {
     index: 'client/index.html',
     bower_fonts: 'client/components/**/*.{ttf,woff,eof,svg}',
 };
+
+var process = null;
 
 /**
  * Handle bower components from index
@@ -98,7 +102,20 @@ gulp.task('webserver', function() {
 
 gulp.task('run', function () {
     server.run(['./bin/www']);
-})
+});
+
+gulp.task('forever', function () {
+    process = new forever.Monitor('./bin/www').start();
+});
+
+gulp.task('foreverstop', function () {
+    if (process) {
+        process.stop();
+    } else {
+        console.log('The process is not up and running now!')
+    }
+});
+
 
 gulp.task('livereload', function() {
     gulp.src(['dist/**/*.*'])
@@ -106,8 +123,18 @@ gulp.task('livereload', function() {
         .pipe(connect.reload());
 });
 
+gulp.task('log', function () {
+    var dir = './logs';
+
+    if (!fs.existsSync(dir)){
+        fs.mkdirSync(dir);
+    }
+})
+
 /**
  * Gulp tasks
  */
 gulp.task('build', ['usemin', 'build-assets', 'build-custom']);
-gulp.task('default', ['build', 'watch']);
+gulp.task('prod', ['build', 'log', 'run']);
+gulp.task('stop', ['foreverstop']);
+gulp.task('default', ['build', 'log', 'run', 'watch']);

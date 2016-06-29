@@ -19,6 +19,7 @@ Use the following command to bring up your app with forever
 
 ```bash
 forever start --minUptime 1000 --spinSleepTime 1000 ./bin/www
+forever start --minUptime 1000 --spinSleepTime 1000 node_modules/gulp/bin/gulp.js prod
 ```
 
 Check list of forever process using the command
