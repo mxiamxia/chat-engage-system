@@ -39,7 +39,7 @@ exports.check3Way = check3Way;
 
 
 var sendMsgToApp = function (value, sentence) {
-    addCacheData(value.sessionId, consts.ANSWER, sentence);
+    //addCacheData(value.sessionId, consts.ANSWER, sentence);
     var deferred = Q.defer();
     var input = util.format(TEMP.conversationReq, value.sessionId, value.realId, sentence);
     logger.debug('Prolog CM conversation input===' + input);
@@ -58,7 +58,7 @@ var sendMsgToApp = function (value, sentence) {
         if (body.indexOf('<xul>') > -1) {
             body = body.replace(/\r?\n|\r/g, '');
             deferred.resolve({'type': 'xul', 'message': body, 'code': 1000});
-            addCacheData(value.sessionId, consts.QUESTION, body);
+            //addCacheData(value.sessionId, consts.QUESTION, body);
         } else {
             parser.parseString(body, function (err, result) {
                 try {
@@ -74,7 +74,7 @@ var sendMsgToApp = function (value, sentence) {
                     }
                     statement = statement.replace(/\r?\n|\r/g, '');
                     var data = {'type': 'message', 'message': statement, 'code': 1000};
-                    addCacheData(value.sessionId, consts.QUESTION, statement);
+                    //addCacheData(value.sessionId, consts.QUESTION, statement);
                     deferred.resolve(data);
                 } catch (e) {
                     if(body.indexOf('existance error: [session') > -1) {

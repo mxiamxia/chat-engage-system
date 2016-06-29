@@ -60,6 +60,7 @@ function MasterCtrl($scope, $cookieStore, Session) {
     var getCurrentSession = function () {
         Session.getCurrentSessions()
             .success(function(sessions) {
+                console.log('current session length=' + sessions[0]);
                 $scope.currentSession = sessions;
             })
             .error(function(data) {

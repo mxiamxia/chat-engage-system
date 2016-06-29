@@ -195,7 +195,7 @@ class Client extends EventEmitter
             @ws.close()
 
         # only attempt to  reconnect 6 times
-        if @_connAttempts is 6
+        if @_connAttempts is 600
             @logger.info 'Attempting reconnects up to maximum 6 times, failed to reconnect'
             @_connAttempts = 0
             return

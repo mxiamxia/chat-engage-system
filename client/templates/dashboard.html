@@ -2,11 +2,11 @@
 	<div class="col-lg-6 col-md-6 col-xs-12">
 		<rd-widget>
 			<rd-widget-body>
-				<div class="widget-icon green pull-left">
+				<div class="widget-icon green pull-left" ng-click="getSessionOfToday()">
 					<i class="fa fa-users"></i>
 				</div>
 				<div class="title">{{sessionOfToday}}</div>
-				<div class="comment">Conversations Today</div>
+				<div class="comment" >Conversations Today</div>
 			</rd-widget-body>
 		</rd-widget>
 	</div>
@@ -14,7 +14,7 @@
 	<div class="col-lg-6 col-md-6 col-xs-12">
 		<rd-widget>
 			<rd-widget-body>
-				<div class="widget-icon blue pull-left">
+				<div class="widget-icon blue pull-left" ng-click="getEngageOfToday()">
 					<i class="fa fa-support"></i>
 				</div>
 				<div class="title">{{engageOfToday}}</div>
@@ -46,14 +46,20 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr ng-repeat="session in currentSession | filter:search.text ">
-                            <td>{{session}}</td>
-                            <td><button class="btn btn-sm btn-primary" ng-click="deleteSession(session)">Delete</button></td>
+                        <tr pagination-id="current" dir-paginate="id in currentSession | filter:search.text | itemsPerPage:4">
+                            <td>{{id}}</td>
+                            <td><button class="btn btn-sm btn-primary" ng-click="deleteSession(id)">Delete</button></td>
                         </tr>
                         </tbody>
                     </table>
                 </div>
             </rd-widget-body>
+            <dir-pagination-controls
+                    pagination-id="current"
+                    max-size="5"
+                    direction-links="true"
+                    boundary-links="true" >
+            </dir-pagination-controls>
         </rd-widget>
     </div>
 </div>
@@ -83,7 +89,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr dir-paginate="session in sessionData | filter:searchText.text | itemsPerPage:5">
+                        <tr dir-paginate="session in sessionData | filter:searchText.text | itemsPerPage:5" pagination-id="history">
                             <td>{{session.sessionId}}</td>
                             <td>{{session.customerId}}</td>
                             <td><span class="text-success"><i
@@ -100,20 +106,11 @@
                 </div>
             </rd-widget-body>
             <dir-pagination-controls
+                    pagination-id="history"
                     max-size="10"
                     direction-links="true"
                     boundary-links="true" >
             </dir-pagination-controls>
-            <!--<rd-widget-footer>-->
-                <!--<ul class="pagination pagination-sm pull-right">-->
-                    <!--<li><a href="#">&laquo;</a></li>-->
-                    <!--<li><a href="#">1</a></li>-->
-                    <!--<li><a href="#">2</a></li>-->
-                    <!--<li><a href="#">3</a></li>-->
-                    <!--<li><a href="#">&raquo;</a></li>-->
-                <!--</ul>-->
-                <!--<div class="clearfix"></div>-->
-            <!--</rd-widget-footer>-->
         </rd-widget>
     </div>
 </div>

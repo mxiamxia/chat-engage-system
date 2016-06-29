@@ -90,7 +90,7 @@ var getKeys = function (pattern, cb) {
         }
     });
     stream.on('end', function () {
-        logger.debug('done with the keys: ', keys);
+        logger.debug('done with the keys: ', keys.length);
         cb(null, keys);
     });
 };
