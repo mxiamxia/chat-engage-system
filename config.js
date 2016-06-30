@@ -32,7 +32,9 @@ var config = {
     houndy_url: 'https://api.houndify.com/v1/text?query=',
     callback_url: 'http://192.168.254.122:4011/engagement',
     ENGAGE_MODE: 'TEST',
-    jwtSecret: 'cyber engagement'
+    jwtSecret: 'cyber engagement',
+    APPLIST: ['wgwwqx5ei789fngx86osp6bzmo', 'gqupp5deapyy9q1gitmxzu1aho']
+
 };
 
 process.env.MATTERMOST_HOST = 'http://192.168.0.55:8065';

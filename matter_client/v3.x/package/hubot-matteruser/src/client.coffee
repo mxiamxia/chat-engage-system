@@ -282,7 +282,7 @@ class Client extends EventEmitter
             postData.props = {msg_type: 'engage_request_claim', session_id: sessionId}
             postData.message = ''
 
-        console.log '=======postMessage data =======' + JSON.stringify postData
+#        console.log '=======postMessage data =======' + JSON.stringify postData
 
         @_apiCall 'POST', @channelRoute(channelID) + '/posts/create', postData, (data, header) =>
             @logger.debug 'Posted message.'

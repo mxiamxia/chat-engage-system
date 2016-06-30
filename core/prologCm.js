@@ -163,7 +163,7 @@ var processPrologMessage = function (id, message, robot, socket, self, room) {
                                 robot.messageRoom(value.realChannelId, text);
                                 break;
                             case 'AGENT' :
-                                cmHelper.appToAgent(text, value, c_value, robot, self, socket);
+                                cmHelper.appToAgent(text, value, c_value.type, robot, self, socket);
                                 break;
                             case 'ALL' :
                                 cmHelper.appToAll(text, value, c_value.type, robot, self, socket);
@@ -183,7 +183,7 @@ var processPrologMessage = function (id, message, robot, socket, self, room) {
                                     break;
                             }
                         } else {
-                            cmHelper.sendMsgToApp(value, text)
+                            cmHelper.sendMsgToApp(value, 'REAL', text)
                                 .then(function (result) {
                                     logger.debug('conversation output===' + JSON.stringify(result));
                                     if (self) {

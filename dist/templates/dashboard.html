@@ -37,7 +37,11 @@
                 </div>
             </rd-widget-header>
             <rd-widget-body classes="medium no-padding">
-                <div class="table-responsive">
+                <div ng-if="currentSession.length === 0">
+                    <span>No active session running</span>
+                </div>
+
+                <div ng-if="currentSession.length > 0" class="table-responsive">
                     <table class="table table-fixed">
                         <thead>
                         <tr>

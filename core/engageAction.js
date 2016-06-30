@@ -20,7 +20,7 @@ var EventProxy = require('eventproxy');
 var engageApi = require('./engageApi');
 var sessionDao = require('../dao/').Session;
 
-var appIdList = ['wgwwqx5ei789fngx86osp6bzmo'];
+var appIdList = config.APPLIST;
 
 var sessionEngaged = [];
 

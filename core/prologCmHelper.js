@@ -38,10 +38,14 @@ var check3Way = function (prop, text, value) {
 exports.check3Way = check3Way;
 
 
-var sendMsgToApp = function (value, sentence) {
+var sendMsgToApp = function (value, type, sentence) {
     //addCacheData(value.sessionId, consts.ANSWER, sentence);
     var deferred = Q.defer();
-    var input = util.format(TEMP.conversationReq, value.sessionId, value.realId, sentence);
+    if (type === 'SHADOW') {
+        var input = util.format(TEMP.conversationReq, value.sessionId, value.agentId, sentence);
+    } else {
+        var input = util.format(TEMP.conversationReq, value.sessionId, value.realId, sentence);
+    }
     logger.debug('Prolog CM conversation input===' + input);
     var options = {
         uri: config.CM_PROLOG,
@@ -147,7 +151,7 @@ var addCacheData = function (id, key, value) {
 };
 
 var appToAgent = function (sentence, value, type, robot, self, socket) {
-    sendMsgToApp(value, sentence)
+    sendMsgToApp(value, type, sentence)
         .then(function (result) {
             logger.debug('appToAgent conversation output===' + JSON.stringify(result));
             if (self) {
@@ -172,7 +176,7 @@ exports.appToAgent = appToAgent;
 
 
 var appToAll = function (sentence, value, type, robot, self, socket) {
-    sendMsgToApp(value, sentence)
+    sendMsgToApp(value, type, sentence)
         .then(function (result) {
             logger.debug('appToAll conversation output===' + JSON.stringify(result));
             if (self) {

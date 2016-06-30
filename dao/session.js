@@ -53,13 +53,24 @@ exports.getSessionByRange = function (date, cb) {
     });
 };
 
+//get the last 200 conversations
 exports.getAllSessions = function (cb) {
-    Session.find({}, '', {sort:{create_at:-1}}, function (err, sessions) {
-        if (err) {
-            return cb(err);
-        }
-        cb(null, sessions);
-    });
+    Session
+        .find({})
+        .sort({create_at:-1})
+        //.limit(200)
+        .exec(function (err, sessions) {
+            if (err) {
+                return cb(err);
+            }
+            cb(null, sessions);
+        });
+    //Session.find({}, '', {sort:{create_at:-1}}, function (err, sessions) {
+    //    if (err) {
+    //        return cb(err);
+    //    }
+    //    cb(null, sessions);
+    //});
 };
 
 exports.getSessionOfToday = function (cb) {
