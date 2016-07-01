@@ -10,16 +10,12 @@ poll = require '../common/poll'
 io_socket = require 'socket.io'
 cm = require '../core/conversation'
 prologCm = require '../core/prologCm'
-fs = require 'fs'
 path = require 'path'
 url = require 'url'
 querystring = require 'querystring'
 _ = require 'lodash'
 
-
 module.exports = (robot) ->
-
-  fs.writeFileSync(path.join(__dirname, '/../app.pid'), process.pid)
 
   io =  io_socket robot.server
 

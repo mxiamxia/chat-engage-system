@@ -7,6 +7,7 @@
     "debug": "node --debug ./bin/www"
   },
   "dependencies": {
+    "async": "^2.0.0-rc.6",
     "bcryptjs": "^2.3.0",
     "body-parser": "~1.13.2",
     "cheerio": "^0.20.0",
@@ -19,7 +20,7 @@
     "express": "~4.13.1",
     "forever-monitor": "^1.7.0",
     "hubot": "^2.19.0",
-    "hubot-matteruser": "file:plugins/hubot-matteruser-0.0.9.tgz",
+    "hubot-matteruser": "file:plugins/hubot-matteruser-0.1.1.tgz",
     "ioredis": "^1.15.1",
     "lodash": "^4.11.0",
     "log4js": "^0.6.33",

@@ -65,7 +65,7 @@ var processPrologMessage = function (id, message, robot, socket, self, room) {
         //Shadow Customer only forward message to either App or Agent
         if (robot.adapter.profile.type == 'CUSTOMER') {
             logger.debug('Shadow Custom ID =' + robot.adapter.profile.id);
-            if (prop.msg_type === 'leave_engage') {
+            if (prop && prop.msg_type === 'leave_engage') {
                 dispatcher.emit(robot.adapter.profile.id + 'engageleave', prop);
                 return;
             }
@@ -80,17 +80,33 @@ var processPrologMessage = function (id, message, robot, socket, self, room) {
                         logger.debug('Message to shadow customer  =' + text);
                         // check if agent try to set engagement mode
                         if (cmHelper.check3Way(prop, text, value)) {
-                            //TODO:
                             if(_.isEmpty(text)) {
                                 return;
                             }
                         }
-                        robot.messageRoom(c_value.appChannelId, text);
-
+                        // check if agent trys to foward message, pass the whole prop to APP for dispatching
+                        if (prop && prop.fwd_to) {
+                            return robot.messageRoom(c_value.appChannelId, {message: text, prop: prop});
+                        }
+                        robot.messageRoom(c_value.appChannelId, {message: text});
                     } else {  // message come from App to agent
-                        logger.debug('Message to shadow customer came from =' + msgFrom);
                         logger.debug('Message to shadow customer  =' + text);
-                        robot.messageRoom(c_value.agentChannelId, text);
+                        //if real customer request logout, foward the whole message to agent
+                        if (prop && prop.msg_type === 'cust_leave') {
+                            return robot.messageRoom(c_value.agentChannelId, message);
+                        }
+
+                        if(text.indexOf('@@CUS@@') === 0) {
+                            text = text.substring('@@CUS@@'.length);
+                            return robot.messageRoom(c_value.agentChannelId, {message: text, prop: {msg_from: 'CUST'}});
+                        }
+
+                        if(text.indexOf('@@APP@@') === 0) {
+                            text = text.substring('@@APP@@'.length);
+                            return robot.messageRoom(c_value.agentChannelId, {message: text, prop: {msg_from: 'APP'}});
+                        }
+
+                        //robot.messageRoom(c_value.agentChannelId, text);
                     }
                 });
             });
@@ -131,7 +147,7 @@ var processPrologMessage = function (id, message, robot, socket, self, room) {
                             cache.set(id, customCache, config.redis_expire);
                             cache.set(session, sessionInfo, config.redis_expire);
                             if (self) {
-                                robot.messageRoom(room, statement);
+                                robot.messageRoom(room, {message: statement});
                             } else {
                                 socket.emit('response', {'userid': id, 'input': statement});
                             }
@@ -154,13 +170,23 @@ var processPrologMessage = function (id, message, robot, socket, self, room) {
 
 
             // when session is established
+            // for each message to appAndShadowChannelId(APP to shadow user), we add message_from prefix and add it to props in client.coffee
             if (!_.isEmpty(value)) {
                 //if message came from agent and intends to send customer directly
                 cache.get(id, function (err, c_value) {
+                    // foward message
+                    if (prop && prop.fwd_to === 'APP') {
+                        return cmHelper.appToAgent(text, value, c_value.type, robot, self, socket);
+                    }
+                    if (prop && prop.fwd_to === 'CUST') {
+                        return robot.messageRoom(value.realChannelId, {message: text});
+                    }
+
+                    //3 way conversation
                     if (c_value.type === 'SHADOW') {
                         switch (value.TO) {
                             case 'CUSTOMER' :
-                                robot.messageRoom(value.realChannelId, text);
+                                robot.messageRoom(value.realChannelId, {message: text});
                                 break;
                             case 'AGENT' :
                                 cmHelper.appToAgent(text, value, c_value.type, robot, self, socket);
@@ -171,9 +197,15 @@ var processPrologMessage = function (id, message, robot, socket, self, room) {
                         }
                     } else {  // from real customer
                         if (value.engagement) {
+                            // Real customer logout/close browser
+                            if (prop && prop.msg_type === 'cust_leave') {
+                                return robot.messageRoom(value.appAndShadowChannelId, message);
+                            }
+
+
                             switch (value.TO) {
                                 case 'CUSTOMER' :
-                                    robot.messageRoom(value.appAndShadowChannelId, text);
+                                    robot.messageRoom(value.appAndShadowChannelId, {message: '@@CUS@@' + text});
                                     break;
                                 case 'AGENT' :
                                     cmHelper.appToAgent(text, value, c_value.type, robot, self, socket);  // if type is from real customer, send text and app answer to agent
@@ -188,15 +220,15 @@ var processPrologMessage = function (id, message, robot, socket, self, room) {
                                     logger.debug('conversation output===' + JSON.stringify(result));
                                     if (self) {
                                         if (result.code === 9999) {
-                                            robot.messageRoom(room, 'Did not find a proper answer');
+                                            robot.messageRoom(room, {message: 'Did not find a proper answer'});
                                         }
                                         else if (result.code === 1801) {
                                             //clean cache and do login again
-                                            robot.messageRoom(room, 'The current session expired. Ready to init a new session.');
+                                            robot.messageRoom(room, {message: 'The current session expired. Ready to init a new session.'});
                                             cmHelper.cleanCache('', 'quit', value, robot, self, socket);
 
                                         } else {
-                                            robot.messageRoom(room, result.message);
+                                            robot.messageRoom(room, {message: result.message});
                                         }
                                     } else {
                                         if (result.code == 9999) {

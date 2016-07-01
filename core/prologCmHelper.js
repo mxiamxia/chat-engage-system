@@ -122,7 +122,7 @@ var cleanCache = function (room, text, value, robot, self, socket) {
             }
         }
         if (self && !_.isEmpty(room)) {
-            robot.messageRoom(room, 'Session is terminated');
+            robot.messageRoom(room, {message: 'Session is terminated'});
         }
         else {
             if (socket) {
@@ -156,12 +156,12 @@ var appToAgent = function (sentence, value, type, robot, self, socket) {
             logger.debug('appToAgent conversation output===' + JSON.stringify(result));
             if (self) {
                 if (result.code == 9999) {
-                    robot.messageRoom(value.appAndShadowChannelId, 'Did not find a proper answer');
+                    robot.messageRoom(value.appAndShadowChannelId, {message: '@@APP@@' + 'Did not find a proper answer'});
                 } else {
                     if (type === 'REAL') {
-                        robot.messageRoom(value.appAndShadowChannelId, sentence);
+                        robot.messageRoom(value.appAndShadowChannelId, {message: '@@CUS@@' + sentence});
                     }
-                    robot.messageRoom(value.appAndShadowChannelId, result.message);
+                    robot.messageRoom(value.appAndShadowChannelId, {message: '@@APP@@' +result.message});
                 }
             } else {
                 if (result.code == 9999) {
@@ -181,15 +181,15 @@ var appToAll = function (sentence, value, type, robot, self, socket) {
             logger.debug('appToAll conversation output===' + JSON.stringify(result));
             if (self) {
                 if (result.code == 9999) {
-                    robot.messageRoom(value.appAndShadowChannelId, 'Did not find a proper answer');
-                    robot.messageRoom(value.realChannelId, 'Did not find a proper answer');
+                    robot.messageRoom(value.appAndShadowChannelId, {message: '@@APP@@' + 'Did not find a proper answer'});
+                    robot.messageRoom(value.realChannelId, {message: 'Did not find a proper answer'});
 
                 } else {
                     if (type === 'REAL') {
-                        robot.messageRoom(value.appAndShadowChannelId, sentence);
+                        robot.messageRoom(value.appAndShadowChannelId, {message: '@@CUS@@' + sentence});
                     }
-                    robot.messageRoom(value.appAndShadowChannelId, result.message);
-                    robot.messageRoom(value.realChannelId, result.message);
+                    robot.messageRoom(value.appAndShadowChannelId, {message: '@@APP@@' + result.message});
+                    robot.messageRoom(value.realChannelId, {message: result.message});
                 }
             } else {
                 if (result.code == 9999) {

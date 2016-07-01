@@ -13,13 +13,11 @@ var config = require('./config');
 var app = express();
 
 //init robot instance
-require('./bots/botInstance')(process.env.MATTERMOST_USER, process.env.MATTERMOST_PASSWORD, 'APP', function () {
-});
-//require('./bots/botinstance')('cust_s1@cyberobject.com', '123456', 'CUSTOMER');
+require('./bots/botInstance')(process.env.MATTERMOST_USER, process.env.MATTERMOST_PASSWORD, 'APP', function () {});
 
 // view engine setup
-app.set('views', path.join(__dirname, '/dist'));
-app.set('view engine', 'ejs');
+//app.set('views', path.join(__dirname, '/dist'));
+//app.set('view engine', 'ejs');
 
 // uncomment after placing your favicon in /public
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -28,6 +26,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '/dist')));
+
+fs.writeFileSync(path.join(__dirname, '/app.pid'), process.pid);
 
 //Allow cross domain request
 //app.use(cors());

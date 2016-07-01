@@ -13,25 +13,24 @@ router.get('/', function (req, res, next) {
 router.get('/about', function (req, res, next) {
 });
 
+//receive engagement request from prolog cm
 router.get('/engagement', engageController.index);
+
+// testing
 router.get('/engagement/accept', engageController.engageAccept);
 router.get('/engagement/reject', engageController.engageReject);
 router.get('/engagement/logout', engageController.engageLeave);
-
-//for testing
 router.get('/api/createUser', mattermostController.createUser);
 
+
+//Admin console
 router.get('/api/getActiveSession', mattermostController.getSessionByRange);
-
 router.get('/api/getHistorySession', mattermostController.getAllSessions);
-
 router.get('/api/getAllRobot', mattermostController.getAllRobot);
 router.get('/api/getAllSessionKey', mattermostController.getAllSessionKey);
-
 router.post('/api/deleteSession', mattermostController.deleteSession);
 router.get('/api/getTodaySession', mattermostController.getSessionOfToday);
 router.get('/api/getTodayEngage', mattermostController.getEngageOfToday);
-
 
 
 module.exports = router;
