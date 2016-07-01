@@ -10,38 +10,45 @@ co-enagement trying to engage agent to all other channel clients
 
 
 #### Install
-* npm install
-* npm install -g forever (if forever is not installed on server)
+
+Engagement Service Installation Instruction
+
+1.	Check out co-engagement source code from GIT server,
+
+2.	Install all the necessary software
+a.	Node JS & NPM
+b.	Redis server (v3.x)
+c.	Mongo DB server
+
+3.	Edit the ‘config.js’ file under the project root directory for the following items,
+a.	CM_URL       (prolog cm url)
+b.	mongodb     (MongoDB url)
+c.	redis_host    (redis cache server url)		
+d.	process.env.PORT
+e.	process.env.MATTERMOST_HOST
+f.	process.env.MATTERMOST_GROUP
+g.	process.env.MATTERMOST_USER
+h.	process.env.MATTERMOST_PASSWORD
+i.	process.env.MATTERMOST_INVITETOKEN 
+j.	process.env.MATTERMOST_AGENT_GROUP 
+k.	etc,
+
+4.	Run the following command under the project folder to install the dependency libs
+•	 "npm install"
+
+5.	Compile and Start the engage server by gulp module, I created a gulp script to compile, minify/compress the js/css file and start the Node server with one step. Under the project root folder, run the following command to bring up the service.
+a.	"forever start --minUptime 1000 --spinSleepTime 1000 node_modules/gulp/bin/gulp.js prod"
 
 
-If your package.json file contains "start": "node ./bin/www"
-Use the following command to bring up your app with forever
 
-```bash
-forever start --minUptime 1000 --spinSleepTime 1000 ./bin/www
-forever start --minUptime 1000 --spinSleepTime 1000 node_modules/gulp/bin/gulp.js prod
-```
 
-Check list of forever process using the command
+6.	Stop the service, run the following commands,
+a.	forever list
+b.	forever stop <PID>
 
-```bash
-forever list
-```
+7.	Service startup verification, two steps below,
+a.	Check the exception.err log file under the project root folder, if there is any new exceptions during the startup
+b.	Check http://server_host_ip:port/
 
-Stop the forever process using the command. We can find the pid from forever list command
 
-```bash
-forever stop <pid>
-```
-
-### Mattermost server
-1. ssh 进入 192.168.0.55;  账号 : mattermost, 密码：asdqwe
-2. cd /opt/mattermost
-3. ./shutdown.sh
-4. ./startup.sh
-
-### Git URL
-```bash
-ssh://gitadmin@192.168.254.196/co-engagement
-```
 
