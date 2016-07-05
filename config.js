@@ -17,7 +17,7 @@ var config = {
     redis_host: 'localhost',
     redis_port: 6379,
     redis_db: 1,
-    redis_expire: 4 * 60 * 60, // four hours
+    redis_expire: 24 * 60 * 60, // four hours
     pollInterval: 1000,
     app: 'mattermost',
     debug: true,
