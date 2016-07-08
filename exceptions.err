@@ -186,3 +186,57 @@ Fri Jul 01 2016 12:52:52 GMT-0400 (EDT) ctrl-c trigger
 Fri Jul 01 2016 14:08:40 GMT-0400 (EDT) ctrl-c trigger
 Fri Jul 01 2016 14:18:10 GMT-0400 (EDT) ctrl-c trigger
 Fri Jul 01 2016 14:20:20 GMT-0400 (EDT) ctrl-c trigger
+Sat Jul 02 2016 04:39:36 GMT-0400 (EDT) Error: not opened
+Mon Jul 04 2016 13:04:41 GMT-0400 (EDT) ctrl-c trigger
+Tue Jul 05 2016 11:49:53 GMT-0400 (EDT) ReferenceError: logger is not defined
+Tue Jul 05 2016 11:53:04 GMT-0400 (EDT) ctrl-c trigger
+Tue Jul 05 2016 12:00:19 GMT-0400 (EDT) ctrl-c trigger
+Tue Jul 05 2016 12:27:30 GMT-0400 (EDT) ctrl-c trigger
+Thu Jul 07 2016 14:05:24 GMT-0400 (EDT) ctrl-c trigger
+Thu Jul 07 2016 14:10:22 GMT-0400 (EDT) ctrl-c trigger
+Thu Jul 07 2016 14:18:14 GMT-0400 (EDT) ctrl-c trigger
+Thu Jul 07 2016 14:20:02 GMT-0400 (EDT) ctrl-c trigger
+Thu Jul 07 2016 14:23:28 GMT-0400 (EDT) ctrl-c trigger
+Thu Jul 07 2016 14:23:34 GMT-0400 (EDT) Error: ENOENT: no such file or directory, open 'logs/co-engagement.log'
+Thu Jul 07 2016 14:23:44 GMT-0400 (EDT) Error: ENOENT: no such file or directory, open 'logs/co-engagement.log'
+Thu Jul 07 2016 14:24:11 GMT-0400 (EDT) Error: ENOENT: no such file or directory, open 'logs/co-engagement.log'
+Thu Jul 07 2016 14:24:27 GMT-0400 (EDT) Error: ENOENT: no such file or directory, open 'logs/co-engagement.log'
+Thu Jul 07 2016 14:26:12 GMT-0400 (EDT) Error: ENOENT: no such file or directory, open 'logs/co-engagement.log'
+Thu Jul 07 2016 14:32:27 GMT-0400 (EDT) ctrl-c trigger
+Thu Jul 07 2016 14:33:39 GMT-0400 (EDT) ctrl-c trigger
+Thu Jul 07 2016 14:34:03 GMT-0400 (EDT) ctrl-c trigger
+Thu Jul 07 2016 14:34:08 GMT-0400 (EDT) Error: ENOENT: no such file or directory, open 'logs/co-engagement.log'
+Thu Jul 07 2016 14:34:08 GMT-0400 (EDT) TypeError: Cannot assign to read only property 'type' of control frames cannot have the Per-message Compressed bits
+Thu Jul 07 2016 14:35:12 GMT-0400 (EDT) Error: ENOENT: no such file or directory, open 'logs/co-engagement.log'
+Thu Jul 07 2016 14:35:12 GMT-0400 (EDT) TypeError: Cannot assign to read only property 'type' of control frames cannot have the Per-message Compressed bits
+Thu Jul 07 2016 14:35:57 GMT-0400 (EDT) Error: ENOENT: no such file or directory, open 'logs/co-engagement.log'
+Thu Jul 07 2016 14:35:57 GMT-0400 (EDT) TypeError: Cannot assign to read only property 'type' of control frames cannot have the Per-message Compressed bits
+Thu Jul 07 2016 14:39:59 GMT-0400 (EDT) Error: ENOENT: no such file or directory, open 'logs/co-engagement.log'
+Thu Jul 07 2016 14:41:13 GMT-0400 (EDT) Error: ENOENT: no such file or directory, open 'logs/co-engagement.log'
+Thu Jul 07 2016 14:41:13 GMT-0400 (EDT) AssertionError: expected 'echo back from server' to equal 'Hello World'
+Thu Jul 07 2016 14:41:48 GMT-0400 (EDT) Error: ENOENT: no such file or directory, open 'logs/co-engagement.log'
+Thu Jul 07 2016 14:42:18 GMT-0400 (EDT) Error: ENOENT: no such file or directory, open 'logs/co-engagement.log'
+Thu Jul 07 2016 14:43:06 GMT-0400 (EDT) Error: ENOENT: no such file or directory, open 'logs/co-engagement.log'
+Thu Jul 07 2016 14:47:23 GMT-0400 (EDT) ctrl-c trigger
+Thu Jul 07 2016 14:56:55 GMT-0400 (EDT) ctrl-c trigger
+Thu Jul 07 2016 14:57:47 GMT-0400 (EDT) ctrl-c trigger
+Thu Jul 07 2016 15:02:28 GMT-0400 (EDT) ctrl-c trigger
+Thu Jul 07 2016 15:04:36 GMT-0400 (EDT) ctrl-c trigger
+Thu Jul 07 2016 15:05:49 GMT-0400 (EDT) ctrl-c trigger
+Thu Jul 07 2016 16:53:43 GMT-0400 (EDT) ctrl-c trigger
+Thu Jul 07 2016 16:53:46 GMT-0400 (EDT) ReferenceError: ioServer is not defined
+Thu Jul 07 2016 16:54:01 GMT-0400 (EDT) ctrl-c trigger
+Thu Jul 07 2016 16:54:04 GMT-0400 (EDT) ReferenceError: ioServer is not defined
+Thu Jul 07 2016 16:55:10 GMT-0400 (EDT) ctrl-c trigger
+Thu Jul 07 2016 16:55:14 GMT-0400 (EDT) ReferenceError: ioServer is not defined
+Thu Jul 07 2016 16:56:52 GMT-0400 (EDT) ctrl-c trigger
+Thu Jul 07 2016 16:56:55 GMT-0400 (EDT) ReferenceError: ioServer is not defined
+Thu Jul 07 2016 16:57:20 GMT-0400 (EDT) ctrl-c trigger
+Thu Jul 07 2016 16:58:27 GMT-0400 (EDT) ctrl-c trigger
+Thu Jul 07 2016 17:02:16 GMT-0400 (EDT) ctrl-c trigger
+Thu Jul 07 2016 17:03:47 GMT-0400 (EDT) ctrl-c trigger
+Thu Jul 07 2016 17:07:29 GMT-0400 (EDT) ctrl-c trigger
+Thu Jul 07 2016 17:40:17 GMT-0400 (EDT) ctrl-c trigger
+Thu Jul 07 2016 17:41:58 GMT-0400 (EDT) ctrl-c trigger
+Thu Jul 07 2016 17:42:46 GMT-0400 (EDT) ctrl-c trigger
+Thu Jul 07 2016 23:16:13 GMT-0400 (EDT) ctrl-c trigger

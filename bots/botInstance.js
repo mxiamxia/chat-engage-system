@@ -27,7 +27,7 @@ var initHubot = function (id, password, type, cb) {
 
     var loadScripts = function (robot) {
         var scriptsPath = path.resolve(".", "scripts");
-        console.log('script path=' + scriptsPath);
+        logger.debug('script path=' + scriptsPath);
         robot.load(scriptsPath);
     };
 

@@ -151,6 +151,8 @@ var processPrologMessage = function (id, message, robot, socket, self, room) {
                             } else {
                                 socket.emit('response', {'userid': id, 'input': statement});
                             }
+
+                            sendMsgToApp(robot, text, room, sessionInfo, self, socket);
                         }
 
                         //store shadow custom channel ID when shadow custom established
@@ -215,32 +217,7 @@ var processPrologMessage = function (id, message, robot, socket, self, room) {
                                     break;
                             }
                         } else {
-                            cmHelper.sendMsgToApp(value, 'REAL', text)
-                                .then(function (result) {
-                                    logger.debug('conversation output===' + JSON.stringify(result));
-                                    if (self) {
-                                        if (result.code === 9999) {
-                                            robot.messageRoom(room, {message: 'Did not find a proper answer'});
-                                        }
-                                        else if (result.code === 1801) {
-                                            //clean cache and do login again
-                                            robot.messageRoom(room, {message: 'The current session expired. Ready to init a new session.'});
-                                            cmHelper.cleanCache('', 'quit', value, robot, self, socket);
-
-                                        } else {
-                                            robot.messageRoom(room, {message: result.message});
-                                        }
-                                    } else {
-                                        if (result.code == 9999) {
-                                            socket.emit('response', {
-                                                'userid': id,
-                                                'input': 'Did not find a proper answer'
-                                            });
-                                        } else {
-                                            socket.emit('response', {'userid': id, 'input': result.message});
-                                        }
-                                    }
-                                });
+                            sendMsgToApp(robot, text, room, value, self, socket);
                         }
                     }
                 });
@@ -282,6 +259,38 @@ var loginAction = function (id) {
     });
     return deferred.promise;
 };
+
+
+var sendMsgToApp = function (robot, text, room, value, self, socket) {
+    cmHelper.sendMsgToApp(value, 'REAL', text)
+        .then(function (result) {
+            logger.debug('conversation output===' + JSON.stringify(result));
+            if (self) {
+                if (result.code === 9999) {
+                    robot.messageRoom(room, {message: 'Did not find a proper answer'});
+                }
+                else if (result.code === 1801) {
+                    //clean cache and do login again
+                    robot.messageRoom(room, {message: 'The current session expired. Ready to init a new session.'});
+                    cmHelper.cleanCache('', 'quit', value, robot, self, socket);
+
+                } else {
+                    robot.messageRoom(room, {message: result.message});
+                }
+            } else {
+                if (result.code == 9999) {
+                    socket.emit('response', {
+                        'userid': id,
+                        'input': 'Did not find a proper answer'
+                    });
+                } else {
+                    socket.emit('response', {'userid': id, 'input': result.message});
+                }
+            }
+        });
+};
+
+
 
 
 exports.processPrologMessage = processPrologMessage;

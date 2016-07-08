@@ -49,6 +49,9 @@ Engagement Service Installation Instruction
 7.	Service startup verification, two steps below,
   -	Check the exception.err log file under the project root folder, if there is any new exceptions during the startup
   -	Check http://server_host_ip:port/
+  
+  
+  istanbul cover _mocha --recursive test/*
 
 
 

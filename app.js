@@ -7,7 +7,6 @@ var bodyParser = require('body-parser');
 var cors = require('cors');
 var fs = require('fs');
 var routes = require('./routes/index');
-
 var config = require('./config');
 
 var app = express();

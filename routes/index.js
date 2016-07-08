@@ -28,9 +28,10 @@ router.get('/api/getActiveSession', mattermostController.getSessionByRange);
 router.get('/api/getHistorySession', mattermostController.getAllSessions);
 router.get('/api/getAllRobot', mattermostController.getAllRobot);
 router.get('/api/getAllSessionKey', mattermostController.getAllSessionKey);
-router.post('/api/deleteSession', mattermostController.deleteSession);
 router.get('/api/getTodaySession', mattermostController.getSessionOfToday);
 router.get('/api/getTodayEngage', mattermostController.getEngageOfToday);
+
+router.post('/api/deleteSession', mattermostController.deleteSession);
 
 
 module.exports = router;

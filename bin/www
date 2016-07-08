@@ -7,6 +7,7 @@
 var app = require('../app');
 var debug = require('debug')('co-engagement:server');
 var http = require('http');
+var socketServer = require('../websocket/socketServer');
 
 /**
  * Get port from environment and store in Express.
@@ -20,6 +21,9 @@ app.set('port', port);
  */
 
 var server = http.createServer(app);
+
+socketServer.initSocketServer(server);
+
 
 /**
  * Listen on provided port, on all network interfaces.
