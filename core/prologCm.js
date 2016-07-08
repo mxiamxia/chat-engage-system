@@ -20,6 +20,7 @@ var dispatcher = require('../event/dispatchEvent').pubsub;
 var consts = require('../common/consts');
 var cmHelper = require('./prologCmHelper');
 var sessionDao = require('../dao/').Session;
+var msg = require('./message');
 
 var processPrologMessage = function (id, message, robot, socket, self, room) {
 
@@ -86,27 +87,30 @@ var processPrologMessage = function (id, message, robot, socket, self, room) {
                         }
                         // check if agent trys to foward message, pass the whole prop to APP for dispatching
                         if (prop && prop.fwd_to) {
-                            return robot.messageRoom(c_value.appChannelId, {message: text, prop: prop});
+                            // return robot.messageRoom(c_value.appChannelId, {message: text, prop: prop});
+                            return msg.sendMessage(robot, socket, c_value.appChannelId, {message: text, prop: prop}, true);
                         }
-                        robot.messageRoom(c_value.appChannelId, {message: text});
+                        // robot.messageRoom(c_value.appChannelId, {message: text});
+                        msg.sendMessage(robot, socket, c_value.appChannelId, {message: text}, true);
                     } else {  // message come from App to agent
                         logger.debug('Message to shadow customer  =' + text);
                         //if real customer request logout, foward the whole message to agent
                         if (prop && prop.msg_type === 'cust_leave') {
-                            return robot.messageRoom(c_value.agentChannelId, message);
+                            // return robot.messageRoom(c_value.agentChannelId, message);
+                            return msg.sendMessage(robot, socket, c_value.agentChannelId, message, true);
                         }
 
                         if(text.indexOf('@@CUS@@') === 0) {
                             text = text.substring('@@CUS@@'.length);
-                            return robot.messageRoom(c_value.agentChannelId, {message: text, prop: {msg_from: 'CUST'}});
+                            // return robot.messageRoom(c_value.agentChannelId, {message: text, prop: {msg_from: 'CUST'}});
+                            return msg.sendMessage(robot, socket, c_value.agentChannelId, {message: text, prop: {msg_from: 'CUST'}}, true);
                         }
 
                         if(text.indexOf('@@APP@@') === 0) {
                             text = text.substring('@@APP@@'.length);
-                            return robot.messageRoom(c_value.agentChannelId, {message: text, prop: {msg_from: 'APP'}});
+                            // return robot.messageRoom(c_value.agentChannelId, {message: text, prop: {msg_from: 'APP'}});
+                            return msg.sendMessage(robot, socket, c_value.agentChannelId, {message: text, prop: {msg_from: 'APP'}}, true);
                         }
-
-                        //robot.messageRoom(c_value.agentChannelId, text);
                     }
                 });
             });
@@ -146,11 +150,13 @@ var processPrologMessage = function (id, message, robot, socket, self, room) {
                             });
                             cache.set(id, customCache, config.redis_expire);
                             cache.set(session, sessionInfo, config.redis_expire);
-                            if (self) {
-                                robot.messageRoom(room, {message: statement});
-                            } else {
-                                socket.emit('response', {'userid': id, 'input': statement});
-                            }
+                            msg.sendMessage(robot, socket, room, {message: statement}, self);
+
+                            // if (self) {
+                            //     robot.messageRoom(room, {message: statement});
+                            // } else {
+                            //     socket.emit('response', {'userid': id, 'input': statement});
+                            // }
 
                             sendMsgToApp(robot, text, room, sessionInfo, self, socket);
                         }
@@ -181,7 +187,8 @@ var processPrologMessage = function (id, message, robot, socket, self, room) {
                         return cmHelper.appToAgent(text, value, c_value.type, robot, self, socket);
                     }
                     if (prop && prop.fwd_to === 'CUST') {
-                        return robot.messageRoom(value.realChannelId, {message: text});
+                        // return robot.messageRoom(value.realChannelId, {message: text});
+                        return msg.sendMessage(robot, socket, value.realChannelId, {message: text}, self);
                     }
 
                     //3 way conversation

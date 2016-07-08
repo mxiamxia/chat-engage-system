@@ -136,7 +136,7 @@ var transferStart = function (input) {
                                                 });
 
                                                 // robot.messageRoom(agentChannelId, {message:'Leave the engagement chat'});
-                                                msg.sendMessage(robot, null, agentChannelId, {message:'Leave the engagement chat'}, false);
+                                                msg.sendMessage(robot, null, agentChannelId, {message:'Leave the engagement chat'}, true);
 
                                                 //clean session record -- temporary fixing
                                                 sessionEngaged.splice(sessionEngaged.indexOf(sessionid), 1);
@@ -203,7 +203,7 @@ var logoutShadowUser = function (robot, cb) {
 
 var sendEngagementMessages = function (text, channelId, robot) {
     // robot.messageRoom(channelId, {message:text});
-    msg.sendMessage(robot, null, channelId, {message:text}, false);
+    msg.sendMessage(robot, null, channelId, {message:text}, true);
     //var q = consts.QUESTION;
     //var a = consts.ANSWER;
     //
@@ -228,7 +228,7 @@ var sendEngagement = function (list, appRobot, sessionid, ep) {
             logger.debug('Agent does not response engagement in 30 seconds=' + data.agentId);
             //appRobot.messageRoom(data.agentChannelId, 'engage_request_claim'+sessionid);
             // appRobot.messageRoom(data.agentChannelId, {message:'', prop:{msg_type: 'engage_request_claim', session_id: sessionid, msg_from: 'APP'}});
-            msg.sendMessage(appRobot, null, data.agentChannelId, {message:'', prop:{msg_type: 'engage_request_claim', session_id: sessionid, msg_from: 'APP'}}, false);
+            msg.sendMessage(appRobot, null, data.agentChannelId, {message:'', prop:{msg_type: 'engage_request_claim', session_id: sessionid, msg_from: 'APP'}}, true);
             clearTimeout(timerId);
             ep.unbind(sessionid + 'timeout');
             list.splice(data.agentIdx, 1);
@@ -287,7 +287,7 @@ var getAvailableAgentList = function (appRobot, cb) {
 var sendEngageAccept = function (agentChannelId, sessionId, appRobot) {
     //appRobot.messageRoom(agentChannelId, 'engage_request_message'+sessionId);
     // appRobot.messageRoom(agentChannelId, {message:'', prop:{msg_type: 'engage_request', session_id: sessionId, msg_from: 'APP'}});
-    msg.sendMessage(appRobot, null, agentChannelId, {message:'', prop:{msg_type: 'engage_request', session_id: sessionId, msg_from: 'APP'}}, false);
+    msg.sendMessage(appRobot, null, agentChannelId, {message:'', prop:{msg_type: 'engage_request', session_id: sessionId, msg_from: 'APP'}}, true);
 };
 
 
