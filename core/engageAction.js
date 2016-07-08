@@ -5,7 +5,6 @@
 var xml2js = require('xml2js');
 var template = require('../common/template');
 var util = require('util');
-var request = require('request');
 var _ = require('lodash');
 var dispatcher = require('../event/dispatchEvent').pubsub;
 var consts = require('../common/consts');
@@ -20,6 +19,7 @@ var EventProxy = require('eventproxy');
 var engageApi = require('./engageApi');
 var sessionDao = require('../dao/').Session;
 var async = require('async');
+var msg = require('./message');
 
 var appIdList = config.APPLIST;
 
@@ -48,18 +48,6 @@ var transferStart = function (input) {
                             logger.debug('Engagement failed, session id from request does not match customer session id');
                             return;
                         }
-                        //if engagement in processing
-                        //if(sessionData.engagement) {
-                        //  logger.debug('Continue on engagement processing');
-                        //  cache.get(sessionData.shadowCustId, function(err, data) {
-                        //    var shadowRobot = robotManager.getRobot(sessionData.shadowCustId);
-                        //    if(shadowRobot) {
-                        //      var agentChannelId = data.agentChannelId;
-                        //      sendEngagementMessages(sessionData, agentChannelId, shadowRobot);
-                        //    }
-                        //  });
-                        //  return;
-                        //}
 
                         //clean session record -- temporary fixing
                         if (sessionEngaged.indexOf(sessionid) < 0) {
@@ -147,73 +135,14 @@ var transferStart = function (input) {
                                                     logger.debug('Logout shadow user response=' + JSON.stringify(body));
                                                 });
 
-                                                robot.messageRoom(agentChannelId, {message:'Leave the engagement chat'});
+                                                // robot.messageRoom(agentChannelId, {message:'Leave the engagement chat'});
+                                                msg.sendMessage(robot, null, agentChannelId, {message:'Leave the engagement chat'}, false);
 
                                                 //clean session record -- temporary fixing
                                                 sessionEngaged.splice(sessionEngaged.indexOf(sessionid), 1);
                                             });
 
                                         });
-
-                                        //getChannelIdById(agentId, robot, function (err, agentChannelId) {
-                                        //    getChannelIdById(appId, robot, function (err, appChannelId) {
-                                        //        engageApi.engageAccept(sessionid, agentId, function (err, res_value) {
-                                        //            if (err) {
-                                        //                sendEngagementMessages('Failed to retrieve engagement message from CM', agentChannelId, robot);
-                                        //
-                                        //            } else {
-                                        //                logger.debug('Engagement Accepted result= ' + res_value);
-                                        //                sendEngagementMessages(res_value, agentChannelId, robot);
-                                        //            }
-                                        //        });
-                                        //        //processEngagement(userid, agentChannelId, agentId, sessionid);
-                                        //        var customerShadowCache = {
-                                        //            'sessionId': sessionid,
-                                        //            'agentChannelId': agentChannelId,
-                                        //            'appChannelId': appChannelId,
-                                        //            'type': 'SHADOW'
-                                        //        };
-                                        //        customerShadowCache[agentId] = 'AGENT';
-                                        //        customerShadowCache[appId] = 'APP';
-                                        //        var sessionDataTmp = _.clone(sessionData);
-                                        //        sessionData.agentId = agentId;
-                                        //        sessionData.TO = 'ALL';
-                                        //        sessionData.shadowCustId = robot.adapter.profile.id;
-                                        //        sessionData.appAndShadowChannelId = appChannelId;
-                                        //        sessionData.engagement = true;
-                                        //        //cache.pipeline().set(robot.adapter.profile.id, customerShadowCache, config.redis_expire).set(sessionid, sessionData, config.redis_expire).exec();
-                                        //        cache.set(robot.adapter.profile.id, customerShadowCache, config.redis_expire);
-                                        //        cache.set(sessionid, sessionData, config.redis_expire);
-                                        //        robotManager.setRobot(sessionData.shadowCustId, robot);
-                                        //        ep.unbind();
-                                        //        //sendEngagementMessages(sessionData, agentChannelId, robot);
-                                        //
-                                        //        sessionDao.updateSession(sessionid, true, true, agentId, function (err, session) {
-                                        //            logger.debug('Update the session info mongo db accept=' + JSON.stringify(session));
-                                        //        });
-                                        //        //notify app get shadowCustomChannel ID
-                                        //        //dispatcher.emit(userid, sessionData);
-                                        //
-                                        //        //Agent leaves the engagement process
-                                        //        dispatcher.once(sessionData.shadowCustId + 'engageleave', function () {
-                                        //            //restore session data to before engagement state
-                                        //            cache.set(sessionid, sessionDataTmp, config.redis_expire);
-                                        //            cache.remove(robot.adapter.profile.id);
-                                        //            engageApi.engageLeave(sessionid, agentId, function (err, body) {
-                                        //                logger.debug('Prolog CM engage leave response=' + JSON.stringify(body));
-                                        //            });
-                                        //            logoutShadowUser(robot, function (err, body) {
-                                        //                logger.debug('Logout shadow user response=' + JSON.stringify(body));
-                                        //            });
-                                        //
-                                        //            robot.messageRoom(agentChannelId, {message:'Leave the engagement chat'});
-                                        //
-                                        //            //clean session record -- temporary fixing
-                                        //            sessionEngaged.splice(sessionEngaged.indexOf(sessionid), 1);
-                                        //        });
-                                        //
-                                        //    });
-                                        //});
                                     });
                                 } else {
                                     //TODO: if create shadow user failed
@@ -273,7 +202,8 @@ var logoutShadowUser = function (robot, cb) {
 }
 
 var sendEngagementMessages = function (text, channelId, robot) {
-    robot.messageRoom(channelId, {message:text});
+    // robot.messageRoom(channelId, {message:text});
+    msg.sendMessage(robot, null, channelId, {message:text}, false);
     //var q = consts.QUESTION;
     //var a = consts.ANSWER;
     //
@@ -297,7 +227,8 @@ var sendEngagement = function (list, appRobot, sessionid, ep) {
             logger.debug('Agent does not response engagement in 30 seconds and list=' + list.length + '==' + data.agentIdx);
             logger.debug('Agent does not response engagement in 30 seconds=' + data.agentId);
             //appRobot.messageRoom(data.agentChannelId, 'engage_request_claim'+sessionid);
-            appRobot.messageRoom(data.agentChannelId, {message:'', prop:{msg_type: 'engage_request_claim', session_id: sessionid, msg_from: 'APP'}});
+            // appRobot.messageRoom(data.agentChannelId, {message:'', prop:{msg_type: 'engage_request_claim', session_id: sessionid, msg_from: 'APP'}});
+            msg.sendMessage(appRobot, null, data.agentChannelId, {message:'', prop:{msg_type: 'engage_request_claim', session_id: sessionid, msg_from: 'APP'}}, false);
             clearTimeout(timerId);
             ep.unbind(sessionid + 'timeout');
             list.splice(data.agentIdx, 1);
@@ -355,7 +286,8 @@ var getAvailableAgentList = function (appRobot, cb) {
 
 var sendEngageAccept = function (agentChannelId, sessionId, appRobot) {
     //appRobot.messageRoom(agentChannelId, 'engage_request_message'+sessionId);
-    appRobot.messageRoom(agentChannelId, {message:'', prop:{msg_type: 'engage_request', session_id: sessionId, msg_from: 'APP'}});
+    // appRobot.messageRoom(agentChannelId, {message:'', prop:{msg_type: 'engage_request', session_id: sessionId, msg_from: 'APP'}});
+    msg.sendMessage(appRobot, null, agentChannelId, {message:'', prop:{msg_type: 'engage_request', session_id: sessionId, msg_from: 'APP'}}, false);
 };
 
 
