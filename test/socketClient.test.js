@@ -9,6 +9,11 @@ var chai = require('chai'),
 
 var io = require('socket.io-client');
 
+var options ={
+    transports: ['websocket'],
+    'force new connection': true
+};
+
 describe("echo", function () {
 
     beforeEach(function (done) {
@@ -17,7 +22,7 @@ describe("echo", function () {
     });
 
     it("echos message", function (done) {
-        var client = io.connect("http://localhost:4012");
+        var client = io.connect("http://localhost:4012", options);
 
         client.on("connect", function () {
             client.on("echo", function (message) {

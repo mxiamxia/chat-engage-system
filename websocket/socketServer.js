@@ -8,16 +8,17 @@ var io = require('socket.io');
 var config = require('../config');
 var logger = require('../common/logger');
 
-var ioServer;
+var socketClients = {};
 
 var initSocketServer = function (server) {
-    ioServer = io(server);
+    var ioServer = io(server);
     ioServer.on('connection', received);
 
 };
 
 var received = function (socket) {
     logger.debug('socket client connected = ' + socket.id);
+    socketClients[socket.id] = socket;
     socket.on('message', function (message) {
         logger.debug('socket server received message=' + JSON.stringify(message));
     });
@@ -26,7 +27,16 @@ var received = function (socket) {
         logger.debug('echo message = ' + message);
         socket.emit('echo', message);
     })
+
+    socket.on('disconnect', function () {
+        logger.debug('socket client disconnected = ' + socket.id);
+        delete socketClients[socket.id];
+    })
 };
+
+exports.getSocketConnectionNum = function () {
+    return Object.keys(socketClients).length;
+}
 
 
 // var secureioServer = ioServerS(server);
