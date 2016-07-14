@@ -3,14 +3,36 @@
  */
 
 
-var redis = require("redis")
-    , subscriber = redis.createClient()
-    , publisher  = redis.createClient();
+// var redis = require("redis")
+//     , subscriber = redis.createClient()
+//     , publisher  = redis.createClient();
 
-subscriber.on("message", function(channel, message) {
-    console.log("Message '" + message + "' on channel '" + channel + "' arrived!")
+var config = require('../config');
+var logger = require('../common/logger');
+
+var Redis = require('ioredis');
+
+var subscriber = new Redis({
+    port: config.redis_port,
+    host: config.redis_host,
+    db: config.redis_db,
+    retryStrategy: function (times) {
+        var delay = Math.min(times * 2, 2000);
+        return delay;
+    }
 });
 
-subscriber.subscribe("chat");
+var publisher = new Redis({
+    port: config.redis_port,
+    host: config.redis_host,
+    db: config.redis_db,
+    retryStrategy: function (times) {
+        var delay = Math.min(times * 2, 2000);
+        return delay;
+    }
+});
 
-publisher.publish("chat", "haaaaai");
+logger.debug('Init redis sub/pub listener.');
+
+exports.Pub = publisher;
+exports.Sub = subscriber;

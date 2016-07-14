@@ -50,8 +50,17 @@ Engagement Service Installation Instruction
   -	Check the exception.err log file under the project root folder, if there is any new exceptions during the startup
   -	Check http://server_host_ip:port/
   
-  
+### Testing  
+  Coverage test script
+```bash  
   istanbul cover _mocha --recursive test/*
+```
+  Load testing
+```bash 
+  http://localhost:4012/api/createMultipleUsers?nums=5&&username=test
+  siege --concurrent=50 --reps=10 -f urls.txt
+```
+
 
 
 

@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var engageController = require('../controller/engagementController');
 var mattermostController = require('../controller/mattermostController');
+var loadTestController = require('../controller/loadTestController');
 
 
 var filePath = __dirname.replace('routes', 'dist/');
@@ -21,6 +22,11 @@ router.get('/engagement/accept', engageController.engageAccept);
 router.get('/engagement/reject', engageController.engageReject);
 router.get('/engagement/logout', engageController.engageLeave);
 router.get('/api/createUser', mattermostController.createUser);
+
+router.get('/api/createMultipleUsers', loadTestController.createMultipleUsers);
+
+router.get('/api/sendMessage/:user/:message', loadTestController.sendMessage);
+
 
 
 //Admin console

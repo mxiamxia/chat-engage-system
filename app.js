@@ -8,7 +8,7 @@ var cors = require('cors');
 var fs = require('fs');
 var routes = require('./routes/index');
 var config = require('./config');
-var redisM = require('./common/ioredisSub');
+var redisM = require('./common/redisSub');
 
 var app = express();
 

@@ -22,7 +22,7 @@ var cmHelper = require('./prologCmHelper');
 var sessionDao = require('../dao/').Session;
 var msg = require('./message');
 
-var processPrologMessage = function (id, message, robot, socket, self, room) {
+var processPrologMessage = function (id, message, robot, socket, self, app, room) {
 
     var text = message.message;
     var prop = message.prop;
@@ -88,28 +88,28 @@ var processPrologMessage = function (id, message, robot, socket, self, room) {
                         // check if agent trys to foward message, pass the whole prop to APP for dispatching
                         if (prop && prop.fwd_to) {
                             // return robot.messageRoom(c_value.appChannelId, {message: text, prop: prop});
-                            return msg.sendMessage(robot, socket, c_value.appChannelId, {message: text, prop: prop}, true);
+                            return msg.sendMessage(robot, socket, c_value.appChannelId, id, {message: text, prop: prop}, true);
                         }
                         // robot.messageRoom(c_value.appChannelId, {message: text});
-                        msg.sendMessage(robot, socket, c_value.appChannelId, {message: text}, true);
+                        msg.sendMessage(robot, socket, c_value.appChannelId, id, {message: text}, true);
                     } else {  // message come from App to agent
                         logger.debug('Message to shadow customer  =' + text);
                         //if real customer request logout, foward the whole message to agent
                         if (prop && prop.msg_type === 'cust_leave') {
                             // return robot.messageRoom(c_value.agentChannelId, message);
-                            return msg.sendMessage(robot, socket, c_value.agentChannelId, message, true);
+                            return msg.sendMessage(robot, socket, c_value.agentChannelId, id, message, true);
                         }
 
                         if(text.indexOf('@@CUS@@') === 0) {
                             text = text.substring('@@CUS@@'.length);
                             // return robot.messageRoom(c_value.agentChannelId, {message: text, prop: {msg_from: 'CUST'}});
-                            return msg.sendMessage(robot, socket, c_value.agentChannelId, {message: text, prop: {msg_from: 'CUST'}}, true);
+                            return msg.sendMessage(robot, socket, c_value.agentChannelId, id, {message: text, prop: {msg_from: 'CUST'}}, true);
                         }
 
                         if(text.indexOf('@@APP@@') === 0) {
                             text = text.substring('@@APP@@'.length);
                             // return robot.messageRoom(c_value.agentChannelId, {message: text, prop: {msg_from: 'APP'}});
-                            return msg.sendMessage(robot, socket, c_value.agentChannelId, {message: text, prop: {msg_from: 'APP'}}, true);
+                            return msg.sendMessage(robot, socket, c_value.agentChannelId, id, {message: text, prop: {msg_from: 'APP'}}, true);
                         }
                     }
                 });
@@ -130,11 +130,11 @@ var processPrologMessage = function (id, message, robot, socket, self, room) {
             }
 
             // login Prolog CM if session is not established
-            if (_.isEmpty(value)) {
-                loginAction(id, robot)
+            if (_.isEmpty(value) || (prop && prop.msg_type === 'login')) {
+                loginAction(id, app, message)
                     .then(function (result) {
                         logger.debug('Prolog CM login output=' + JSON.stringify(result));
-                        if (result.code == 1000) {
+                        if (result.code === 1000) {
                             var session = result.session;
                             var statement = result.statement;
                             var customCache = {sessionId: session, type: 'REAL'};
@@ -142,7 +142,8 @@ var processPrologMessage = function (id, message, robot, socket, self, room) {
                                 'sessionId': session,
                                 'realId': id,
                                 'realChannelId': room,
-                                'appId': robot.adapter.profile.id
+                                'appId': robot.adapter.profile.id, 
+                                'channelType': app
                             };
 
                             sessionDao.newAndSave(session, robot.adapter.profile.id, id, function(err, session) {
@@ -150,28 +151,9 @@ var processPrologMessage = function (id, message, robot, socket, self, room) {
                             });
                             cache.set(id, customCache, config.redis_expire);
                             cache.set(session, sessionInfo, config.redis_expire);
-                            msg.sendMessage(robot, socket, room, {message: statement}, self);
-
-                            // if (self) {
-                            //     robot.messageRoom(room, {message: statement});
-                            // } else {
-                            //     socket.emit('response', {'userid': id, 'input': statement});
-                            // }
-
+                            msg.sendMessage(robot, socket, room, id, {message: statement, prop: {msg_type: 'login'}, sessionid: session}, self);
                             sendMsgToApp(robot, text, room, sessionInfo, self, socket);
                         }
-
-                        //store shadow custom channel ID when shadow custom established
-                        //dispatcher.on(id, function (data) {
-                        //  logger.debug('new shadow custom id=' + data.shadowCustId + '----' +robot.adapter.profile.type);
-                        //  robot.adapter.client.loadUsersList();
-                        //  dispatcher.on('refreshChannel', function () {
-                        //    logger.debug('new shadow custom channel=' + JSON.stringify(robot.adapter.client.channel_details));
-                        //    var shadowCustChannelId = engageAction.getChannelIdById(data.shadowCustId, robot.adapter.client.channel_details);
-                        //    data.shadowCustChannelId = shadowCustChannelId;
-                        //    cache.set(data.sessionId, data, config.redis_expire);
-                        //  });
-                        //});
                     });
                 return;
             }
@@ -183,19 +165,20 @@ var processPrologMessage = function (id, message, robot, socket, self, room) {
                 //if message came from agent and intends to send customer directly
                 cache.get(id, function (err, c_value) {
                     // foward message
-                    if (prop && prop.fwd_to === 'APP') {
+                    if (prop && prop.fwd_to === 'CM') {
                         return cmHelper.appToAgent(text, value, c_value.type, robot, self, socket);
                     }
                     if (prop && prop.fwd_to === 'CUST') {
                         // return robot.messageRoom(value.realChannelId, {message: text});
-                        return msg.sendMessage(robot, socket, value.realChannelId, {message: text}, self);
+                        return msg.sendMessage(robot, socket, value.realChannelId, id, {message: text, sessionid: value.sessionId}, self);
                     }
 
                     //3 way conversation
                     if (c_value.type === 'SHADOW') {
                         switch (value.TO) {
                             case 'CUSTOMER' :
-                                robot.messageRoom(value.realChannelId, {message: text});
+                                // robot.messageRoom(value.realChannelId, {message: text});
+                                msg.sendMessage(robot, socket, value.realChannelId, id, {message: text, sessionid: value.sessionId}, self);
                                 break;
                             case 'AGENT' :
                                 cmHelper.appToAgent(text, value, c_value.type, robot, self, socket);
@@ -208,13 +191,14 @@ var processPrologMessage = function (id, message, robot, socket, self, room) {
                         if (value.engagement) {
                             // Real customer logout/close browser
                             if (prop && prop.msg_type === 'cust_leave') {
-                                return robot.messageRoom(value.appAndShadowChannelId, message);
+                                // return robot.messageRoom(value.appAndShadowChannelId, message);
+                                return msg.sendMessage(robot, socket, value.appAndShadowChannelId, id, message, true);
                             }
-
 
                             switch (value.TO) {
                                 case 'CUSTOMER' :
-                                    robot.messageRoom(value.appAndShadowChannelId, {message: '@@CUS@@' + text});
+                                    // robot.messageRoom(value.appAndShadowChannelId, {message: '@@CUS@@' + text});
+                                    msg.sendMessage(robot, socket, value.appAndShadowChannelId, id, {message: '@@CUS@@' + text}, true);
                                     break;
                                 case 'AGENT' :
                                     cmHelper.appToAgent(text, value, c_value.type, robot, self, socket);  // if type is from real customer, send text and app answer to agent
@@ -233,11 +217,14 @@ var processPrologMessage = function (id, message, robot, socket, self, room) {
     });
 };
 
-
-var loginAction = function (id) {
+var loginAction = function (id, app, message) {
     var deferred = Q.defer();
     var prologLogin = TEMP.loginReq;
-    prologLogin = util.format(prologLogin, id);
+    if (app.toLowerCase() === 'ivr') {
+        prologLogin = util.format(prologLogin, id, message.sessionid);
+    } else {
+        prologLogin = util.format(prologLogin, id, '');
+    }
     logger.debug('login input=' + prologLogin);
     logger.debug('login url=' + config.CM_PROLOG);
     var options = {
@@ -255,8 +242,8 @@ var loginAction = function (id) {
             parser.parseString(body, function (err, result) {
                 try {
                     var sessionID = result.response.header[0].sessionid[0].$.value;
-                    var statement = result.response.body[0].statement[0];
-                    var data = {'session': sessionID, 'statement': statement, 'code': 1000};
+                    // var statement = result.response.body[0].statement[0];
+                    var data = {'session': sessionID, 'statement': body, 'code': 1000};
                     deferred.resolve(data);
                 } catch (e) {
                     deferred.resolve({'code': 9999});
@@ -272,32 +259,21 @@ var sendMsgToApp = function (robot, text, room, value, self, socket) {
     cmHelper.sendMsgToApp(value, 'REAL', text)
         .then(function (result) {
             logger.debug('conversation output===' + JSON.stringify(result));
-            if (self) {
-                if (result.code === 9999) {
-                    robot.messageRoom(room, {message: 'Did not find a proper answer'});
-                }
-                else if (result.code === 1801) {
-                    //clean cache and do login again
-                    robot.messageRoom(room, {message: 'The current session expired. Ready to init a new session.'});
-                    cmHelper.cleanCache('', 'quit', value, robot, self, socket);
+            if (result.code === 9999) {
+                // robot.messageRoom(room, {message: 'Did not find a proper answer'});
+                msg.sendMessage(robot, socket, room, value.realId, {message: 'Did not find a proper answer', sessionid: value.sessionId}, self);
+            }
+            else if (result.code === 1801) {
+                //clean cache and do login again
+                // robot.messageRoom(room, {message: 'The current session expired. Ready to init a new session.'});
+                msg.sendMessage(robot, socket, room, value.realId, {message: 'The current session expired. Ready to init a new session.', sessionid: value.sessionId}, self);
+                cmHelper.cleanCache('', 'quit', value, robot, self, socket);
 
-                } else {
-                    robot.messageRoom(room, {message: result.message});
-                }
             } else {
-                if (result.code == 9999) {
-                    socket.emit('response', {
-                        'userid': id,
-                        'input': 'Did not find a proper answer'
-                    });
-                } else {
-                    socket.emit('response', {'userid': id, 'input': result.message});
-                }
+                // robot.messageRoom(room, {message: result.message});
+                msg.sendMessage(robot, socket, room, value.realId, {message: result.message}, self);
             }
         });
 };
-
-
-
 
 exports.processPrologMessage = processPrologMessage;
