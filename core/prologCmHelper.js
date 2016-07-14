@@ -14,7 +14,7 @@ var TEMP = require('../common/template');
 var xml2js = require('xml2js');
 var robotManager = require('./robotManager');
 var engageAction = require('./engageAction');
-var parser = new xml2js.Parser();
+var msg = require('./message');
 
 // only when engagement setup, allow agent to set engagement mode
 var check3Way = function (prop, text, value) {
@@ -56,39 +56,47 @@ var sendMsgToApp = function (value, type, sentence) {
     request(options, function (err, response, body) {
         if (err) {
             logger.debug('conversation request err=' + err);
-            return;
+            return deferred.resolve({'code': 9999});
         }
         logger.debug('Prolog CM conversation output=' + body);
-        if (body.indexOf('<xul>') > -1) {
-            body = body.replace(/\r?\n|\r/g, '');
-            deferred.resolve({'type': 'xul', 'message': body, 'code': 1000});
-            //addCacheData(value.sessionId, consts.QUESTION, body);
-        } else {
-            parser.parseString(body, function (err, result) {
-                try {
-                    var statement = 'no valid answer returned';
-                    if (_.isEmpty(result.response.body[0].question)) {
-                        if (!_.isEmpty(result.response.body[0].statement)) {
-                            statement = result.response.body[0].statement[0];
-                        }
-                    } else {
-                        if (typeof result.response.body[0].question[0] === 'string') {
-                            statement = result.response.body[0].question[0]
-                        }
-                    }
-                    statement = statement.replace(/\r?\n|\r/g, '');
-                    var data = {'type': 'message', 'message': statement, 'code': 1000};
-                    //addCacheData(value.sessionId, consts.QUESTION, statement);
-                    deferred.resolve(data);
-                } catch (e) {
-                    if(body.indexOf('existance error: [session') > -1) {
-                        deferred.resolve({'code': 1801});
-                    } else {
-                        deferred.resolve({'code': 9999});
-                    }
-                }
-            });
+
+        if(body.indexOf('existance error: [session') > -1) {
+            return deferred.resolve({'code': 1801});
         }
+
+        body = body.replace(/\r?\n|\r/g, '');
+        return deferred.resolve({'type': 'xul', 'message': body, 'code': 1000});
+
+        // if (body.indexOf('<xul>') > -1) {
+        //     body = body.replace(/\r?\n|\r/g, '');
+        //     deferred.resolve({'type': 'xul', 'message': body, 'code': 1000});
+        //     //addCacheData(value.sessionId, consts.QUESTION, body);
+        // } else {
+        //     parser.parseString(body, function (err, result) {
+        //         try {
+        //             var statement = 'no valid answer returned';
+        //             if (_.isEmpty(result.response.body[0].question)) {
+        //                 if (!_.isEmpty(result.response.body[0].statement)) {
+        //                     statement = result.response.body[0].statement[0];
+        //                 }
+        //             } else {
+        //                 if (typeof result.response.body[0].question[0] === 'string') {
+        //                     statement = result.response.body[0].question[0]
+        //                 }
+        //             }
+        //             statement = statement.replace(/\r?\n|\r/g, '');
+        //             var data = {'type': 'message', 'message': statement, 'code': 1000};
+        //             //addCacheData(value.sessionId, consts.QUESTION, statement);
+        //             deferred.resolve(data);
+        //         } catch (e) {
+        //             if(body.indexOf('existance error: [session') > -1) {
+        //                 deferred.resolve({'code': 1801});
+        //             } else {
+        //                 deferred.resolve({'code': 9999});
+        //             }
+        //         }
+        //     });
+        // }
     });
     return deferred.promise;
 };
@@ -122,11 +130,18 @@ var cleanCache = function (room, text, value, robot, self, socket) {
             }
         }
         if (self && !_.isEmpty(room)) {
-            robot.messageRoom(room, {message: 'Session is terminated'});
+            // robot.messageRoom(room, {message: 'Session is terminated'});
+            msg.sendMessage(robot, socket, room, room, {message: 'Session is terminated'}, self);
+
         }
         else {
-            if (socket) {
-                socket.emit('response', {'userid': id, 'input': 'Session is terminated'});
+            // if (socket) {
+            // socket.emit('response', {'userid': id, 'input': 'Session is terminated'});
+            // }
+            if(!_.isEmpty(value)) {
+                msg.sendMessage(robot, socket, room, value.realId, {message: 'Session is terminated', sessionid: value.sessionId}, self);
+            } else {
+                msg.sendMessage(robot, socket, room, room, {message: 'Session is terminated', sessionid: value.sessionId}, self);
             }
         }
         return true;
@@ -154,21 +169,16 @@ var appToAgent = function (sentence, value, type, robot, self, socket) {
     sendMsgToApp(value, type, sentence)
         .then(function (result) {
             logger.debug('appToAgent conversation output===' + JSON.stringify(result));
-            if (self) {
-                if (result.code == 9999) {
-                    robot.messageRoom(value.appAndShadowChannelId, {message: '@@APP@@' + 'Did not find a proper answer'});
-                } else {
-                    if (type === 'REAL') {
-                        robot.messageRoom(value.appAndShadowChannelId, {message: '@@CUS@@' + sentence});
-                    }
-                    robot.messageRoom(value.appAndShadowChannelId, {message: '@@APP@@' +result.message});
-                }
+            if (result.code == 9999) {
+                // robot.messageRoom(value.appAndShadowChannelId, {message: '@@APP@@' + 'Did not find a proper answer'});
+                msg.sendMessage(robot, socket, value.appAndShadowChannelId, value.realId, {message: '@@APP@@' + 'Did not find a proper answer'}, true);
             } else {
-                if (result.code == 9999) {
-                    socket.emit('response', {'userid': id, 'input': 'Did not find a proper answer'});
-                } else {
-                    socket.emit('response', {'userid': id, 'input': result.message});
+                if (type === 'REAL') {
+                    // robot.messageRoom(value.appAndShadowChannelId, {message: '@@CUS@@' + sentence});
+                    msg.sendMessage(robot, socket, value.appAndShadowChannelId, value.realId, {message: '@@CUS@@' + sentence}, true);
                 }
+                // robot.messageRoom(value.appAndShadowChannelId, {message: '@@APP@@' +result.message});
+                msg.sendMessage(robot, socket, value.appAndShadowChannelId, value.realId, {message: '@@APP@@' +result.message}, true);
             }
         });
 };
@@ -179,25 +189,38 @@ var appToAll = function (sentence, value, type, robot, self, socket) {
     sendMsgToApp(value, type, sentence)
         .then(function (result) {
             logger.debug('appToAll conversation output===' + JSON.stringify(result));
-            if (self) {
-                if (result.code == 9999) {
-                    robot.messageRoom(value.appAndShadowChannelId, {message: '@@APP@@' + 'Did not find a proper answer'});
-                    robot.messageRoom(value.realChannelId, {message: 'Did not find a proper answer'});
+            // if (self) {
+            if (result.code == 9999) {
+                // robot.messageRoom(value.appAndShadowChannelId, {message: '@@APP@@' + 'Did not find a proper answer'});
+                msg.sendMessage(robot, socket, value.appAndShadowChannelId, value.realId, {message: '@@APP@@' + 'Did not find a proper answer'}, true);
+                // robot.messageRoom(value.realChannelId, {message: 'Did not find a proper answer'});
+                msg.sendMessage(robot, socket, value.realChannelId, value.realId, {message: 'Did not find a proper answer', sessionid: value.sessionId}, self);
 
-                } else {
-                    if (type === 'REAL') {
-                        robot.messageRoom(value.appAndShadowChannelId, {message: '@@CUS@@' + sentence});
-                    }
-                    robot.messageRoom(value.appAndShadowChannelId, {message: '@@APP@@' + result.message});
-                    robot.messageRoom(value.realChannelId, {message: result.message});
-                }
+            } else if (result.code === 1801) {
+                // robot.messageRoom(value.appAndShadowChannelId, {message: '@@APP@@' + 'The current session expired. Ready to init a new session.'});
+                msg.sendMessage(robot, socket, value.appAndShadowChannelId, value.realId, {message: '@@APP@@' + 'The current session expired. Ready to init a new session.'}, true);
+                // robot.messageRoom(value.realChannelId, {message: 'The current session expired. Ready to init a new session.'});
+                msg.sendMessage(robot, socket, value.realChannelId, value.realId, {message: 'The current session expired. Ready to init a new session.', sessionid: value.sessionId}, self);
+                cleanCache('', 'quit', value, robot, self, socket);
             } else {
-                if (result.code == 9999) {
-                    socket.emit('response', {'userid': id, 'input': 'Did not find a proper answer'});
-                } else {
-                    socket.emit('response', {'userid': id, 'input': result.message});
+                if (type === 'REAL') {
+                    // robot.messageRoom(value.appAndShadowChannelId, {message: '@@CUS@@' + sentence});
+                    msg.sendMessage(robot, socket, value.appAndShadowChannelId, value.realId, {message: '@@CUS@@' + sentence}, true);
                 }
+                // robot.messageRoom(value.appAndShadowChannelId, {message: '@@APP@@' + result.message});
+                msg.sendMessage(robot, socket, value.appAndShadowChannelId, value.realId, {message: '@@APP@@' + result.message}, true);
+                // robot.messageRoom(value.realChannelId, {message: result.message});
+                msg.sendMessage(robot, socket, value.realChannelId, value.realId, {message: result.message, sessionid: value.sessionId}, self);
             }
+            // } else {
+            //     if (result.code == 9999) {
+            //         // socket.emit('response', {'userid': id, 'input': 'Did not find a proper answer'});
+            //         msg.sendMessage(robot, socket, value.realChannelId, {message: 'Did not find a proper answer'}, self);
+            //     } else {
+            //         // socket.emit('response', {'userid': id, 'input': result.message});
+            //         msg.sendMessage(robot, socket, value.realChannelId, {message: result.message}, self);
+            //     }
+            // }
         });
 };
 exports.appToAll = appToAll;

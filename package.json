@@ -4,11 +4,14 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "debug": "node --debug ./bin/www"
+    "prod" : "forever start --minUptime 1000 --spinSleepTime 1000 node_modules/gulp/bin/gulp.js prod",
+    "debug": "node --debug ./bin/www",
+    "load" : "siege --concurrent=20 --reps=5 -f urls.txt"
   },
   "dependencies": {
     "async": "^2.0.0-rc.6",
     "bcryptjs": "^2.3.0",
+    "benchmark": "^2.1.0",
     "body-parser": "~1.13.2",
     "chai": "^3.5.0",
     "cheerio": "^0.20.0",
@@ -30,6 +33,7 @@
     "mongoose": "^4.5.1",
     "morgan": "~1.6.1",
     "q": "^1.4.1",
+    "redis": "^2.6.2",
     "request": "^2.72.0",
     "serve-favicon": "~2.3.0",
     "should": "^9.0.2",

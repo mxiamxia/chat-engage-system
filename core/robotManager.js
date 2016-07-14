@@ -4,7 +4,7 @@
 
 var appRobot = {};
 var shadowCount = 0;
-var token = {};
+var appHubotToken = {};
 var getCustomerShadow = function () {
     var shadow_info = [
         {'name': 'cust_s1@cyberobject.com', 'password': '123456', 'type': 'CUSTOMER'},
@@ -41,11 +41,11 @@ var delRobot = function (id) {
 };
 
 var setToken = function (value) {
-    token.token = value;
+    appHubotToken.token = value;
 };
 
 var getToken = function () {
-    return token.token;
+    return appHubotToken.token;
 };
 
 module.exports = {setRobot, getRobot, getAllRobot, delRobot, getToken, setToken, getCustomerShadow, releaseCustomerShadow};
