@@ -8,6 +8,7 @@ var _ = require('lodash');
 
 
 var SessionSchema = new Schema({
+    channel: {type: String},
     sessionId: {type: String},
     customerId: {type: String},
     appId: {type: String},

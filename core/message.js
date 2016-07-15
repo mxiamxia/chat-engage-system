@@ -9,7 +9,7 @@ var cache = require('../common/cache');
 var robotManager = require('../core/robotManager');
 var CM = require('../core/prologCm');
 var logger = require('../common/logger');
-
+var _ = require('lodash');
 
 var msg_template = {
     app: "IVR",
@@ -28,8 +28,7 @@ var sendMessage = function (robot, socket, room, id, message, isHubot) {
     if (isHubot) {
         robot.messageRoom(room, message);
     } else {
-        logger.debug('send message to redis client' + JSON.stringify(message));
-        var msg = msg_template;
+        var msg = _.clone(msg_template);
         msg.channel_id = id;
         msg.user_id = id;
         msg.message = message.message;
@@ -37,7 +36,8 @@ var sendMessage = function (robot, socket, room, id, message, isHubot) {
             msg.props = message.prop;
         }
         msg.sessionid = message.sessionid;
-        Pub.rpush('ivrchannel', JSON.stringify(message));
+        logger.debug('send message to redis client=' + JSON.stringify(msg));
+        Pub.rpush('ivrchannel', JSON.stringify(msg));
     }
 };
 

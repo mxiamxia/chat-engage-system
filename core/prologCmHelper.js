@@ -112,7 +112,6 @@ var cleanCache = function (room, text, value, robot, self, socket) {
         //robot.listeners = [];  // remove message listener in Hubot
         //robot.commands = [];
         if (!_.isEmpty(value)) {
-            //TODO:
             var sessionId = value.sessionId;
             var customerId = value.realId;
             cache.remove(sessionId);

@@ -27,6 +27,10 @@ var processPrologMessage = function (id, message, robot, socket, self, app, room
     var text = message.message;
     var prop = message.prop;
 
+    // if (_.isEmpty(text)) {
+    //     return;
+    // }
+
     var ep = new EventProxy();
     if (typeof room == 'undefined' || room == null) {
         //room = 'GENERAL'
@@ -146,13 +150,15 @@ var processPrologMessage = function (id, message, robot, socket, self, app, room
                                 'channelType': app
                             };
 
-                            sessionDao.newAndSave(session, robot.adapter.profile.id, id, function(err, session) {
+                            sessionDao.newAndSave(session, robot.adapter.profile.id, id, app, function(err, session) {
                                 logger.debug('Create new session info into mongo db=' + JSON.stringify(session));
                             });
                             cache.set(id, customCache, config.redis_expire);
                             cache.set(session, sessionInfo, config.redis_expire);
                             msg.sendMessage(robot, socket, room, id, {message: statement, prop: {msg_type: 'login'}, sessionid: session}, self);
-                            sendMsgToApp(robot, text, room, sessionInfo, self, socket);
+                            if (app !== 'ivr') {
+                                sendMsgToApp(robot, text, room, sessionInfo, self, socket);
+                            }
                         }
                     });
                 return;
@@ -174,7 +180,7 @@ var processPrologMessage = function (id, message, robot, socket, self, app, room
                     }
 
                     //3 way conversation
-                    if (c_value.type === 'SHADOW') {
+                    if (c_value.type === 'SHADOW') {  // from agent/shadow user to app
                         switch (value.TO) {
                             case 'CUSTOMER' :
                                 // robot.messageRoom(value.realChannelId, {message: text});
@@ -187,11 +193,12 @@ var processPrologMessage = function (id, message, robot, socket, self, app, room
                                 cmHelper.appToAll(text, value, c_value.type, robot, self, socket);
                                 break;
                         }
-                    } else {  // from real customer
+                    } else {  // from real customer to app
                         if (value.engagement) {
                             // Real customer logout/close browser
                             if (prop && prop.msg_type === 'cust_leave') {
                                 // return robot.messageRoom(value.appAndShadowChannelId, message);
+                                cmHelper.cleanCache('', 'quit', value, robot, self, socket);
                                 return msg.sendMessage(robot, socket, value.appAndShadowChannelId, id, message, true);
                             }
 

@@ -7,8 +7,9 @@ var Session = models.Session;
 var logger  = require('../common/logger');
 
 
-exports.newAndSave = function (sessionId, appId, customerId, cb) {
+exports.newAndSave = function (sessionId, appId, customerId, app, cb) {
     var session = new Session();
+    session.channel = app;
     session.sessionId = sessionId;
     session.appId = appId;
     session.customerId = customerId;
