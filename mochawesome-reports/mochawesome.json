@@ -6,9 +6,9 @@
     "passes": 1,
     "pending": 0,
     "failures": 0,
-    "start": "2016-07-14T19:47:59.707Z",
-    "end": "2016-07-14T19:47:59.905Z",
-    "duration": 198,
+    "start": "2016-07-15T14:50:42.353Z",
+    "end": "2016-07-15T14:50:42.462Z",
+    "duration": 109,
     "testsRegistered": 1,
     "passPercent": 100,
     "pendingPercent": 0,
@@ -30,7 +30,7 @@
             "title": "echos message",
             "fullTitle": "echo echos message",
             "timedOut": false,
-            "duration": 146,
+            "duration": 90,
             "state": "passed",
             "speed": "slow",
             "pass": true,
@@ -38,8 +38,8 @@
             "pending": false,
             "code": "<span class=\"hljs-keyword\">var</span> client = io.connect(<span class=\"hljs-string\">\"http://localhost:4012\"</span>, options);<br>client.on(<span class=\"hljs-string\">\"connect\"</span>, <span class=\"hljs-function\"><span class=\"hljs-keyword\">function</span> (<span class=\"hljs-params\"></span>) </span>{<br>    client.on(<span class=\"hljs-string\">\"echo\"</span>, <span class=\"hljs-function\"><span class=\"hljs-keyword\">function</span> (<span class=\"hljs-params\">message</span>) </span>{<br>        message.should.equal(<span class=\"hljs-string\">\"Hello World\"</span>);<br>        client.disconnect();<br>        done();<br>    });<br>});<br>client.emit(<span class=\"hljs-string\">\"echo\"</span>, <span class=\"hljs-string\">\"Hello World\"</span>);",
             "isRoot": false,
-            "uuid": "5bc28fac-1702-4bc6-b464-3d2d79d9ff8b",
-            "parentUUID": "d9f884fd-362d-4763-b717-d22c3498fd9d",
+            "uuid": "5580d6e1-2fb6-4409-bd93-67fa5a7b1196",
+            "parentUUID": "773a7f0a-bc5d-4f3c-864b-9023d2c17cb1",
             "skipped": false
           }
         ],
@@ -47,14 +47,14 @@
         "root": false,
         "_timeout": 2000,
         "file": "/test/socketClient.test.js",
-        "uuid": "d9f884fd-362d-4763-b717-d22c3498fd9d",
+        "uuid": "773a7f0a-bc5d-4f3c-864b-9023d2c17cb1",
         "fullFile": "/Users/min/Documents/dev/ipf/co-engagement/test/socketClient.test.js",
         "passes": [
           {
             "title": "echos message",
             "fullTitle": "echo echos message",
             "timedOut": false,
-            "duration": 146,
+            "duration": 90,
             "state": "passed",
             "speed": "slow",
             "pass": true,
@@ -62,8 +62,8 @@
             "pending": false,
             "code": "<span class=\"hljs-keyword\">var</span> client = io.connect(<span class=\"hljs-string\">\"http://localhost:4012\"</span>, options);<br>client.on(<span class=\"hljs-string\">\"connect\"</span>, <span class=\"hljs-function\"><span class=\"hljs-keyword\">function</span> (<span class=\"hljs-params\"></span>) </span>{<br>    client.on(<span class=\"hljs-string\">\"echo\"</span>, <span class=\"hljs-function\"><span class=\"hljs-keyword\">function</span> (<span class=\"hljs-params\">message</span>) </span>{<br>        message.should.equal(<span class=\"hljs-string\">\"Hello World\"</span>);<br>        client.disconnect();<br>        done();<br>    });<br>});<br>client.emit(<span class=\"hljs-string\">\"echo\"</span>, <span class=\"hljs-string\">\"Hello World\"</span>);",
             "isRoot": false,
-            "uuid": "5bc28fac-1702-4bc6-b464-3d2d79d9ff8b",
-            "parentUUID": "d9f884fd-362d-4763-b717-d22c3498fd9d",
+            "uuid": "5580d6e1-2fb6-4409-bd93-67fa5a7b1196",
+            "parentUUID": "773a7f0a-bc5d-4f3c-864b-9023d2c17cb1",
             "skipped": false
           }
         ],
@@ -80,14 +80,14 @@
         "hasFailures": false,
         "hasPending": false,
         "hasSkipped": false,
-        "duration": 146
+        "duration": 90
       }
     ],
     "tests": [],
     "pending": [],
     "root": true,
     "_timeout": 2000,
-    "uuid": "cd1d40aa-c1a7-4ca0-951b-bb8bedc7cd61",
+    "uuid": "31d6a0ff-d1c3-4ebc-8460-b45f309138be",
     "fullFile": "",
     "file": "",
     "passes": [],
@@ -112,7 +112,7 @@
       "title": "echos message",
       "fullTitle": "echo echos message",
       "timedOut": false,
-      "duration": 146,
+      "duration": 90,
       "state": "passed",
       "speed": "slow",
       "pass": true,
@@ -120,8 +120,8 @@
       "pending": false,
       "code": "<span class=\"hljs-keyword\">var</span> client = io.connect(<span class=\"hljs-string\">\"http://localhost:4012\"</span>, options);<br>client.on(<span class=\"hljs-string\">\"connect\"</span>, <span class=\"hljs-function\"><span class=\"hljs-keyword\">function</span> (<span class=\"hljs-params\"></span>) </span>{<br>    client.on(<span class=\"hljs-string\">\"echo\"</span>, <span class=\"hljs-function\"><span class=\"hljs-keyword\">function</span> (<span class=\"hljs-params\">message</span>) </span>{<br>        message.should.equal(<span class=\"hljs-string\">\"Hello World\"</span>);<br>        client.disconnect();<br>        done();<br>    });<br>});<br>client.emit(<span class=\"hljs-string\">\"echo\"</span>, <span class=\"hljs-string\">\"Hello World\"</span>);",
       "isRoot": false,
-      "uuid": "c106720c-42f8-49b3-9f10-6e4d1649ba58",
-      "parentUUID": "d9f884fd-362d-4763-b717-d22c3498fd9d",
+      "uuid": "483ce215-d017-4e84-9652-36a6840eb92d",
+      "parentUUID": "773a7f0a-bc5d-4f3c-864b-9023d2c17cb1",
       "skipped": false
     }
   ],
@@ -131,7 +131,7 @@
       "title": "echos message",
       "fullTitle": "echo echos message",
       "timedOut": false,
-      "duration": 146,
+      "duration": 90,
       "state": "passed",
       "speed": "slow",
       "pass": true,
@@ -139,8 +139,8 @@
       "pending": false,
       "code": "<span class=\"hljs-keyword\">var</span> client = io.connect(<span class=\"hljs-string\">\"http://localhost:4012\"</span>, options);<br>client.on(<span class=\"hljs-string\">\"connect\"</span>, <span class=\"hljs-function\"><span class=\"hljs-keyword\">function</span> (<span class=\"hljs-params\"></span>) </span>{<br>    client.on(<span class=\"hljs-string\">\"echo\"</span>, <span class=\"hljs-function\"><span class=\"hljs-keyword\">function</span> (<span class=\"hljs-params\">message</span>) </span>{<br>        message.should.equal(<span class=\"hljs-string\">\"Hello World\"</span>);<br>        client.disconnect();<br>        done();<br>    });<br>});<br>client.emit(<span class=\"hljs-string\">\"echo\"</span>, <span class=\"hljs-string\">\"Hello World\"</span>);",
       "isRoot": false,
-      "uuid": "be12a6bd-4d4d-4f91-9564-8bd4e8f382bb",
-      "parentUUID": "d9f884fd-362d-4763-b717-d22c3498fd9d",
+      "uuid": "f71cbd57-2521-424d-805c-29dd74984d68",
+      "parentUUID": "773a7f0a-bc5d-4f3c-864b-9023d2c17cb1",
       "skipped": false
     }
   ],

@@ -33,7 +33,8 @@ var sendMessage = function (robot, socket, room, id, message, isHubot) {
         msg.user_id = id;
         msg.message = message.message;
         if (message.prop) {
-            msg.props = message.prop;
+            msg.props = _.merge(msg.props, message.prop);
+            // msg.props = message.prop;
         }
         msg.sessionid = message.sessionid;
         logger.debug('send message to redis client=' + JSON.stringify(msg));

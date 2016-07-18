@@ -107,13 +107,15 @@ var processPrologMessage = function (id, message, robot, socket, self, app, room
                         if(text.indexOf('@@CUS@@') === 0) {
                             text = text.substring('@@CUS@@'.length);
                             // return robot.messageRoom(c_value.agentChannelId, {message: text, prop: {msg_from: 'CUST'}});
-                            return msg.sendMessage(robot, socket, c_value.agentChannelId, id, {message: text, prop: {msg_from: 'CUST'}}, true);
+                            var new_prop = _.merge(prop, {msg_from: 'CUST'});
+                            return msg.sendMessage(robot, socket, c_value.agentChannelId, id, {message: text, prop: new_prop}, true);
                         }
 
                         if(text.indexOf('@@APP@@') === 0) {
                             text = text.substring('@@APP@@'.length);
                             // return robot.messageRoom(c_value.agentChannelId, {message: text, prop: {msg_from: 'APP'}});
-                            return msg.sendMessage(robot, socket, c_value.agentChannelId, id, {message: text, prop: {msg_from: 'APP'}}, true);
+                            var new_prop = _.merge(prop, {msg_from: 'APP'});
+                            return msg.sendMessage(robot, socket, c_value.agentChannelId, id, {message: text, prop: new_prop}, true);
                         }
                     }
                 });
@@ -155,7 +157,8 @@ var processPrologMessage = function (id, message, robot, socket, self, app, room
                             });
                             cache.set(id, customCache, config.redis_expire);
                             cache.set(session, sessionInfo, config.redis_expire);
-                            msg.sendMessage(robot, socket, room, id, {message: statement, prop: {msg_type: 'login'}, sessionid: session}, self);
+                            var new_prop = _.merge(prop, {msg_type: 'login'});
+                            msg.sendMessage(robot, socket, room, id, {message: statement, prop: new_prop, sessionid: session}, self);
                             if (app !== 'ivr') {
                                 sendMsgToApp(robot, text, room, sessionInfo, self, socket);
                             }
@@ -172,7 +175,7 @@ var processPrologMessage = function (id, message, robot, socket, self, app, room
                 cache.get(id, function (err, c_value) {
                     // foward message
                     if (prop && prop.fwd_to === 'CM') {
-                        return cmHelper.appToAgent(text, value, c_value.type, robot, self, socket);
+                        return cmHelper.appToAgent(text, prop, value, c_value.type, robot, self, socket);
                     }
                     if (prop && prop.fwd_to === 'CUST') {
                         // return robot.messageRoom(value.realChannelId, {message: text});
@@ -187,10 +190,10 @@ var processPrologMessage = function (id, message, robot, socket, self, app, room
                                 msg.sendMessage(robot, socket, value.realChannelId, id, {message: text, sessionid: value.sessionId}, self);
                                 break;
                             case 'AGENT' :
-                                cmHelper.appToAgent(text, value, c_value.type, robot, self, socket);
+                                cmHelper.appToAgent(text, prop, value, c_value.type, robot, self, socket);
                                 break;
                             case 'ALL' :
-                                cmHelper.appToAll(text, value, c_value.type, robot, self, socket);
+                                cmHelper.appToAll(text, prop, value, c_value.type, robot, self, socket);
                                 break;
                         }
                     } else {  // from real customer to app
@@ -205,13 +208,14 @@ var processPrologMessage = function (id, message, robot, socket, self, app, room
                             switch (value.TO) {
                                 case 'CUSTOMER' :
                                     // robot.messageRoom(value.appAndShadowChannelId, {message: '@@CUS@@' + text});
-                                    msg.sendMessage(robot, socket, value.appAndShadowChannelId, id, {message: '@@CUS@@' + text}, true);
+                                    var new_prop = _.merge(prop, {msg_to: 'TOAGENT'});
+                                    msg.sendMessage(robot, socket, value.appAndShadowChannelId, id, {message: '@@CUS@@' + text, prop: new_prop}, true);
                                     break;
                                 case 'AGENT' :
-                                    cmHelper.appToAgent(text, value, c_value.type, robot, self, socket);  // if type is from real customer, send text and app answer to agent
+                                    cmHelper.appToAgent(text, prop, value, c_value.type, robot, self, socket);  // if type is from real customer, send text and app answer to agent
                                     break;
                                 case 'ALL' :
-                                    cmHelper.appToAll(text, value, c_value.type, robot, self, socket);
+                                    cmHelper.appToAll(text, prop, value, c_value.type, robot, self, socket);
                                     break;
                             }
                         } else {

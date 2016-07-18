@@ -53,7 +53,7 @@ class Matteruser extends Adapter
         return true
 
     error: (err) =>
-        @robot.logger.info 'Error: ' + err
+        @robot.logger.info 'Error: ' + JSON.stringify err
         return true
 
     onConnected: =>

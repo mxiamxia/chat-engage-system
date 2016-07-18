@@ -4,7 +4,7 @@ TextEncoder = require 'text-encoding'
 Log            = require 'log'
 {EventEmitter} = require 'events'
 request     = require 'request'
-defaultPingInterval = 60000
+defaultPingInterval = 120000
 
 User = require './user.coffee'
 Message = require './message.coffee'

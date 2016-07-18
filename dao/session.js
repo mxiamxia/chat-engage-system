@@ -81,6 +81,9 @@ exports.getSessionOfToday = function (cb) {
     end.setHours(23,59,59,999);
 
     Session.count({"create_at": {$gte: start, $lte: end}}, function (err, nums) {
+        if (err) {
+            return cb(err);
+        }
         logger.debug('Today\'s session number=' + nums);
         cb(null, nums);
     });

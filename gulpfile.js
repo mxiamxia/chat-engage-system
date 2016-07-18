@@ -129,7 +129,7 @@ gulp.task('log', function () {
     if (!fs.existsSync(dir)){
         fs.mkdirSync(dir);
     }
-})
+});
 
 /**
  * Gulp tasks

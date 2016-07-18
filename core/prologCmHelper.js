@@ -164,52 +164,56 @@ var addCacheData = function (id, key, value) {
     });
 };
 
-var appToAgent = function (sentence, value, type, robot, self, socket) {
+var appToAgent = function (sentence, prop, value, type, robot, self, socket) {
     sendMsgToApp(value, type, sentence)
         .then(function (result) {
             logger.debug('appToAgent conversation output===' + JSON.stringify(result));
             if (result.code == 9999) {
                 // robot.messageRoom(value.appAndShadowChannelId, {message: '@@APP@@' + 'Did not find a proper answer'});
-                msg.sendMessage(robot, socket, value.appAndShadowChannelId, value.realId, {message: '@@APP@@' + 'Did not find a proper answer'}, true);
+                var new_prop = _.merge(prop, {msg_to: 'TOAGENT'});
+                msg.sendMessage(robot, socket, value.appAndShadowChannelId, value.realId, {message: '@@APP@@' + 'Did not find a proper answer', prop: new_prop}, true);
             } else {
                 if (type === 'REAL') {
                     // robot.messageRoom(value.appAndShadowChannelId, {message: '@@CUS@@' + sentence});
-                    msg.sendMessage(robot, socket, value.appAndShadowChannelId, value.realId, {message: '@@CUS@@' + sentence}, true);
+                    var new_prop = _.merge(prop, {msg_to: 'TOAGENT'});
+                    msg.sendMessage(robot, socket, value.appAndShadowChannelId, value.realId, {message: '@@CUS@@' + sentence, prop: new_prop}, true);
                 }
                 // robot.messageRoom(value.appAndShadowChannelId, {message: '@@APP@@' +result.message});
-                msg.sendMessage(robot, socket, value.appAndShadowChannelId, value.realId, {message: '@@APP@@' +result.message}, true);
+                var new_prop = _.merge(prop, {msg_to: 'TOAGENT'});
+                msg.sendMessage(robot, socket, value.appAndShadowChannelId, value.realId, {message: '@@APP@@' +result.message, prop: new_prop}, true);
             }
         });
 };
 exports.appToAgent = appToAgent;
 
 
-var appToAll = function (sentence, value, type, robot, self, socket) {
+var appToAll = function (sentence, prop, value, type, robot, self, socket) {
     sendMsgToApp(value, type, sentence)
         .then(function (result) {
             logger.debug('appToAll conversation output===' + JSON.stringify(result));
             // if (self) {
+            var new_prop = _.merge(prop, {msg_to: 'TOALL'});
             if (result.code == 9999) {
                 // robot.messageRoom(value.appAndShadowChannelId, {message: '@@APP@@' + 'Did not find a proper answer'});
-                msg.sendMessage(robot, socket, value.appAndShadowChannelId, value.realId, {message: '@@APP@@' + 'Did not find a proper answer'}, true);
+                msg.sendMessage(robot, socket, value.appAndShadowChannelId, value.realId, {message: '@@APP@@' + 'Did not find a proper answer', prop: new_prop}, true);
                 // robot.messageRoom(value.realChannelId, {message: 'Did not find a proper answer'});
-                msg.sendMessage(robot, socket, value.realChannelId, value.realId, {message: 'Did not find a proper answer', sessionid: value.sessionId}, self);
+                msg.sendMessage(robot, socket, value.realChannelId, value.realId, {message: 'Did not find a proper answer', sessionid: value.sessionId, prop: new_prop}, self);
 
             } else if (result.code === 1801) {
                 // robot.messageRoom(value.appAndShadowChannelId, {message: '@@APP@@' + 'The current session expired. Ready to init a new session.'});
-                msg.sendMessage(robot, socket, value.appAndShadowChannelId, value.realId, {message: '@@APP@@' + 'The current session expired. Ready to init a new session.'}, true);
+                msg.sendMessage(robot, socket, value.appAndShadowChannelId, value.realId, {message: '@@APP@@' + 'The current session expired. Ready to init a new session.', prop: new_prop}, true);
                 // robot.messageRoom(value.realChannelId, {message: 'The current session expired. Ready to init a new session.'});
-                msg.sendMessage(robot, socket, value.realChannelId, value.realId, {message: 'The current session expired. Ready to init a new session.', sessionid: value.sessionId}, self);
+                msg.sendMessage(robot, socket, value.realChannelId, value.realId, {message: 'The current session expired. Ready to init a new session.', sessionid: value.sessionId, prop: new_prop}, self);
                 cleanCache('', 'quit', value, robot, self, socket);
             } else {
                 if (type === 'REAL') {
                     // robot.messageRoom(value.appAndShadowChannelId, {message: '@@CUS@@' + sentence});
-                    msg.sendMessage(robot, socket, value.appAndShadowChannelId, value.realId, {message: '@@CUS@@' + sentence}, true);
+                    msg.sendMessage(robot, socket, value.appAndShadowChannelId, value.realId, {message: '@@CUS@@' + sentence, prop: new_prop}, true);
                 }
                 // robot.messageRoom(value.appAndShadowChannelId, {message: '@@APP@@' + result.message});
-                msg.sendMessage(robot, socket, value.appAndShadowChannelId, value.realId, {message: '@@APP@@' + result.message}, true);
+                msg.sendMessage(robot, socket, value.appAndShadowChannelId, value.realId, {message: '@@APP@@' + result.message, prop: new_prop}, true);
                 // robot.messageRoom(value.realChannelId, {message: result.message});
-                msg.sendMessage(robot, socket, value.realChannelId, value.realId, {message: result.message, sessionid: value.sessionId}, self);
+                msg.sendMessage(robot, socket, value.realChannelId, value.realId, {message: result.message, sessionid: value.sessionId, prop: new_prop}, self);
             }
             // } else {
             //     if (result.code == 9999) {
