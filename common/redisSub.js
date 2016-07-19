@@ -32,7 +32,31 @@ var publisher = new Redis({
     }
 });
 
+
+var cmsubscriber = new Redis({
+    port: config.redis_port,
+    host: config.redis_host,
+    db: config.redis_db,
+    retryStrategy: function (times) {
+        var delay = Math.min(times * 2, 2000);
+        return delay;
+    }
+});
+
+var cmpublisher = new Redis({
+    port: config.redis_port,
+    host: config.redis_host,
+    db: config.redis_db,
+    retryStrategy: function (times) {
+        var delay = Math.min(times * 2, 2000);
+        return delay;
+    }
+});
+
 logger.debug('Init redis sub/pub listener.');
 
 exports.Pub = publisher;
 exports.Sub = subscriber;
+
+exports.CMPub = cmpublisher;
+exports.CMSub = cmsubscriber;

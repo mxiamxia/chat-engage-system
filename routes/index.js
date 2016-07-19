@@ -26,6 +26,7 @@ router.get('/api/createUser', mattermostController.createUser);
 router.get('/api/createMultipleUsers', loadTestController.createMultipleUsers);
 
 router.get('/api/sendMessage/:user/:message', loadTestController.sendMessage);
+router.get('/api/sendAooMessage/:user/:message', loadTestController.sendAppMessage);
 
 
 

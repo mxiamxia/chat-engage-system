@@ -10,6 +10,7 @@ var robotManager = require('../core/robotManager');
 var CM = require('../core/prologCm');
 var logger = require('../common/logger');
 var _ = require('lodash');
+var config = require('../config');
 
 var msg_template = {
     app: "IVR",
@@ -38,16 +39,16 @@ var sendMessage = function (robot, socket, room, id, message, isHubot) {
         }
         msg.sessionid = message.sessionid;
         logger.debug('send message to redis client=' + JSON.stringify(msg));
-        Pub.rpush('ivrchannel', JSON.stringify(msg));
+        Pub.rpush(config.IVRCHANNEL, JSON.stringify(msg));
     }
 };
 
 var loopRedisQ = function () {
-    Sub.blpop('ivrapp', 0, function (err, message) {
+    Sub.blpop(config.IVRAPP, 0, function (err, message) {
         if (err) {
             logger.error('redis q err' + err);
         }
-        logger.debug('recieved message=' + message[1]);
+        logger.debug('received message=' + message[1]);
         try {
             message = JSON.parse(message[1]);
             var robot = robotManager.getRobot('APP');

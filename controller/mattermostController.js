@@ -14,7 +14,7 @@ var cmHelper = require('../core/prologCmHelper');
 
 
 //http://localhost:4012/api/createUser?email=cust_test@cyberobject.com&name=cust_test&password=123456
-var createUser = function (req, res) {
+var createUser = function (req, res, next) {
     var resObj = url.parse(req.url);
     var result = {'message': 'create User failed'};
     logger.debug('Create User request query=' + JSON.stringify(querystring.parse(resObj.query)));

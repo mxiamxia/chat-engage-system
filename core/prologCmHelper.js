@@ -15,6 +15,9 @@ var xml2js = require('xml2js');
 var robotManager = require('./robotManager');
 var engageAction = require('./engageAction');
 var msg = require('./message');
+var parser = new xml2js.Parser();
+var CMPub = require('../common/redisSub').CMPub;
+var CMSub = require('../common/redisSub').CMSub;
 
 // only when engagement setup, allow agent to set engagement mode
 var check3Way = function (prop, text, value) {
@@ -66,43 +69,50 @@ var sendMsgToApp = function (value, type, sentence) {
 
         body = body.replace(/\r?\n|\r/g, '');
         return deferred.resolve({'type': 'xul', 'message': body, 'code': 1000});
-
-        // if (body.indexOf('<xul>') > -1) {
-        //     body = body.replace(/\r?\n|\r/g, '');
-        //     deferred.resolve({'type': 'xul', 'message': body, 'code': 1000});
-        //     //addCacheData(value.sessionId, consts.QUESTION, body);
-        // } else {
-        //     parser.parseString(body, function (err, result) {
-        //         try {
-        //             var statement = 'no valid answer returned';
-        //             if (_.isEmpty(result.response.body[0].question)) {
-        //                 if (!_.isEmpty(result.response.body[0].statement)) {
-        //                     statement = result.response.body[0].statement[0];
-        //                 }
-        //             } else {
-        //                 if (typeof result.response.body[0].question[0] === 'string') {
-        //                     statement = result.response.body[0].question[0]
-        //                 }
-        //             }
-        //             statement = statement.replace(/\r?\n|\r/g, '');
-        //             var data = {'type': 'message', 'message': statement, 'code': 1000};
-        //             //addCacheData(value.sessionId, consts.QUESTION, statement);
-        //             deferred.resolve(data);
-        //         } catch (e) {
-        //             if(body.indexOf('existance error: [session') > -1) {
-        //                 deferred.resolve({'code': 1801});
-        //             } else {
-        //                 deferred.resolve({'code': 9999});
-        //             }
-        //         }
-        //     });
-        // }
     });
     return deferred.promise;
 };
 
 exports.sendMsgToApp = sendMsgToApp;
 
+var loginApp = function (id, app, message) {
+    var deferred = Q.defer();
+    var prologLogin = TEMP.loginReq;
+    if (app.toLowerCase() === 'ivr') {
+        prologLogin = util.format(prologLogin, id, message.sessionid);
+    } else {
+        prologLogin = util.format(prologLogin, id, '');
+    }
+    logger.debug('login input=' + prologLogin);
+    logger.debug('login url=' + config.CM_PROLOG);
+    var options = {
+        uri: config.CM_PROLOG,
+        method: 'POST',
+        qs: {request: prologLogin},
+        headers: {'Content-Type': 'application/xml'}
+    };
+    request(options, function (err, response, body) {
+        if (err) {
+            logger.debug('login request err=' + err);
+            deferred.resolve({'code': 9999});
+        } else {
+            logger.debug('login body=' + JSON.stringify(body));
+            parser.parseString(body, function (err, result) {
+                try {
+                    var sessionID = result.response.header[0].sessionid[0].$.value;
+                    // var statement = result.response.body[0].statement[0];
+                    var data = {'session': sessionID, 'statement': body, 'code': 1000};
+                    deferred.resolve(data);
+                } catch (e) {
+                    deferred.resolve({'code': 9999});
+                }
+            });
+        }
+    });
+    return deferred.promise;
+};
+
+exports.loginApp = loginApp;
 
 var cleanCache = function (room, text, value, robot, self, socket) {
     if (text.toLowerCase() === 'quit') {

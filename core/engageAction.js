@@ -33,6 +33,7 @@ var transferStart = function (input) {
                 logger.debug('Engagement failed, transfer request is not valid');
                 return;
             }
+            logger.debug('Engagement request json=' + JSON.stringify(result));
             if (result && result.message && result.message.header && result.message.header[0].action) {
                 var action = result.message.header[0].action[0].$.value;
                 if (action === 'transfer_start') {
@@ -65,11 +66,11 @@ var transferStart = function (input) {
                             var shadowName = 'shadow_' + appRobot.adapter.profile.id + '_' + userid;
                             var shadowEmail = shadowName + '@cyberobject.com';
                             createShadowUser(shadowEmail, '123456', shadowName, function (err, response) {
+                                logger.debug('Init new mattermost user' + JSON.stringify(response));
                                 // if create shadow customer successfully
                                 if ((response.message === 'An account with that username already exists.' || response.message === 'An account with that email already exists.')
                                     || (response.username && (response.username.toLowerCase() === shadowName.toLowerCase()))) {
                                     //Login shadow customer with email and password
-                                    logger.debug('Init new mattermost user' + JSON.stringify(response));
                                     initHubot(shadowEmail, '123456', 'CUSTOMER', function (err, robot) {
                                         if(err) {
                                             logger.debug('Init hubot error=' + err);

@@ -4,23 +4,21 @@
 
 
 var config = {
-    MODE_ENV: 'DEV', //DEV
+     //DEV
     CM: 'PROLOG',  //or 'PROLOG'
     //CM:'MQ',  //or 'MQ'
-    ROCKET_URL: 'www.cyberobject.com:3000',
     CM_URL: 'http://192.168.254.196:18011/ntelagent-chat-web-mobile/HttpService',
     CM_PROLOG: 'http://192.168.254.116:3030/cm',
-    HUBOT_SKY: 'http://localhost:8092/skype/message',
-    HUBOT_ROCKET: 'http://localhost:8093/rocket/message',
-    // mongodb
+
+    //mongodb && redis
     mongodb: 'mongodb://localhost/co_engage',
     redis_host: 'localhost',
     redis_port: 6379,
     redis_db: 1,
     redis_expire: 168 * 60 * 60, // four hours
     pollInterval: 1000,
-    app: 'mattermost',
-    debug: true,
+
+    //houndify setting
     houndy_clientid: '5Tp0jrUv3EK0LXNGLt_u4A==',
     houndy_clientkey: 'vUMKM3lR6J-uGnUfDI4ENeLvNyvyJ56PQwppZqtjU4ETuO6UrozYz0rZ24M94N82w3RPC2WB9fgQhlYi5IVSzg==',
     Hound_Request_Info: '{"ClientID":"5Tp0jrUv3EK0LXNGLt_u4A==","PartialTranscriptsDesired":true,"Latitude":33.9253,"Longitude":-84.3857}',
@@ -30,10 +28,22 @@ var config = {
         'Hound-Request-Info': '{"ClientID":"uI1km2cRUlcLU2Nuq3MJiw==","PartialTranscriptsDesired":true,"Latitude":33.9253,"Longitude":-84.3857}'
     },
     houndy_url: 'https://api.houndify.com/v1/text?query=',
-    callback_url: 'http://192.168.254.122:4011/engagement',
-    ENGAGE_MODE: 'TEST',
-    jwtSecret: 'cyber engagement',
+
+    //app id in the agent group
     APPLIST: ['wgwwqx5ei789fngx86osp6bzmo', 'gqupp5deapyy9q1gitmxzu1aho'],
+
+    //websocket
+    jwtSecret: 'cyber engagement',
+
+    //redis queue
+    IVRAPP: 'ivrapp',
+    IVRCHANNEL: 'ivrchannel',
+    CMAPP: 'cmapp',
+    CMCHANNEL: 'cmchannel',
+
+    //Dev
+    debug: true,
+    MODE_ENV: 'DEV',
     LOAD_TEST: false
 
 };

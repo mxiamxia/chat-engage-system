@@ -13,6 +13,9 @@ var fs = require('fs');
 var path = require('path');
 var initHubot = require('../bots/botInstance');
 var engage = require('../core/engageAction');
+var robotManager = require('../core/robotManager');
+var CM = require('../core/prologCm');
+var logger = require('../common/logger');
 
 var userList = {};
 var appid = 'wgwwqx5ei789fngx86osp6bzmo';
@@ -91,6 +94,21 @@ var sendMessage = function (req, res, next) {
 
 };
 exports.sendMessage = sendMessage;
+
+
+//siege --concurrent=10 --reps=5 http://localhost:4012/api/sendAooMessage/mxiatest/ready%20to%20close%20a%20job
+var sendAppMessage = function (req, res, next) {
+    if (req.params.user && req.params.message) {
+        var id = req.params.user;
+        var message = req.params.message;
+        var robot = robotManager.getRobot('APP');
+        CM.processPrologMessage(id, {message: message}, robot, null, false, 'MM', id, function (err, result) {
+            res.send('app result=' + JSON.stringify(result));
+        });
+    }
+};
+
+exports.sendAppMessage = sendAppMessage;
 
 
 

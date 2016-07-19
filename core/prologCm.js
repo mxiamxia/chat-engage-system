@@ -15,29 +15,24 @@ var cache = require('../common/cache');
 var EventProxy = require('eventproxy');
 var engageAction = require('./engageAction');
 
-var parser = new xml2js.Parser();
 var dispatcher = require('../event/dispatchEvent').pubsub;
 var consts = require('../common/consts');
 var cmHelper = require('./prologCmHelper');
 var sessionDao = require('../dao/').Session;
 var msg = require('./message');
 
-var processPrologMessage = function (id, message, robot, socket, self, app, room) {
+var processPrologMessage = function (id, message, robot, socket, self, app, room, cb) {
 
     var text = message.message;
     var prop = message.prop;
 
-    // if (_.isEmpty(text)) {
-    //     return;
-    // }
-
     var ep = new EventProxy();
     if (typeof room == 'undefined' || room == null) {
-        //room = 'GENERAL'
         room = id;
     }
 
     logger.debug('deliver message to room===' + room + ' with ID===' + id);
+    logger.debug('deliver message ===' + text);
 
     ep.fail(function (err) {
         logger.error('Failed to retreive data from Redis server', err);
@@ -57,7 +52,6 @@ var processPrologMessage = function (id, message, robot, socket, self, app, room
             ep.emit('sessionDataReturn', null);
         }
     });
-
 
     ep.all('sessionDataReturn', function (value) {
 
@@ -137,7 +131,7 @@ var processPrologMessage = function (id, message, robot, socket, self, app, room
 
             // login Prolog CM if session is not established
             if (_.isEmpty(value) || (prop && prop.msg_type === 'login')) {
-                loginAction(id, app, message)
+                cmHelper.loginApp(id, app, message)
                     .then(function (result) {
                         logger.debug('Prolog CM login output=' + JSON.stringify(result));
                         if (result.code === 1000) {
@@ -160,13 +154,12 @@ var processPrologMessage = function (id, message, robot, socket, self, app, room
                             var new_prop = _.merge(prop, {msg_type: 'login'});
                             msg.sendMessage(robot, socket, room, id, {message: statement, prop: new_prop, sessionid: session}, self);
                             if (app !== 'ivr') {
-                                sendMsgToApp(robot, text, room, sessionInfo, self, socket);
+                                sendMsgToApp(robot, text, room, sessionInfo, self, socket, cb);
                             }
                         }
                     });
                 return;
             }
-
 
             // when session is established
             // for each message to appAndShadowChannelId(APP to shadow user), we add message_from prefix and add it to props in client.coffee
@@ -219,7 +212,7 @@ var processPrologMessage = function (id, message, robot, socket, self, app, room
                                     break;
                             }
                         } else {
-                            sendMsgToApp(robot, text, room, value, self, socket);
+                            sendMsgToApp(robot, text, room, value, self, socket, cb);
                         }
                     }
                 });
@@ -228,48 +221,13 @@ var processPrologMessage = function (id, message, robot, socket, self, app, room
     });
 };
 
-var loginAction = function (id, app, message) {
-    var deferred = Q.defer();
-    var prologLogin = TEMP.loginReq;
-    if (app.toLowerCase() === 'ivr') {
-        prologLogin = util.format(prologLogin, id, message.sessionid);
-    } else {
-        prologLogin = util.format(prologLogin, id, '');
-    }
-    logger.debug('login input=' + prologLogin);
-    logger.debug('login url=' + config.CM_PROLOG);
-    var options = {
-        uri: config.CM_PROLOG,
-        method: 'POST',
-        qs: {request: prologLogin},
-        headers: {'Content-Type': 'application/xml'}
-    };
-    request(options, function (err, response, body) {
-        if (err) {
-            logger.debug('login request err=' + err);
-            deferred.resolve({'code': 9999});
-        } else {
-            logger.debug('login body=' + JSON.stringify(body));
-            parser.parseString(body, function (err, result) {
-                try {
-                    var sessionID = result.response.header[0].sessionid[0].$.value;
-                    // var statement = result.response.body[0].statement[0];
-                    var data = {'session': sessionID, 'statement': body, 'code': 1000};
-                    deferred.resolve(data);
-                } catch (e) {
-                    deferred.resolve({'code': 9999});
-                }
-            });
-        }
-    });
-    return deferred.promise;
-};
-
-
-var sendMsgToApp = function (robot, text, room, value, self, socket) {
+var sendMsgToApp = function (robot, text, room, value, self, socket, cb) {
     cmHelper.sendMsgToApp(value, 'REAL', text)
         .then(function (result) {
             logger.debug('conversation output===' + JSON.stringify(result));
+            if (config.LOAD_TEST) {
+                cb(null, result);
+            }
             if (result.code === 9999) {
                 // robot.messageRoom(room, {message: 'Did not find a proper answer'});
                 msg.sendMessage(robot, socket, room, value.realId, {message: 'Did not find a proper answer', sessionid: value.sessionId}, self);
