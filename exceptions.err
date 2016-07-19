@@ -328,3 +328,9 @@ Fri Jul 15 2016 15:10:57 GMT-0400 (EDT) ctrl-c trigger
 Fri Jul 15 2016 15:23:32 GMT-0400 (EDT) ctrl-c trigger
 Sat Jul 16 2016 22:00:10 GMT-0400 (EDT) ctrl-c trigger
 Mon Jul 18 2016 10:04:48 GMT-0400 (EDT) ctrl-c trigger
+Tue Jul 19 2016 17:58:58 GMT-0400 (EDT) TypeError: Cannot read property 'adapter' of null
+Tue Jul 19 2016 17:58:58 GMT-0400 (EDT) TypeError: Cannot read property 'adapter' of null
+Tue Jul 19 2016 17:58:58 GMT-0400 (EDT) TypeError: Cannot read property 'adapter' of null
+Tue Jul 19 2016 17:58:58 GMT-0400 (EDT) TypeError: Cannot read property 'adapter' of null
+Tue Jul 19 2016 17:58:58 GMT-0400 (EDT) TypeError: Cannot read property 'adapter' of null
+Tue Jul 19 2016 17:58:58 GMT-0400 (EDT) TypeError: Cannot read property 'adapter' of null
