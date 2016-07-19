@@ -36,10 +36,10 @@ var config = {
     jwtSecret: 'cyber engagement',
 
     //redis queue
-    IVRAPP: 'ivrapp',
+    WORKFLOW: 'workflow',
+    APPCM: 'app.workflow',
+    APPIVR: 'ivrapp',
     IVRCHANNEL: 'ivrchannel',
-    CMAPP: 'cmapp',
-    CMCHANNEL: 'cmchannel',
 
     //Dev
     debug: true,

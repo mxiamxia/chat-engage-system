@@ -43,7 +43,7 @@ module.exports = (robot) ->
     logger.debug 'room of message = ' + room
     self = true
     if config.CM is 'PROLOG'
-      prologCm.processPrologMessage id, text, robot, null, self, 'MM', room
+      prologCm.processPrologMessage id, text, robot, 'MM', room
     else
       id = id + '@@mq'
       cm.processMessage id, text, robot, null, self, room

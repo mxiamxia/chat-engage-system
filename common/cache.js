@@ -1,6 +1,7 @@
 var redis = require('./redis');
 var _ = require('lodash');
 var logger = require('./logger');
+var Promise = require('bluebird');
 
 var get = function (key, callback) {
     var t = new Date();
@@ -19,6 +20,7 @@ var get = function (key, callback) {
 };
 
 exports.get = get;
+exports.pget = Promise.promisify(get);
 
 var set = function (key, value, time, callback) {
     var t = new Date();

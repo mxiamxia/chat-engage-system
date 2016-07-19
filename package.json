@@ -12,6 +12,7 @@
     "async": "^2.0.0-rc.6",
     "bcryptjs": "^2.3.0",
     "benchmark": "^2.1.0",
+    "bluebird": "^3.4.1",
     "body-parser": "~1.13.2",
     "cheerio": "^0.20.0",
     "coffee-script": "^1.10.0",

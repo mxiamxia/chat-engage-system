@@ -75,13 +75,13 @@ var sendMsgToApp = function (value, type, sentence) {
 
 exports.sendMsgToApp = sendMsgToApp;
 
-var loginApp = function (id, app, message) {
+var loginApp = function (id, room, app, message) {
     var deferred = Q.defer();
     var prologLogin = TEMP.loginReq;
     if (app.toLowerCase() === 'ivr') {
-        prologLogin = util.format(prologLogin, id, message.sessionid);
+        prologLogin = util.format(prologLogin, id, message.sessionid, app, room);
     } else {
-        prologLogin = util.format(prologLogin, id, '');
+        prologLogin = util.format(prologLogin, id, '', app, room);
     }
     logger.debug('login input=' + prologLogin);
     logger.debug('login url=' + config.CM_PROLOG);
@@ -114,7 +114,20 @@ var loginApp = function (id, app, message) {
 
 exports.loginApp = loginApp;
 
-var cleanCache = function (room, text, value, robot, self, socket) {
+var loginAppQ = function (id, app, message) {
+    var prologLogin = TEMP.loginReq;
+    if (app.toLowerCase() === 'ivr') {
+        prologLogin = util.format(prologLogin, id, message.sessionid, app);
+    } else {
+        prologLogin = util.format(prologLogin, id, '', app);
+    }
+    logger.debug('login input=' + prologLogin);
+    msg.sendMessage()
+    CMPub.rpush(config.CMCHANNEL, prologLogin);
+};
+exports.loginAppQ = loginAppQ;
+
+var cleanCache = function (room, text, value, robot, app) {
     if (text.toLowerCase() === 'quit') {
         //robot.shutdown();
         //logger.debug('robot command length=' + robot.commands.length);
@@ -138,58 +151,39 @@ var cleanCache = function (room, text, value, robot, self, socket) {
                 robotManager.delRobot(shadowCustomerId);
             }
         }
-        if (self && !_.isEmpty(room)) {
-            // robot.messageRoom(room, {message: 'Session is terminated'});
-            msg.sendMessage(robot, socket, room, room, {message: 'Session is terminated'}, self);
 
+        if(!_.isEmpty(value)) {
+            msg.sendMessage(robot, room, value.realId, {message: 'Session is terminated', sessionid: value.sessionId}, app);
+        } else {
+            msg.sendMessage(robot, room, room, {message: 'Session is terminated', sessionid: value.sessionId}, app);
         }
-        else {
-            // if (socket) {
-            // socket.emit('response', {'userid': id, 'input': 'Session is terminated'});
-            // }
-            if(!_.isEmpty(value)) {
-                msg.sendMessage(robot, socket, room, value.realId, {message: 'Session is terminated', sessionid: value.sessionId}, self);
-            } else {
-                msg.sendMessage(robot, socket, room, room, {message: 'Session is terminated', sessionid: value.sessionId}, self);
-            }
-        }
-        return true;
     }
     return false;
 };
 
 exports.cleanCache = cleanCache;
 
-var addCacheData = function (id, key, value) {
-    if (key === consts.QUESTION && value === 'I don\'t understand.') {
-        return;
+var appToAgent = function (sentence, prop, value, type, robot, self, socket) {
+    var new_prop = _.merge(prop, {msg_to: 'TOAGENT'});
+    if (type === 'REAL') {
+        // robot.messageRoom(value.appAndShadowChannelId, {message: '@@CUS@@' + sentence});
+        var new_prop = _.merge(prop, {msg_to: 'TOAGENT'});
+        msg.sendMessage(robot, socket, value.appAndShadowChannelId, value.realId, {message: '@@CUS@@' + sentence, prop: new_prop}, true);
     }
 
-    //TODO: may not need to retrieve cache here,
-    cache.get(id, function (err, data) {
-        if (!_.isEmpty(data)) {
-            data[key] = value;
-            cache.set(id, data, config.redis_expire)
-        }
-    });
-};
-
-var appToAgent = function (sentence, prop, value, type, robot, self, socket) {
     sendMsgToApp(value, type, sentence)
         .then(function (result) {
             logger.debug('appToAgent conversation output===' + JSON.stringify(result));
             if (result.code == 9999) {
                 // robot.messageRoom(value.appAndShadowChannelId, {message: '@@APP@@' + 'Did not find a proper answer'});
-                var new_prop = _.merge(prop, {msg_to: 'TOAGENT'});
                 msg.sendMessage(robot, socket, value.appAndShadowChannelId, value.realId, {message: '@@APP@@' + 'Did not find a proper answer', prop: new_prop}, true);
             } else {
-                if (type === 'REAL') {
-                    // robot.messageRoom(value.appAndShadowChannelId, {message: '@@CUS@@' + sentence});
-                    var new_prop = _.merge(prop, {msg_to: 'TOAGENT'});
-                    msg.sendMessage(robot, socket, value.appAndShadowChannelId, value.realId, {message: '@@CUS@@' + sentence, prop: new_prop}, true);
-                }
+                // if (type === 'REAL') {
+                //     // robot.messageRoom(value.appAndShadowChannelId, {message: '@@CUS@@' + sentence});
+                //     var new_prop = _.merge(prop, {msg_to: 'TOAGENT'});
+                //     msg.sendMessage(robot, socket, value.appAndShadowChannelId, value.realId, {message: '@@CUS@@' + sentence, prop: new_prop}, true);
+                // }
                 // robot.messageRoom(value.appAndShadowChannelId, {message: '@@APP@@' +result.message});
-                var new_prop = _.merge(prop, {msg_to: 'TOAGENT'});
                 msg.sendMessage(robot, socket, value.appAndShadowChannelId, value.realId, {message: '@@APP@@' +result.message, prop: new_prop}, true);
             }
         });
@@ -198,11 +192,16 @@ exports.appToAgent = appToAgent;
 
 
 var appToAll = function (sentence, prop, value, type, robot, self, socket) {
+    var new_prop = _.merge(prop, {msg_to: 'TOALL'});
+    if (type === 'REAL') {
+        // robot.messageRoom(value.appAndShadowChannelId, {message: '@@CUS@@' + sentence});
+        msg.sendMessage(robot, socket, value.appAndShadowChannelId, value.realId, {message: '@@CUS@@' + sentence, prop: new_prop}, true);
+    }
     sendMsgToApp(value, type, sentence)
         .then(function (result) {
             logger.debug('appToAll conversation output===' + JSON.stringify(result));
             // if (self) {
-            var new_prop = _.merge(prop, {msg_to: 'TOALL'});
+
             if (result.code == 9999) {
                 // robot.messageRoom(value.appAndShadowChannelId, {message: '@@APP@@' + 'Did not find a proper answer'});
                 msg.sendMessage(robot, socket, value.appAndShadowChannelId, value.realId, {message: '@@APP@@' + 'Did not find a proper answer', prop: new_prop}, true);

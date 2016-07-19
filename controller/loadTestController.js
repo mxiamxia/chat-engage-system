@@ -102,7 +102,7 @@ var sendAppMessage = function (req, res, next) {
         var id = req.params.user;
         var message = req.params.message;
         var robot = robotManager.getRobot('APP');
-        CM.processPrologMessage(id, {message: message}, robot, null, false, 'MM', id, function (err, result) {
+        CM.processPrologMessage(id, {message: message}, robot, 'MM', id, function (err, result) {
             res.send('app result=' + JSON.stringify(result));
         });
     }

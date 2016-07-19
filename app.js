@@ -9,11 +9,12 @@ var fs = require('fs');
 var routes = require('./routes/index');
 var config = require('./config');
 var redisM = require('./common/redisSub');
-
+var init = require('./core/init');
 var app = express();
 
 //init robot instance
-require('./bots/botInstance')(process.env.MATTERMOST_USER, process.env.MATTERMOST_PASSWORD, 'APP', function () {});
+// require('./bots/botInstance')(process.env.MATTERMOST_USER, process.env.MATTERMOST_PASSWORD, 'APP', function () {});
+init.init();
 
 // view engine setup
 //app.set('views', path.join(__dirname, '/dist'));

@@ -3,8 +3,6 @@
  */
 
 
-var Q = require('q');
-var TEMP = require('../common/template');
 var logger = require('../common/logger');
 var request = require('request');
 var config = require('../config');
@@ -21,7 +19,7 @@ var cmHelper = require('./prologCmHelper');
 var sessionDao = require('../dao/').Session;
 var msg = require('./message');
 
-var processPrologMessage = function (id, message, robot, socket, self, app, room, cb) {
+var processPrologMessage = function (id, message, robot, app, room, cb) {
 
     var text = message.message;
     var prop = message.prop;
@@ -57,7 +55,7 @@ var processPrologMessage = function (id, message, robot, socket, self, app, room
 
         logger.debug('cached session value=' + JSON.stringify(value));
 
-        if (cmHelper.cleanCache(room, text, value, robot, self, socket)) {
+        if (cmHelper.cleanCache(room, text, value, robot, app)) {
             return;
         }
 
@@ -86,30 +84,30 @@ var processPrologMessage = function (id, message, robot, socket, self, app, room
                         // check if agent trys to foward message, pass the whole prop to APP for dispatching
                         if (prop && prop.fwd_to) {
                             // return robot.messageRoom(c_value.appChannelId, {message: text, prop: prop});
-                            return msg.sendMessage(robot, socket, c_value.appChannelId, id, {message: text, prop: prop}, true);
+                            return msg.sendMessage(robot, c_value.appChannelId, id, {message: text, prop: prop}, 'MM');
                         }
                         // robot.messageRoom(c_value.appChannelId, {message: text});
-                        msg.sendMessage(robot, socket, c_value.appChannelId, id, {message: text}, true);
+                        msg.sendMessage(robot, c_value.appChannelId, id, {message: text}, 'MM');
                     } else {  // message come from App to agent
                         logger.debug('Message to shadow customer  =' + text);
                         //if real customer request logout, foward the whole message to agent
                         if (prop && prop.msg_type === 'cust_leave') {
                             // return robot.messageRoom(c_value.agentChannelId, message);
-                            return msg.sendMessage(robot, socket, c_value.agentChannelId, id, message, true);
+                            return msg.sendMessage(robot, c_value.agentChannelId, id, message, 'MM');
                         }
 
                         if(text.indexOf('@@CUS@@') === 0) {
                             text = text.substring('@@CUS@@'.length);
                             // return robot.messageRoom(c_value.agentChannelId, {message: text, prop: {msg_from: 'CUST'}});
                             var new_prop = _.merge(prop, {msg_from: 'CUST'});
-                            return msg.sendMessage(robot, socket, c_value.agentChannelId, id, {message: text, prop: new_prop}, true);
+                            return msg.sendMessage(robot, c_value.agentChannelId, id, {message: text, prop: new_prop}, 'MM');
                         }
 
                         if(text.indexOf('@@APP@@') === 0) {
                             text = text.substring('@@APP@@'.length);
                             // return robot.messageRoom(c_value.agentChannelId, {message: text, prop: {msg_from: 'APP'}});
                             var new_prop = _.merge(prop, {msg_from: 'APP'});
-                            return msg.sendMessage(robot, socket, c_value.agentChannelId, id, {message: text, prop: new_prop}, true);
+                            return msg.sendMessage(robot, c_value.agentChannelId, id, {message: text, prop: new_prop}, 'MM');
                         }
                     }
                 });
@@ -131,7 +129,7 @@ var processPrologMessage = function (id, message, robot, socket, self, app, room
 
             // login Prolog CM if session is not established
             if (_.isEmpty(value) || (prop && prop.msg_type === 'login')) {
-                cmHelper.loginApp(id, app, message)
+                cmHelper.loginApp(id, room, app, message)
                     .then(function (result) {
                         logger.debug('Prolog CM login output=' + JSON.stringify(result));
                         if (result.code === 1000) {
@@ -152,8 +150,8 @@ var processPrologMessage = function (id, message, robot, socket, self, app, room
                             cache.set(id, customCache, config.redis_expire);
                             cache.set(session, sessionInfo, config.redis_expire);
                             var new_prop = _.merge(prop, {msg_type: 'login'});
-                            msg.sendMessage(robot, socket, room, id, {message: statement, prop: new_prop, sessionid: session}, self);
-                            if (app !== 'ivr') {
+                            msg.sendMessage(robot, room, id, {message: statement, prop: new_prop, sessionid: session}, app);
+                            if (app === 'MM') {
                                 sendMsgToApp(robot, text, room, sessionInfo, self, socket, cb);
                             }
                         }
