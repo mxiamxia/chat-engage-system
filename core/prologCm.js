@@ -164,6 +164,10 @@ var processPrologMessage = function (id, message, robot, app, room, cb) {
             if (!_.isEmpty(value)) {
                 //if message came from agent and intends to send customer directly
                 cache.get(id, function (err, c_value) {
+                    if (err || _.isEmpty(c_value)) {
+                        logger.debug('Failed to get incoming id session data');
+                        return;
+                    }
                     // foward message
                     if (prop && prop.fwd_to === 'CM') {
                         return cmHelper.appToAgent(text, prop, value, c_value.type, robot, self, socket);
