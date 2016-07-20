@@ -8,12 +8,11 @@
 var Sub = require('../common/redisSub').Sub;
 var config = require('../config');
 var logger = require('../common/logger');
-var CMMsg = require('./cmMessenger');
 var CM = require('./prologCm');
 var robotManager = require('./robotManager');
 
 var loopRedisIVRQ = function () {
-    Sub.blpop(config.IVRAPP, 0, function (err, message) {
+    Sub.blpop(config.APPIVR, 0, function (err, message) {
         if (err) {
             logger.error('redis q err' + err);
         }
@@ -31,7 +30,7 @@ var loopRedisIVRQ = function () {
 };
 
 var init = function () {
-    loopRedisIVRQ ();
+    loopRedisIVRQ();
 };
 
 exports.init = init;

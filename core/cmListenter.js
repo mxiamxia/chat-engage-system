@@ -24,7 +24,7 @@ var loopRedisCMQ = function () {
 };
 
 var init = function () {
-    loopRedisCMQ ();
+    loopRedisCMQ();
 };
 
 exports.init = init;

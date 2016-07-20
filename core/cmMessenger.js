@@ -72,6 +72,7 @@ var conversationProcess = function (message, result) {
     var id        = result.response.header[0].userid[0].$.value;
     var app_h = result.response.header[0].app[0].$.value;
     var prop = result.response.header[0].prop[0].$.value;
+    var from = result.response.header[0].from[0].$.value;
     var robot = robotManager.getRobot('APP');
     cache.pget(sessionid)
         .then(function (value) {
@@ -79,7 +80,10 @@ var conversationProcess = function (message, result) {
                return cmHelper.loginAppQ(id, app_h, message);
             }
             var app = value.channelType;
-            cache.pget(id)
+            if (app_h !== app) {
+                logger.error('Conversation message is not matched with session data');
+            }
+            cache.pget(from)
                 .then(function (c_value) {
                     //3 way conversation
                     if (c_value.type === 'SHADOW') {  // from agent/shadow user to app

@@ -13,7 +13,6 @@ var cache = require('../common/cache');
 var EventProxy = require('eventproxy');
 var engageAction = require('./engageAction');
 var dispatcher = require('../event/dispatchEvent').pubsub;
-var consts = require('../common/consts');
 var cmHelper = require('./prologCmHelper');
 var msg = require('./message');
 
@@ -66,6 +65,7 @@ var processPrologMessage = function (id, message, robot, app, room) {
             }
             cache.get(robot.adapter.profile.id, function (err, c_value) {
                 if (_.isEmpty(c_value)) {
+                    logger.error('Can not get shadow user session data');
                     return;
                 }
                 cache.get(c_value.sessionId, function (err, value) {
@@ -121,7 +121,7 @@ var processPrologMessage = function (id, message, robot, app, room) {
 
             // login Prolog CM if session is not established
             if (_.isEmpty(value) || (prop && prop.msg_type === 'login')) {
-                cmHelper.loginAppQ(id, app, message);
+                cmHelper.loginAppQ(id, room, app, message);
                 return;
             }
 
@@ -139,7 +139,6 @@ var processPrologMessage = function (id, message, robot, app, room) {
                         return cmHelper.appToAgent(text, prop, value, c_value.type, robot);
                     }
                     if (prop && prop.fwd_to === 'CUST') {
-                        // return robot.messageRoom(value.realChannelId, {message: text});
                         return msg.sendMessage(robot, value.realChannelId, id, {message: text, sessionid: value.sessionId}, app);
                     }
 
@@ -150,10 +149,10 @@ var processPrologMessage = function (id, message, robot, app, room) {
                                 msg.sendMessage(robot, value.realChannelId, id, {message: text, sessionid: value.sessionId}, app);
                                 break;
                             case 'AGENT' :
-                                cmHelper.appToAgent(text, prop, value, c_value.type, robot);
+                                cmHelper.appToAgent(id, text, prop, value, c_value.type, robot);
                                 break;
                             case 'ALL' :
-                                cmHelper.appToAll(text, prop, value, c_value.type, robot);
+                                cmHelper.appToAll(id, text, prop, value, c_value.type, robot);
                                 break;
                         }
                     } else {  // from real customer to app
@@ -169,10 +168,10 @@ var processPrologMessage = function (id, message, robot, app, room) {
                                     msg.sendMessage(robot, value.appAndShadowChannelId, id, {message: '@@CUS@@' + text, prop: new_prop}, 'MM');
                                     break;
                                 case 'AGENT' :
-                                    cmHelper.appToAgent(text, prop, value, c_value.type, robot);  // if type is from real customer, send text and app answer to agent
+                                    cmHelper.appToAgent(id, text, prop, value, c_value.type, robot);  // if type is from real customer, send text and app answer to agent
                                     break;
                                 case 'ALL' :
-                                    cmHelper.appToAll(text, prop, value, c_value.type, robot);
+                                    cmHelper.appToAll(id, text, prop, value, c_value.type, robot);
                                     break;
                             }
                         } else {
