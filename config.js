@@ -37,15 +37,14 @@ var config = {
 
     //redis queue
     WORKFLOW: 'workflow',
-    APPCM: 'app.workflow',
-    APPIVR: 'ivrapp',
+    APPCM: 'appcm',
     IVRCHANNEL: 'ivrchannel',
+    APPIVR: 'appivr',
 
     //Dev
     debug: true,
     MODE_ENV: 'DEV',
     LOAD_TEST: false
-
 };
 
 process.env.MATTERMOST_HOST = 'http://192.168.0.55:8065';

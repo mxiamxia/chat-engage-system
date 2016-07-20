@@ -7,7 +7,7 @@ var moment = require('moment');
 var TEMP = {
 
     loginReq: '<message> <header> <action value="login" /> <userid value="%s" /> <sessionid value="%s" /> <orgid value="cyberobject" /> <appid value="ntelagent" /> <debugid value="" /> <app value="%s" /> <channel value="%s" /></header> <body> <usertype value="customer" /> <channel value="CCSA" /> </body> </message>',
-    conversationReq: "<message><header><action value='conversation' /><sessionid value='%s' /><userid value='%s'/><debug id=''/></header><body><message><![CDATA[%s]]></message></body></message>",
+    conversationReq: "<message><header><action value='conversation' /><sessionid value='%s' /><userid value='%s'/><debug id=''/><app value='%s' /><prop value='%s' /></header><body><message><![CDATA[%s]]></message></body></message>",
     transferAcceptReq: '<message> <header> <action value="transfer_accept" /> <sessionid value="%s" /> <userid value="%s" /> </header> </message>',
     engageLeave: '<message> <header> <action value="transfer_leave" /> <sessionid value="%s" /> <userid value="%s"/> </header> <body></body> </message>',
 

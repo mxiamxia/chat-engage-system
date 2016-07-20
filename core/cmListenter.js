@@ -9,7 +9,7 @@ var logger = require('../common/logger');
 var CMMsg = require('./cmMessenger');
 
 var loopRedisCMQ = function () {
-    CMSub.blpop(config.WORKFLOW, 0, function (err, message) {
+    CMSub.blpop(config.APPCM, 0, function (err, message) {
         if (err) {
             logger.error('redis q err' + err);
         }

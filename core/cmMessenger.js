@@ -12,6 +12,7 @@ var cache = require('../common/cache');
 var msg = require('./message');
 var sessionDao = require('../dao/').Session;
 var config = require('../config');
+var cmHelper = require('./prologCmHelper');
 
 var process = function (message) {
     if (_.isEmpty(message)) {
@@ -69,11 +70,13 @@ var loginProcess = function (message, result) {
 var conversationProcess = function (message, result) {
     var sessionid = result.response.header[0].sessionid[0].$.value;
     var id        = result.response.header[0].userid[0].$.value;
+    var app_h = result.response.header[0].app[0].$.value;
+    var prop = result.response.header[0].prop[0].$.value;
     var robot = robotManager.getRobot('APP');
     cache.pget(sessionid)
         .then(function (value) {
             if (_.isEmpty(value)) {
-                //TODO: if cache data is empty
+               return cmHelper.loginAppQ(id, app_h, message);
             }
             var app = value.channelType;
             cache.pget(id)
@@ -85,33 +88,28 @@ var conversationProcess = function (message, result) {
                                 // message sent before pushing to Q, nothing to do here
                                 break;
                             case 'AGENT' :
-                                // var new_prop = _.merge(prop, {msg_to: 'TOAGENT'});
-                                msg.sendMessage(robot, value.appAndShadowChannelId, value.realId, {message: '@@APP@@' +result.message, prop: {msg_to: 'TOAGENT'}}, 'MM');
+                                var new_prop = _.merge(JSON.parse(prop), {msg_to: 'TOAGENT'});
+                                msg.sendMessage(robot, value.appAndShadowChannelId, value.realId, {message: '@@APP@@' +result, prop: new_prop}, 'MM');
                                 break;
                             case 'ALL' :
-                                cmHelper.appToAll(text, prop, value, c_value.type, robot, self, socket);
+                                var new_prop = _.merge(JSON.parse(prop), {msg_to: 'TOALL'});
+                                msg.sendMessage(robot, value.appAndShadowChannelId, value.realId, {message: '@@APP@@' + result, prop: new_prop}, 'MM');
+                                msg.sendMessage(robot, value.realChannelId, value.realId, {message: result, sessionid: value.sessionId, prop: new_prop}, app);
                                 break;
                         }
                     } else {  // from real customer to app
                         if (value.engagement) {
-                            // Real customer logout/close browser
-                            if (prop && prop.msg_type === 'cust_leave') {
-                                // return robot.messageRoom(value.appAndShadowChannelId, message);
-                                cmHelper.cleanCache('', 'quit', value, robot, self, socket);
-                                return msg.sendMessage(robot, socket, value.appAndShadowChannelId, id, message, true);
-                            }
-
                             switch (value.TO) {
                                 case 'CUSTOMER' :
-                                    // robot.messageRoom(value.appAndShadowChannelId, {message: '@@CUS@@' + text});
-                                    var new_prop = _.merge(prop, {msg_to: 'TOAGENT'});
-                                    msg.sendMessage(robot, socket, value.appAndShadowChannelId, id, {message: '@@CUS@@' + text, prop: new_prop}, true);
                                     break;
                                 case 'AGENT' :
-                                    cmHelper.appToAgent(text, prop, value, c_value.type, robot, self, socket);  // if type is from real customer, send text and app answer to agent
+                                    var new_prop = _.merge(JSON.parse(prop), {msg_to: 'TOAGENT'});
+                                    msg.sendMessage(robot, value.appAndShadowChannelId, value.realId, {message: '@@APP@@' +result, prop: new_prop}, 'MM');
                                     break;
                                 case 'ALL' :
-                                    cmHelper.appToAll(text, prop, value, c_value.type, robot, self, socket);
+                                    var new_prop = _.merge(JSON.parse(prop), {msg_to: 'TOALL'});
+                                    msg.sendMessage(robot, value.appAndShadowChannelId, value.realId, {message: '@@APP@@' + result, prop: new_prop}, 'MM');
+                                    msg.sendMessage(robot, value.realChannelId, value.realId, {message: result, sessionid: value.sessionId, prop: new_prop}, app);
                                     break;
                             }
                         } else {
