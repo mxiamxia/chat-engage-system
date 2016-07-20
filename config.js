@@ -14,7 +14,7 @@ var config = {
     mongodb: 'mongodb://localhost/co_engage',
     redis_host: 'localhost',
     redis_port: 6379,
-    redis_db: 1,
+    redis_db: 0,
     redis_expire: 168 * 60 * 60, // four hours
     pollInterval: 1000,
 
