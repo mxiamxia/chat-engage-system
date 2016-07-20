@@ -38,6 +38,7 @@ var config = {
     //redis queue
     WORKFLOW: 'workflow',
     APPCM: 'app.cm',
+    
     IVRCHANNEL: 'ivr',
     APPIVR: 'app.ivr',
 

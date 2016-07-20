@@ -8,8 +8,9 @@ var msg = require('../../core/message');
 
 describe('prolog cm', function () {
     it('login function', function () {
-        var prologLogin = util.format(TEMP.loginReq, uuid.v1(), uuid.v1() , 'TEST', uuid.v1());
+        var prologLogin = util.format(TEMP.loginReq, uuid.v1(), uuid.v1(), 'TEST', uuid.v1());
         msg.sendMessage('', '', '', prologLogin, 'cm');
+        
     });
 
 });

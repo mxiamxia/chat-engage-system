@@ -13,9 +13,11 @@ var msg = require('./message');
 var sessionDao = require('../dao/').Session;
 var config = require('../config');
 var cmHelper = require('./prologCmHelper');
+var engageAction = require('./engageAction');
 
 var process = function (message) {
     if (_.isEmpty(message)) {
+        logger.error('received empty message from cm queue');
         return;
     }
     parser.parseString(message, function (err, result) {
@@ -28,7 +30,12 @@ var process = function (message) {
                 case 'conversation':
                     conversationProcess(message, result);
                     break;
-                case '':
+                case 'transfer_start':
+                    engageAction.transferStart(message);
+                    break;
+                case 'transfer_accept':
+                    break;
+                case 'transfer_leave':
                     break;
                 default:
                     //

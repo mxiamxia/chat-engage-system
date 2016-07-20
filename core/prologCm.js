@@ -4,7 +4,6 @@
 
 
 var logger = require('../common/logger');
-var request = require('request');
 var config = require('../config');
 var xml2js = require('xml2js');
 var util = require('util');

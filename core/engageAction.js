@@ -30,7 +30,7 @@ var transferStart = function (input) {
         parser.parseString(input, function (err, result) {
             if (err) {
                 //TODO: err
-                logger.debug('Engagement failed, transfer request is not valid');
+                logger.error('Engagement failed, transfer request is not valid');
                 return;
             }
             logger.debug('Engagement request json=' + JSON.stringify(result));
@@ -41,12 +41,12 @@ var transferStart = function (input) {
                     var userid = result.message.header[0].userid[0].$.value;
                     cache.getSessionById(userid, function (err, sessionData) {
                         if (err || _.isEmpty(sessionData)) {
-                            logger.debug('Engagement failed, session data is not found');
+                            logger.error('Engagement failed, session data is not found');
                             return;
                         }
 
                         if (!sessionData && sessionData.sessionId !== sessionid) {
-                            logger.debug('Engagement failed, session id from request does not match customer session id');
+                            logger.error('Engagement failed, session id from request does not match customer session id');
                             return;
                         }
 
@@ -54,7 +54,7 @@ var transferStart = function (input) {
                         if (sessionEngaged.indexOf(sessionid) < 0) {
                             sessionEngaged.push(sessionid);
                         } else {
-                            logger.debug('Prolog CM sent duplicate engagements session ID = ' + sessionid);
+                            logger.error('Prolog CM sent duplicate engagements session ID = ' + sessionid);
                             return;
                         }
 
@@ -203,19 +203,7 @@ var logoutShadowUser = function (robot, cb) {
 }
 
 var sendEngagementMessages = function (text, channelId, robot) {
-    // robot.messageRoom(channelId, {message:text});
     msg.sendMessage(robot, null, channelId, 'id', {message:text}, true);
-    //var q = consts.QUESTION;
-    //var a = consts.ANSWER;
-    //
-    //if (!_.isEmpty(sessionData[q])) {
-    //    var question = sessionData[q];
-    //    robot.messageRoom(channelId, question);
-    //}
-    //if (!_.isEmpty(sessionData[a])) {
-    //    var answer = sessionData[a];
-    //    robot.messageRoom(channelId, answer);
-    //}
 };
 
 

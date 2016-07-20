@@ -10,7 +10,6 @@ var _ = require('lodash');
 var cache = require('../common/cache');
 var consts = require('../common/consts');
 var TEMP = require('../common/template');
-var xml2js = require('xml2js');
 var robotManager = require('./robotManager');
 var engageAction = require('./engageAction');
 var msg = require('./message');

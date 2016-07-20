@@ -15,7 +15,6 @@ var engageLeave = function (sessionId, agentId, cb) {
 
 var engageAccept = function (sessionId, agentId, cb) {
     var req = util.format(template.transferAcceptReq, sessionId, agentId);
-
     apiCall('POST', req, cb);
 };
 
