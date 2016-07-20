@@ -13,6 +13,8 @@ apiPrefix = '/api/v3'
 usersRoute = '/users'
 teamsRoute = '/teams'
 
+tlsverify = !(process.env.MATTERMOST_TLS_VERIFY or '').match(/^false|0|no|off$/i)
+
 class Client extends EventEmitter
     constructor: (@host, @group, @email, @password, @options={wssPort: 443}) ->
         @authenticated = false
@@ -351,18 +353,18 @@ class Client extends EventEmitter
     _apiCall: (method, path, params, callback) ->
       post_data = ''
       post_data = JSON.stringify(params) if params?
-    #  console.log 'post data=' + post_data
-     # console.log 'full url=' + @host + apiPrefix + path + '==='
       options = {
         uri: @host + apiPrefix + path,
         method: method,
         json: params,
+        rejectUnauthorized: tlsverify,
         headers: {
           'Content-Type': 'application/json',
           'Content-Length': new TextEncoder.TextEncoder('utf-8').encode(post_data).length
         }
       }
       options.headers['Authorization'] = 'BEARER ' + @token if @token
+        @logger.debug "#{method} #{path}"
 
       request options, (error, res, value) ->
        # console.log 'api call body==' + JSON.stringify value
