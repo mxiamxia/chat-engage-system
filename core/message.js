@@ -42,8 +42,8 @@ var sendMessage = function (robot, room, id, message, app) {
             Pub.rpush(config.IVRCHANNEL, JSON.stringify(msg));
             break;
         case 'cm':
-            logger.debug('send message to CM=' + message);
             CMPub.rpush(config.WORKFLOW, message);
+            logger.debug('send message to CM=' + message);
             break;
     }
 };

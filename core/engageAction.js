@@ -137,7 +137,7 @@ var transferStart = function (input) {
                                                 });
 
                                                 // robot.messageRoom(agentChannelId, {message:'Leave the engagement chat'});
-                                                msg.sendMessage(robot, null, agentChannelId, userid, {message:'Leave the engagement chat'}, true);
+                                                msg.sendMessage(robot, agentChannelId, userid, {message:'Leave the engagement chat'}, 'MM');
 
                                                 //clean session record -- temporary fixing
                                                 sessionEngaged.splice(sessionEngaged.indexOf(sessionid), 1);
@@ -203,7 +203,7 @@ var logoutShadowUser = function (robot, cb) {
 }
 
 var sendEngagementMessages = function (text, channelId, robot) {
-    msg.sendMessage(robot, null, channelId, 'id', {message:text}, true);
+    msg.sendMessage(robot, channelId, 'id', {message:text}, 'MM');
 };
 
 
@@ -213,11 +213,8 @@ var sendEngagement = function (list, appRobot, sessionid, ep) {
         //add timeout event if no response from agent with 30 seconds
         var timerId = setEngagementTimer(sessionid, ep);
         ep.all(sessionid + 'timeout', function () {
-            logger.debug('Agent does not response engagement in 30 seconds and list=' + list.length + '==' + data.agentIdx);
-            logger.debug('Agent does not response engagement in 30 seconds=' + data.agentId);
-            //appRobot.messageRoom(data.agentChannelId, 'engage_request_claim'+sessionid);
-            // appRobot.messageRoom(data.agentChannelId, {message:'', prop:{msg_type: 'engage_request_claim', session_id: sessionid, msg_from: 'APP'}});
-            msg.sendMessage(appRobot, null, data.agentChannelId, 'id', {message:'', prop:{msg_type: 'engage_request_claim', session_id: sessionid, msg_from: 'APP'}}, true);
+            logger.debug('Agent does not response engagement in 30 seconds and list=' + list.length + '==' + data.agentIdx + ' = '+ data.agentId);
+            msg.sendMessage(appRobot, data.agentChannelId, 'id', {message:'', prop:{msg_type: 'engage_request_claim', session_id: sessionid, msg_from: 'APP'}}, 'MM');
             clearTimeout(timerId);
             ep.unbind(sessionid + 'timeout');
             list.splice(data.agentIdx, 1);
@@ -225,7 +222,7 @@ var sendEngagement = function (list, appRobot, sessionid, ep) {
         });
 
         logger.debug('Register engagement event data=' + JSON.stringify(data));
-        logger.debug('Register engagement event sessinos=' + data.agentChannelId + sessionid + 'engagerequest');
+        logger.debug('Register engagement event session=' + data.agentChannelId + sessionid + 'engagerequest');
         dispatcher.once(data.agentChannelId + sessionid + 'engagerequest', function (engage_data) {
             logger.debug('Received engagement response from agent=' + JSON.stringify(engage_data));
             if (engage_data.msg_type === 'engage_request_answer' && engage_data.answer == 'accept') {
@@ -274,9 +271,7 @@ var getAvailableAgentList = function (appRobot, cb) {
 };
 
 var sendEngageAccept = function (agentChannelId, sessionId, appRobot) {
-    //appRobot.messageRoom(agentChannelId, 'engage_request_message'+sessionId);
-    // appRobot.messageRoom(agentChannelId, {message:'', prop:{msg_type: 'engage_request', session_id: sessionId, msg_from: 'APP'}});
-    msg.sendMessage(appRobot, null, agentChannelId, 'id', {message:'', prop:{msg_type: 'engage_request', session_id: sessionId, msg_from: 'APP'}}, true);
+    msg.sendMessage(appRobot, agentChannelId, 'id', {message:'', prop:{msg_type: 'engage_request', session_id: sessionId, msg_from: 'APP'}}, 'MM');
 };
 
 

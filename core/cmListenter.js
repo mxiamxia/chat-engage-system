@@ -2,7 +2,6 @@
  * Created by min on 7/19/16.
  */
 
-var CMPub = require('../common/redisSub').CMPub;
 var CMSub = require('../common/redisSub').CMSub;
 var config = require('../config');
 var logger = require('../common/logger');

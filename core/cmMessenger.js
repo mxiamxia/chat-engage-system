@@ -100,12 +100,12 @@ var conversationProcess = function (message, result) {
                                 break;
                             case 'AGENT' :
                                 var new_prop = _.merge(JSON.parse(prop), {msg_to: 'TOAGENT'});
-                                msg.sendMessage(robot, value.appAndShadowChannelId, value.realId, {message: '@@APP@@' +result, prop: new_prop}, 'MM');
+                                msg.sendMessage(robot, value.appAndShadowChannelId, value.realId, {message: '@@APP@@' +message, prop: new_prop}, 'MM');
                                 break;
                             case 'ALL' :
                                 var new_prop = _.merge(JSON.parse(prop), {msg_to: 'TOALL'});
-                                msg.sendMessage(robot, value.appAndShadowChannelId, value.realId, {message: '@@APP@@' + result, prop: new_prop}, 'MM');
-                                msg.sendMessage(robot, value.realChannelId, value.realId, {message: result, sessionid: value.sessionId, prop: new_prop}, app);
+                                msg.sendMessage(robot, value.appAndShadowChannelId, value.realId, {message: '@@APP@@' + message, prop: new_prop}, 'MM');
+                                msg.sendMessage(robot, value.realChannelId, value.realId, {message: message, sessionid: value.sessionId, prop: new_prop}, app);
                                 break;
                         }
                     } else {  // from real customer to app
@@ -115,12 +115,12 @@ var conversationProcess = function (message, result) {
                                     break;
                                 case 'AGENT' :
                                     var new_prop = _.merge(JSON.parse(prop), {msg_to: 'TOAGENT'});
-                                    msg.sendMessage(robot, value.appAndShadowChannelId, value.realId, {message: '@@APP@@' +result, prop: new_prop}, 'MM');
+                                    msg.sendMessage(robot, value.appAndShadowChannelId, value.realId, {message: '@@APP@@' +message, prop: new_prop}, 'MM');
                                     break;
                                 case 'ALL' :
                                     var new_prop = _.merge(JSON.parse(prop), {msg_to: 'TOALL'});
-                                    msg.sendMessage(robot, value.appAndShadowChannelId, value.realId, {message: '@@APP@@' + result, prop: new_prop}, 'MM');
-                                    msg.sendMessage(robot, value.realChannelId, value.realId, {message: result, sessionid: value.sessionId, prop: new_prop}, app);
+                                    msg.sendMessage(robot, value.appAndShadowChannelId, value.realId, {message: '@@APP@@' + message, prop: new_prop}, 'MM');
+                                    msg.sendMessage(robot, value.realChannelId, value.realId, {message: message, sessionid: value.sessionId, prop: new_prop}, app);
                                     break;
                             }
                         } else {

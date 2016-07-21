@@ -174,7 +174,7 @@ var processPrologMessage = function (id, message, robot, app, room) {
                                     break;
                             }
                         } else {
-                            cmHelper.sendMsgToAppQ(value, 'REAL', prop, text);
+                            cmHelper.sendMsgToAppQ(id, value, 'REAL', prop, text);
                         }
                     }
                 });
