@@ -34,8 +34,11 @@ var sendMessage = function (robot, room, id, message, app) {
             msg.channel_id = id;
             msg.user_id = id;
             msg.message = message.message;
-            if (message.prop) {
+            msg.create_at = Date.now();
+            if (!_.isEmpty(message.prop)) {
                 msg.props = _.merge(msg.props, message.prop);
+            } else {
+                msg.props = {}
             }
             msg.sessionid = message.sessionid;
             logger.debug('send message to IVR=' + JSON.stringify(msg));

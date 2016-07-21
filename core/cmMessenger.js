@@ -23,6 +23,7 @@ var process = function (message) {
     parser.parseString(message, function (err, result) {
         try {
             var action = result.response.header[0].action[0].$.value;
+            logger.debug('CM message action = ' + action);
             switch (action) {
                 case 'login':
                     loginProcess(message, result);
@@ -124,7 +125,8 @@ var conversationProcess = function (message, result) {
                                     break;
                             }
                         } else {
-                            msg.sendMessage(robot, value.realChannelId, id, message, app);
+                            logger.debug('Message to client' + JSON.stringify(message) + '==' + app);
+                            msg.sendMessage(robot, value.realChannelId, id, {message: message}, app);
                         }
                     }
                 });
