@@ -68,11 +68,12 @@ var deleteSession = function (req, res) {
     var result = {};
     logger.debug('delete session id=' + JSON.stringify(req.body));
     var sessionId = req.body.sessionId;
+    var robot = robotManager.getRobot('APP');
     cache.get(sessionId, function (err, value) {
        if (err || _.isEmpty(value)) {
            result.code = 9999;
        }
-        cmHelper.cleanCache('', 'quit', value, null, null, null);
+        cmHelper.cleanCache('', 'quit', value, robot, 'MM');
         result.code = 1000;
         result.id = sessionId;
         res.send(result);
