@@ -113,7 +113,7 @@ var transferStart = function (input) {
                                             sessionData.engagement = true;
                                             //cache.pipeline().set(robot.adapter.profile.id, customerShadowCache, config.redis_expire).set(sessionid, sessionData, config.redis_expire).exec();
                                             cache.set(robot.adapter.profile.id, customerShadowCache, config.redis_expire);
-                                            cache.set(sessionid, sessionData, config.redis_expire);
+                                            cache.set('ss'+sessionid, sessionData, config.redis_expire);
                                             robotManager.setRobot(sessionData.shadowCustId, robot);
                                             ep.unbind();
                                             //sendEngagementMessages(sessionData, agentChannelId, robot);
@@ -127,7 +127,7 @@ var transferStart = function (input) {
                                             //Agent leaves the engagement process
                                             dispatcher.once(sessionData.shadowCustId + 'engageleave', function () {
                                                 //restore session data to before engagement state
-                                                cache.set(sessionid, sessionDataTmp, config.redis_expire);
+                                                cache.set('ss'+sessionid, sessionDataTmp, config.redis_expire);
                                                 cache.remove(robot.adapter.profile.id);
                                                 engageApi.engageLeave(sessionid, agentId, function (err, body) {
                                                     logger.debug('Prolog CM engage leave response=' + JSON.stringify(body));

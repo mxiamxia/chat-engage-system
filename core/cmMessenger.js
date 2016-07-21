@@ -69,7 +69,7 @@ var loginProcess = function (message, result) {
         logger.debug('Create new session info into mongo db=' + JSON.stringify(session));
     });
     cache.set(id, customCache, config.redis_expire);
-    cache.set(session, sessionInfo, config.redis_expire);
+    cache.set('ss'+session, sessionInfo, config.redis_expire);
     var new_prop = {msg_type: 'login'};
     msg.sendMessage(robot, channel, id, {message: message, prop: new_prop, sessionid: session}, app);
     //TODO: send original text to app
@@ -82,7 +82,7 @@ var conversationProcess = function (message, result) {
     var prop = result.response.header[0].prop[0].$.value;
     var from = result.response.header[0].from[0].$.value;
     var robot = robotManager.getRobot('APP');
-    cache.pget(sessionid)
+    cache.pget('ss'+sessionid)
         .then(function (value) {
             if (_.isEmpty(value)) {
                return cmHelper.loginAppQ(id, app_h, message);

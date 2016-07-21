@@ -66,7 +66,7 @@ exports.pipeline = pipeline;
 var getSessionById = function (id, callback) {
     get(id, function (err, value) {
         if (value) {
-            get(value.sessionId, function (err, sessionData) {
+            get('ss'+value.sessionId, function (err, sessionData) {
                 if (sessionData) {
                     callback(null, sessionData);
                 } else {

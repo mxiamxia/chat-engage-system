@@ -35,7 +35,7 @@ var processPrologMessage = function (id, message, robot, app, room) {
     //get session info from the Redis cache server
     cache.get(id, function (err, value) {
         if (value) {
-            cache.get(value.sessionId, function (err, sessionData) {
+            cache.get('ss'+value.sessionId, function (err, sessionData) {
                 if (sessionData) {
                     ep.emit('sessionDataReturn', sessionData);
                 } else {
@@ -67,7 +67,7 @@ var processPrologMessage = function (id, message, robot, app, room) {
                     logger.error('Can not get shadow user session data');
                     return;
                 }
-                cache.get(c_value.sessionId, function (err, value) {
+                cache.get('ss'+c_value.sessionId, function (err, value) {
                     var msgFrom = c_value[id];
                     if (msgFrom === 'AGENT') { //Message came from agent to app
                         logger.debug('Message to shadow customer `came from =' + msgFrom);
@@ -129,6 +129,7 @@ var processPrologMessage = function (id, message, robot, app, room) {
             if (!_.isEmpty(value)) {
                 //if message came from agent and intends to send customer directly
                 cache.get(id, function (err, c_value) {
+                    logger.debug('user id session=' + JSON.stringify(c_value));
                     if (err || _.isEmpty(c_value)) {
                         logger.debug('Failed to get incoming id session data');
                         return;

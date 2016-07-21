@@ -19,15 +19,15 @@ var check3Way = function (prop, text, value) {
     if (value && prop && prop.msg_dest) {
         if (text === '@@toall' || prop.msg_dest === 'TOALL') {
             value.TO = 'ALL';
-            cache.set(value.sessionId, value, config.redis_expire);
+            cache.set('ss'+value.sessionId, value, config.redis_expire);
             return true;
         } else if (text === '@@toagent' || prop.msg_dest === 'TOCM') {
             value.TO = 'AGENT';
-            cache.set(value.sessionId, value, config.redis_expire);
+            cache.set('ss'+value.sessionId, value, config.redis_expire);
             return true;
         } else if (text == '@@tocustomer' || prop.msg_dest == 'TOCUST') {
             value.TO = 'CUSTOMER';
-            cache.set(value.sessionId, value, config.redis_expire);
+            cache.set('ss'+value.sessionId, value, config.redis_expire);
             return true;
         }
     }
@@ -65,7 +65,7 @@ var cleanCache = function (room, text, value, robot, app) {
         if (!_.isEmpty(value)) {
             var sessionId = value.sessionId;
             var customerId = value.realId;
-            cache.remove(sessionId);
+            cache.remove('ss'+sessionId);
             cache.remove(customerId);
             if (value.engagement) {
                 var shadowCustomerId = value.shadowCustId;
