@@ -6,7 +6,9 @@
     "start": "node ./bin/www",
     "prod": "forever start --minUptime 1000 --spinSleepTime 1000 node_modules/gulp/bin/gulp.js prod",
     "debug": "node --debug ./bin/www",
-    "load": "siege --concurrent=20 --reps=5 -f urls.txt"
+    "load": "siege --concurrent=20 --reps=5 -f urls.txt",
+    "test": "mocha",
+    "test:cov": "istanbul --include-all-sources cover _mocha"
   },
   "dependencies": {
     "async": "^2.0.0-rc.6",

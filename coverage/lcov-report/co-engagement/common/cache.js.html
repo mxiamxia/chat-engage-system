@@ -1,0 +1,368 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for co-engagement/common/cache.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../prettify.css" />
+    <link rel="stylesheet" href="../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../index.html">all files</a> / <a href="index.html">co-engagement/common/</a> cache.js
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">29.31% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>17/58</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>0/14</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>0/11</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">29.31% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>17/58</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">var redis = require('./redis');
+var _ = require('lodash');
+var logger = require('./logger');
+var Promise = require('bluebird');
+&nbsp;
+var get = <span class="fstat-no" title="function not covered" >function (key, callback) {</span>
+<span class="cstat-no" title="statement not covered" >    var t = new Date();</span>
+<span class="cstat-no" title="statement not covered" >    redis.get(key, <span class="fstat-no" title="function not covered" >function (err, data) {</span></span>
+<span class="cstat-no" title="statement not covered" >        if (err) {</span>
+<span class="cstat-no" title="statement not covered" >            return callback(err);</span>
+        }
+<span class="cstat-no" title="statement not covered" >        if (!data) {</span>
+<span class="cstat-no" title="statement not covered" >            return callback();</span>
+        }
+<span class="cstat-no" title="statement not covered" >        data = JSON.parse(data);</span>
+<span class="cstat-no" title="statement not covered" >        var duration = (new Date() - t);</span>
+<span class="cstat-no" title="statement not covered" >        logger.debug('Cache', 'get', key, (duration + 'ms'));</span>
+<span class="cstat-no" title="statement not covered" >        callback(null, data);</span>
+    });
+};
+&nbsp;
+exports.get = get;
+exports.pget = Promise.promisify(get);
+&nbsp;
+var set = <span class="fstat-no" title="function not covered" >function (key, value, time, callback) {</span>
+<span class="cstat-no" title="statement not covered" >    var t = new Date();</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    if (typeof time === 'function') {</span>
+<span class="cstat-no" title="statement not covered" >        callback = time;</span>
+<span class="cstat-no" title="statement not covered" >        time = null;</span>
+    }
+<span class="cstat-no" title="statement not covered" >    callback = callback || _.noop;</span>
+<span class="cstat-no" title="statement not covered" >    value = JSON.stringify(value);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    if (!time) {</span>
+<span class="cstat-no" title="statement not covered" >        redis.set(key, value, callback);</span>
+    } else {
+<span class="cstat-no" title="statement not covered" >        redis.setex(key, time, value, callback);</span>
+    }
+<span class="cstat-no" title="statement not covered" >    var duration = (new Date() - t);</span>
+<span class="cstat-no" title="statement not covered" >    logger.debug("Cache", "set", key, (duration + 'ms'));</span>
+};
+&nbsp;
+exports.set = set;
+&nbsp;
+var remove = <span class="fstat-no" title="function not covered" >function (key) {</span>
+<span class="cstat-no" title="statement not covered" >    var t = new Date();</span>
+<span class="cstat-no" title="statement not covered" >    redis.del(key);</span>
+<span class="cstat-no" title="statement not covered" >    var duration = (new Date() - t);</span>
+<span class="cstat-no" title="statement not covered" >    logger.debug('Cache', 'delete', key, (duration + 'ms'));</span>
+}
+&nbsp;
+exports.remove = remove;
+&nbsp;
+//var promise = redis.pipeline().set('foo', 'bar').get('foo').exec();
+//promise.then(function (result) {
+//  // result === [[null, 'OK'], [null, 'bar']]
+//});
+var pipeline = <span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >    return redis.pipeline();</span>
+};
+exports.pipeline = pipeline;
+&nbsp;
+&nbsp;
+//move out of redis util file
+var getSessionById = <span class="fstat-no" title="function not covered" >function (id, callback) {</span>
+<span class="cstat-no" title="statement not covered" >    get(id, <span class="fstat-no" title="function not covered" >function (err, value) {</span></span>
+<span class="cstat-no" title="statement not covered" >        if (value) {</span>
+<span class="cstat-no" title="statement not covered" >            get('ss'+value.sessionId, <span class="fstat-no" title="function not covered" >function (err, sessionData) {</span></span>
+<span class="cstat-no" title="statement not covered" >                if (sessionData) {</span>
+<span class="cstat-no" title="statement not covered" >                    callback(null, sessionData);</span>
+                } else {
+<span class="cstat-no" title="statement not covered" >                    callback('no session data found');</span>
+                }
+            });
+        } else {
+<span class="cstat-no" title="statement not covered" >            callback('no session data found');</span>
+        }
+    });
+};
+&nbsp;
+exports.getSessionById = getSessionById;
+&nbsp;
+var getKeys = <span class="fstat-no" title="function not covered" >function (pattern, cb) {</span>
+<span class="cstat-no" title="statement not covered" >    var stream = redis.scanStream({</span>
+        match: pattern//'ss*'
+    });
+<span class="cstat-no" title="statement not covered" >    var keys = [];</span>
+<span class="cstat-no" title="statement not covered" >    stream.on('data', <span class="fstat-no" title="function not covered" >function (resultKeys) {</span></span>
+<span class="cstat-no" title="statement not covered" >        for (var i = 0; i &lt; resultKeys.length; i++) {</span>
+<span class="cstat-no" title="statement not covered" >            keys.push(resultKeys[i]);</span>
+        }
+    });
+<span class="cstat-no" title="statement not covered" >    stream.on('end', <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >        logger.debug('done with the keys: ', keys.length);</span>
+<span class="cstat-no" title="statement not covered" >        cb(null, keys);</span>
+    });
+};
+&nbsp;
+exports.getKeys = getKeys;
+&nbsp;
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Fri Jul 22 2016 11:31:14 GMT-0400 (EDT)
+</div>
+</div>
+<script src="../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../sorter.js"></script>
+</body>
+</html>

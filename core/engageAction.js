@@ -96,7 +96,6 @@ var transferStart = function (input) {
                                                     sendEngagementMessages(res_value, agentChannelId, robot);
                                                 }
                                             });
-                                            //processEngagement(userid, agentChannelId, agentId, sessionid);
                                             var customerShadowCache = {
                                                 'sessionId': sessionid,
                                                 'agentChannelId': agentChannelId,
@@ -116,14 +115,11 @@ var transferStart = function (input) {
                                             cache.set('ss'+sessionid, sessionData, config.redis_expire);
                                             robotManager.setRobot(sessionData.shadowCustId, robot);
                                             ep.unbind();
-                                            //sendEngagementMessages(sessionData, agentChannelId, robot);
 
                                             sessionDao.updateSession(sessionid, true, true, agentId, function (err, session) {
                                                 logger.debug('Update the session info mongodb');
                                             });
-                                            //notify app get shadowCustomChannel ID
-                                            //dispatcher.emit(userid, sessionData);
-
+                                            
                                             //Agent leaves the engagement process
                                             dispatcher.once(sessionData.shadowCustId + 'engageleave', function () {
                                                 //restore session data to before engagement state
