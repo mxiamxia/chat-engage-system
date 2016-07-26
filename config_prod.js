@@ -8,7 +8,7 @@ var config = {
     CM: 'PROLOG',  //or 'PROLOG'
     //CM:'MQ',  //or 'MQ'
     CM_URL: 'http://192.168.254.196:18011/ntelagent-chat-web-mobile/HttpService',
-    CM_PROLOG: 'http://192.168.254.116:3030/cm',
+    CM_PROLOG: 'http://192.168.254.199:3030/cm',
 
     //mongodb && redis
     mongodb: 'mongodb://localhost/co_engage',
@@ -57,7 +57,7 @@ var config = {
     LOAD_TEST: false
 };
 
-process.env.MATTERMOST_HOST = 'http://192.168.0.55:8065';
+process.env.MATTERMOST_HOST = 'http://192.168.254.199:8065';
 process.env.MATTERMOST_GROUP = 'cyber';
 process.env.MATTERMOST_USER = 'dev_cm@cyberobject.com';
 process.env.MATTERMOST_PASSWORD = '123456';
