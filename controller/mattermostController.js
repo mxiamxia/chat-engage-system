@@ -11,7 +11,8 @@ var sessionDao = require('../dao/session');
 var robotManager = require('../core/robotManager');
 var cache = require('../common/cache');
 var cmHelper = require('../core/prologCmHelper');
-
+var pg_userDao = require('../pg/userDao');
+var bcrypt = require('bcrypt');
 
 //http://localhost:4012/api/createUser?email=cust_test@cyberobject.com&name=cust_test&password=123456
 var createUser = function (req, res, next) {
@@ -105,3 +106,34 @@ var getEngageOfToday = function (req, res) {
     })
 };
 exports.getEngageOfToday = getEngageOfToday;
+
+var login = function (req, res, next) {
+    var email = req.body.email;
+    var password = req.body.password;
+
+    if(email && password) {
+        pg_userDao.getPasswordByEmail(email, function (err, result) {
+            if (err) {
+                return res.json({auth: false, desc: 'no match result'})
+            }
+            var hashPassword = result.password;
+            bcrypt.compare(password, hashPassword, function(err, ret) {
+                // res == true
+                if (ret) {
+                    return res.json({auth: true, desc: 'auth success'});
+                } else {
+                    return res.json({auth: false, desc: 'auth fail'});
+                }
+            });
+        })
+    }
+};
+exports.login = login;
+
+// bcrypt.genSalt(10, function(err, salt) {
+//     logger.debug('salt=' + salt);
+//
+//     bcrypt.hash('123456', salt, function(err, hash) {
+//         logger.debug('hash=' + hash);
+//     });
+// });

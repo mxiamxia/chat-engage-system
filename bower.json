@@ -27,7 +27,8 @@
     "angular-ui-router": "^0.2.15",
     "bootstrap": "~3.3.6",
     "font-awesome": "~4.5.0",
-    "angularUtils-pagination": "angular-utils-pagination#^0.11.1"
+    "angularUtils-pagination": "angular-utils-pagination#^0.11.1",
+    "angular-local-storage": "^0.2.7"
   },
   "repository": {
     "type": "git",

@@ -39,6 +39,12 @@ router.get('/api/getTodaySession', mattermostController.getSessionOfToday);
 router.get('/api/getTodayEngage', mattermostController.getEngageOfToday);
 
 router.post('/api/deleteSession', mattermostController.deleteSession);
+router.post('/api/authenticate', mattermostController.login);
+
+
+router.get('*', function (req, res) {
+    res.sendFile(filePath + 'index.html');
+});
 
 
 module.exports = router;

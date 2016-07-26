@@ -17,6 +17,15 @@ var config = {
     redis_db: 0,
     redis_expire: 168 * 60 * 60, // four hours
     pollInterval: 1000,
+    
+    //Postgres DB
+    pg_host: '192.168.254.199',
+    pg_port: 5432,
+    pg_user: 'mmuser',
+    pg_password: 'mmuser_password',
+    pg_db: 'mattermost',
+    pg_max: 10,
+    pg_idleTimeoutMillis: 30000,
 
     //houndify setting
     houndy_clientid: '5Tp0jrUv3EK0LXNGLt_u4A==',
@@ -50,9 +59,9 @@ var config = {
 
 process.env.MATTERMOST_HOST = 'http://192.168.0.55:8065';
 process.env.MATTERMOST_GROUP = 'cyber';
-process.env.MATTERMOST_USER = 'dev_test@cyberobject.com';
+process.env.MATTERMOST_USER = 'mxia@cyberobject.com';
 process.env.MATTERMOST_PASSWORD = '123456';
-process.env.PORT = 4012;
+process.env.PORT = 4019;
 process.env.MATTERMOST_INVITETOKEN = 'ikfb5ynuhfrtjpfi1u9hi948ur';
 process.env.MATTERMOST_AGENT_GROUP = 'hcfstbeietrbik88xhtfp5pkur';
 
