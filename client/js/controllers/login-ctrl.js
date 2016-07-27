@@ -13,6 +13,7 @@ function LoginController($scope, $state, authService) {
                 if (result) {
                     if (result.auth) {
                         $scope.loginerror = false;
+                        authService.setLoginStatus({user: $scope.input.username});
                         $state.go('layout.dashboard', {username: $scope.input.username});
                     } else {
                         $scope.loginerror = true;
@@ -28,4 +29,7 @@ function LoginController($scope, $state, authService) {
                 $scope.errdetail = 'Your account does not exist in Mattermost';
             });
     }
+    
+    
+    
 }

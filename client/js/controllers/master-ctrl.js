@@ -3,9 +3,9 @@
  */
 
 app
-    .controller('MasterCtrl', ['$scope', '$cookieStore', '$stateParams', 'Session', 'localStorageService', MasterCtrl]);
+    .controller('MasterCtrl', ['$scope', '$cookieStore', '$state', 'Session', 'localStorageService', 'authService', MasterCtrl]);
 
-function MasterCtrl($scope, $cookieStore, $stateParams, Session, localStorageService) {
+function MasterCtrl($scope, $cookieStore, $state, Session, localStorageService, authService) {
     /**
      * Sidebar Toggle & Cookie Control
      */
@@ -21,10 +21,11 @@ function MasterCtrl($scope, $cookieStore, $stateParams, Session, localStorageSer
     $scope.sessionOfToday = 0;
     $scope.engageOfToday = 0;
 
-    if (Object.keys($stateParams.username).length !== 0) {
-        localStorageService.set('username', $stateParams.username);
+
+    console.log('cookie in master=' + JSON.stringify(localStorageService.cookie.get('username')));
+    if (authService.isLogin()) {
+        $scope.loginname = localStorageService.cookie.get('username').user;
     }
-    $scope.loginname = localStorageService.get('username');
 
     $scope.getWidth = function() {
         return window.innerWidth;
@@ -135,6 +136,11 @@ function MasterCtrl($scope, $cookieStore, $stateParams, Session, localStorageSer
         getEngageOfToday();
     };
     init();
+
+    $scope.logout = function () {
+        authService.logout();
+        $state.go('index');
+    }
 
 
 }

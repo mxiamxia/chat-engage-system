@@ -51,9 +51,9 @@ exports.sendMsgToAppQ = sendMsgToAppQ;
 var loginAppQ = function (id, room, app, message) {
     var prologLogin = TEMP.loginReq;
     if (_.isEmpty(message.sessionid)) {
-        prologLogin = util.format(prologLogin, id, '', app, room);
+        prologLogin = util.format(prologLogin, id, '', app, room, config.APPCM);
     } else {
-        prologLogin = util.format(prologLogin, id, message.sessionid, app, room);
+        prologLogin = util.format(prologLogin, id, message.sessionid, app, room, config.APPCM);
     }
     logger.debug('login input=' + prologLogin);
     msg.sendMessage('', '', '', prologLogin, 'cm');
