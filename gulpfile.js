@@ -19,7 +19,7 @@ var paths = {
     images: 'client/img/**/*.*',
     templates: 'client/templates/**/*.html',
     index: 'client/index.html',
-    bower_fonts: 'client/components/**/*.{ttf,woff,eof,svg}',
+    bower_fonts: 'client/components/**/*.{ttf,woff,woff2,eof,svg}',
 };
 
 var process = null;

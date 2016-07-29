@@ -4,8 +4,8 @@
 
 
 var config = {
-     //DEV
-    CM: 'PROLOG',  //or 'PROLOG'
+    //DEV
+    CM: 'PROLOG', //or 'PROLOG'
     //CM:'MQ',  //or 'MQ'
     CM_URL: 'http://192.168.254.196:18011/ntelagent-chat-web-mobile/HttpService',
     CM_PROLOG: 'http://192.168.254.116:3030/cm',
@@ -17,7 +17,7 @@ var config = {
     redis_db: 0,
     redis_expire: 168 * 60 * 60, // four hours
     pollInterval: 1000,
-    
+
     //Postgres DB
     pg_host: '192.168.254.199',
     pg_port: 5432,
@@ -47,7 +47,7 @@ var config = {
     //redis queue
     WORKFLOW: 'workflow',
     APPCM: 'app.cm',
-    
+
     IVRCHANNEL: 'ivr',
     APPIVR: 'app.ivr',
 

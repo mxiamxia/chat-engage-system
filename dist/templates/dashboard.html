@@ -2,10 +2,10 @@
 	<div class="col-lg-6 col-md-6 col-xs-12">
 		<rd-widget>
 			<rd-widget-body>
-				<div class="widget-icon green pull-left" ng-click="getSessionOfToday()">
+				<div class="widget-icon green pull-left">
 					<i class="fa fa-users"></i>
 				</div>
-				<div class="title">{{sessionOfToday}}</div>
+				<div class="title">{{sessionOfToday}}<a class="btn" ng-click="getSessionOfToday()"><i class="fa fa-refresh"></i></a></div>
 				<div class="comment">Conversations Today</div>
 			</rd-widget-body>
 		</rd-widget>
@@ -14,10 +14,10 @@
 	<div class="col-lg-6 col-md-6 col-xs-12">
 		<rd-widget>
 			<rd-widget-body>
-				<div class="widget-icon blue pull-left" ng-click="getEngageOfToday()">
+				<div class="widget-icon blue pull-left">
 					<i class="fa fa-support"></i>
 				</div>
-				<div class="title">{{engageOfToday}}</div>
+				<div class="title">{{engageOfToday}}<a class="btn" ng-click="getEngageOfToday()"><i class="fa fa-refresh"></i></a></div>
 				<div class="comment">Engagements Today</div>
 			</rd-widget-body>
 		</rd-widget>
@@ -32,7 +32,7 @@
                 <div class="input-group">
                     <input type="text" class="form-control" ng-model="search.text" placeholder="Search for...">
                     <span class="input-group-btn">
-                        <button class="btn btn-primary" type="button" ng-click="refreshCurrentSessions()">Refresh!</button>
+                        <a class="btn btn-primary" href="" ng-click="refreshCurrentSessions()"><i class="fa fa-refresh fa-lg"></i></a>
                     </span>
                 </div>
             </rd-widget-header>
@@ -45,14 +45,15 @@
                     <table class="table table-fixed">
                         <thead>
                         <tr>
-                            <th>Session ID</th>
-                            <th>Delete</th>
+                            <th><i class="fa fa-table" aria-hidden="true"></i> Session ID</th>
+                            <th><i class="fa fa-table" aria-hidden="true"></i> Delete</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr pagination-id="current" dir-paginate="id in currentSession | filter:search.text | itemsPerPage:4">
                             <td>{{id}}</td>
-                            <td><button class="btn btn-sm btn-primary" ng-click="deleteSession(id)">Delete</button></td>
+                            <!--<td><button class="btn btn-sm btn-primary" ng-click="deleteSession(id)">Delete</button></td>-->
+                            <td> <a class="btn btn-danger" href="" ng-click="deleteSession(id)"><i class="fa fa-trash-o fa-lg"></i> Delete</a> </td>
                         </tr>
                         </tbody>
                     </table>
@@ -71,7 +72,7 @@
                 <div class="input-group">
                     <input type="text" class="form-control" placeholder="Search for..." ng-model="searchText.text">
                     <span class="input-group-btn">
-                        <button class="btn btn-primary" type="button" ng-click="refreshSessions()">Refresh!</button>
+                        <a class="btn btn-primary" href="" ng-click="refreshSessions()"><i class="fa fa-refresh fa-lg"></i></a>
                     </span>
                 </div>
             </rd-widget-header>

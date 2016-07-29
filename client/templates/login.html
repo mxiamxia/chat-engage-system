@@ -1,7 +1,8 @@
 <div class="jumbotron">
     <div class="container">
         <div class="col-sm-8 col-sm-offset-2">
-            <h2>Login</h2>
+            <h2 class="text-center">Engagement Admin</h2>
+            <br>
             <form name="form" role="form">
                 <div class="form-group">
                     <label for="username">Username</label>
@@ -25,9 +26,11 @@
                 <div class="form-actions">
                     <button type="submit" ng-disabled="form.$invalid" class="btn btn-primary" ng-click="login()">Login
                     </button>
-                    <a href="/register" class="btn btn-link">Register</a>
+                    <!--<a href="/register" class="btn btn-link">Register</a>-->
                 </div>
             </form>
+            <br>
+            <span><i class="fa fa-exclamation-triangle" aria-hidden="true"></i>    Please use your mattermost email id to login</span>
         </div>
     </div>
 </div>

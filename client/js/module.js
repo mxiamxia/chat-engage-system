@@ -1,6 +1,7 @@
 var app = angular.module('RDash', ['ui.bootstrap', 'ui.router', 'ngCookies', 'angularUtils.directives.dirPagination', 'LocalStorageModule']);
 
 app.run(['$rootScope', '$location', 'authService', '$state', function($rootScope, $location, authService, $state) {
+    //permission routing based on login cookie
     $rootScope.$on('$stateChangeStart',function(event, toState, toParams, fromState, fromParams){
         if (toState.name=='index') {
             if (authService.isLogin()) {

@@ -3,9 +3,9 @@ var _ = require('lodash');
 var logger = require('./logger');
 var Promise = require('bluebird');
 
-var get = function (key, callback) {
+var get = function(key, callback) {
     var t = new Date();
-    redis.get(key, function (err, data) {
+    redis.get(key, function(err, data) {
         if (err) {
             return callback(err);
         }
@@ -14,7 +14,7 @@ var get = function (key, callback) {
         }
         data = JSON.parse(data);
         var duration = (new Date() - t);
-        logger.debug('Cache', 'get', key, (duration + 'ms'));
+        logger.debug('Cache get ' + key + ' ' + duration + 'ms');
         callback(null, data);
     });
 };
@@ -22,7 +22,7 @@ var get = function (key, callback) {
 exports.get = get;
 exports.pget = Promise.promisify(get);
 
-var set = function (key, value, time, callback) {
+var set = function(key, value, time, callback) {
     var t = new Date();
 
     if (typeof time === 'function') {
@@ -38,16 +38,16 @@ var set = function (key, value, time, callback) {
         redis.setex(key, time, value, callback);
     }
     var duration = (new Date() - t);
-    logger.debug("Cache", "set", key, (duration + 'ms'));
+    logger.debug('Cache set ' + key + ' ' + duration + 'ms');
 };
 
 exports.set = set;
 
-var remove = function (key) {
+var remove = function(key) {
     var t = new Date();
     redis.del(key);
     var duration = (new Date() - t);
-    logger.debug('Cache', 'delete', key, (duration + 'ms'));
+    logger.debug('Cache delete ' + key + ' ' + duration + 'ms');
 }
 
 exports.remove = remove;
@@ -56,17 +56,17 @@ exports.remove = remove;
 //promise.then(function (result) {
 //  // result === [[null, 'OK'], [null, 'bar']]
 //});
-var pipeline = function () {
+var pipeline = function() {
     return redis.pipeline();
 };
 exports.pipeline = pipeline;
 
 
 //move out of redis util file
-var getSessionById = function (id, callback) {
-    get(id, function (err, value) {
+var getSessionById = function(id, callback) {
+    get(id, function(err, value) {
         if (value) {
-            get('ss'+value.sessionId, function (err, sessionData) {
+            get('ss' + value.sessionId, function(err, sessionData) {
                 if (sessionData) {
                     callback(null, sessionData);
                 } else {
@@ -81,21 +81,20 @@ var getSessionById = function (id, callback) {
 
 exports.getSessionById = getSessionById;
 
-var getKeys = function (pattern, cb) {
+var getKeys = function(pattern, cb) {
     var stream = redis.scanStream({
-        match: pattern//'ss*'
+        match: pattern //'ss*'
     });
     var keys = [];
-    stream.on('data', function (resultKeys) {
+    stream.on('data', function(resultKeys) {
         for (var i = 0; i < resultKeys.length; i++) {
             keys.push(resultKeys[i]);
         }
     });
-    stream.on('end', function () {
-        logger.debug('done with the keys: ', keys.length);
+    stream.on('end', function() {
+        logger.debug('done with the keys: ' + keys.length);
         cb(null, keys);
     });
 };
 
 exports.getKeys = getKeys;
-

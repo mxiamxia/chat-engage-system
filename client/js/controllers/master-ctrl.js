@@ -14,15 +14,14 @@ function MasterCtrl($scope, $cookieStore, $state, Session, localStorageService, 
     $scope.sessionData = [];
 
     $scope.currentSession = [];
-    $scope.searchText = {text: ''};
+    $scope.searchText = { text: '' };
 
-    $scope.search = {text: ''};
+    $scope.search = { text: '' };
 
     $scope.sessionOfToday = 0;
     $scope.engageOfToday = 0;
 
 
-    console.log('cookie in master=' + JSON.stringify(localStorageService.cookie.get('username')));
     if (authService.isLogin()) {
         $scope.loginname = localStorageService.cookie.get('username').user;
     }
@@ -34,7 +33,7 @@ function MasterCtrl($scope, $cookieStore, $state, Session, localStorageService, 
     $scope.$watch($scope.getWidth, function(newValue, oldValue) {
         if (newValue >= mobileView) {
             if (angular.isDefined($cookieStore.get('toggle'))) {
-                $scope.toggle = ! $cookieStore.get('toggle') ? false : true;
+                $scope.toggle = !$cookieStore.get('toggle') ? false : true;
             } else {
                 $scope.toggle = true;
             }
@@ -52,7 +51,7 @@ function MasterCtrl($scope, $cookieStore, $state, Session, localStorageService, 
         $scope.$apply();
     };
 
-    var getSessions = function () {
+    var getSessions = function() {
         Session.getHistorySession()
             .success(function(sessions) {
                 $scope.sessionData = sessions;
@@ -62,7 +61,7 @@ function MasterCtrl($scope, $cookieStore, $state, Session, localStorageService, 
             });
     };
 
-    var getCurrentSession = function () {
+    var getCurrentSession = function() {
         Session.getCurrentSessions()
             .success(function(sessions) {
                 console.log('current session length=' + sessions[0]);
@@ -73,7 +72,7 @@ function MasterCtrl($scope, $cookieStore, $state, Session, localStorageService, 
             });
     };
 
-    $scope.refreshSessions = function () {
+    $scope.refreshSessions = function() {
         Session.getHistorySession()
             .success(function(sessions) {
                 $scope.sessionData = sessions;
@@ -82,9 +81,8 @@ function MasterCtrl($scope, $cookieStore, $state, Session, localStorageService, 
                 console.log('Error: ' + data);
             });
     };
-    
-    $scope.deleteSession = function (sessionId) {
-        console.log('delete session=' + sessionId);
+
+    $scope.deleteSession = function(sessionId) {
         Session.deleteSession(sessionId)
             .success(function(resp) {
                 if (resp.code === 1000) {
@@ -98,11 +96,11 @@ function MasterCtrl($scope, $cookieStore, $state, Session, localStorageService, 
             });
     };
 
-    $scope.refreshCurrentSessions = function () {
+    $scope.refreshCurrentSessions = function() {
         getCurrentSession();
     };
 
-    var getSessionOfToday = function () {
+    var getSessionOfToday = function() {
         Session.getSessionOfToday()
             .success(function(value) {
                 $scope.sessionOfToday = value.number;
@@ -112,11 +110,11 @@ function MasterCtrl($scope, $cookieStore, $state, Session, localStorageService, 
             });
     };
 
-    $scope.getSessionOfToday = function () {
+    $scope.getSessionOfToday = function() {
         getSessionOfToday();
     };
 
-    var getEngageOfToday = function () {
+    var getEngageOfToday = function() {
         Session.getEngageOfToday()
             .success(function(value) {
                 $scope.engageOfToday = value.number;
@@ -125,11 +123,11 @@ function MasterCtrl($scope, $cookieStore, $state, Session, localStorageService, 
                 console.log('Error: ' + data);
             });
     };
-    $scope.getEngageOfToday = function () {
+    $scope.getEngageOfToday = function() {
         getEngageOfToday();
     };
 
-    var init = function () {
+    var init = function() {
         getCurrentSession();
         getSessions();
         getSessionOfToday();
@@ -137,10 +135,8 @@ function MasterCtrl($scope, $cookieStore, $state, Session, localStorageService, 
     };
     init();
 
-    $scope.logout = function () {
+    $scope.logout = function() {
         authService.logout();
         $state.go('index');
-    }
-
-
+    };
 }

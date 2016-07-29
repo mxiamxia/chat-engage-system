@@ -279,59 +279,6 @@ class Client extends EventEmitter
 
     console.log '=======postMessage data =======' + JSON.stringify postData
 
-    #
-    #
-    #        postData =
-    #            message: msg
-    #            filenames: []
-    #            create_at: Date.now()
-    #            user_id: @self.id
-    #            channel_id: channelID
-    #
-    #        idx = msg.indexOf('engage_request_message')
-    #        if idx > -1
-    #            sessionId = msg.substring(idx + 'engage_request_message'.length)
-    #            postData.props = {msg_type: 'engage_request', session_id: sessionId, msg_from: 'APP'}
-    #            postData.message = ''
-    #            console.log '=======postMessage data =======' + JSON.stringify postData
-    #            @_apiCall 'POST', @channelRoute(channelID) + '/posts/create', postData, (data, header) =>
-    #                @logger.debug 'Posted message.'
-    #                return true
-    #            return
-    #
-    #        idx = msg.indexOf('engage_request_claim')
-    #        if idx > -1
-    #            sessionId = msg.substring(idx + 'engage_request_claim'.length)
-    #            postData.props = {msg_type: 'engage_request_claim', session_id: sessionId, msg_from: 'APP'}
-    #            postData.message = ''
-    #            console.log '=======postMessage data =======' + JSON.stringify postData
-    #            @_apiCall 'POST', @channelRoute(channelID) + '/posts/create', postData, (data, header) =>
-    #                @logger.debug 'Posted message.'
-    #                return true
-    #            return
-    #
-    #        idx = msg.indexOf('@@MSG_APP@@')
-    #        if idx is 0
-    #            txt = msg.substring('@@MSG_APP@@'.length)
-    #            postData.props = {msg_from: 'APP'}
-    #            postData.message = txt
-    #            console.log '=======postMessage data =======' + JSON.stringify postData
-    #            @_apiCall 'POST', @channelRoute(channelID) + '/posts/create', postData, (data, header) =>
-    #                @logger.debug 'Posted message.'
-    #                return true
-    #            return
-    #
-    #        idx = msg.indexOf('@@MSG_CUS@@')
-    #        if idx is 0
-    #            txt = msg.substring('@@MSG_CUS@@'.length)
-    #            postData.props = {msg_from: 'CUST'}
-    #            postData.message = txt
-    #            console.log '=======postMessage data =======' + JSON.stringify postData
-    #            @_apiCall 'POST', @channelRoute(channelID) + '/posts/create', postData, (data, header) =>
-    #                @logger.debug 'Posted message.'
-    #                return true
-    #            return
-
     @_apiCall 'POST', @channelRoute(channelID) + '/posts/create', postData, (data, header) =>
       @logger.debug 'Posted message.'
       return true

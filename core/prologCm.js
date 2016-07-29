@@ -15,27 +15,27 @@ var dispatcher = require('../event/dispatchEvent').pubsub;
 var cmHelper = require('./prologCmHelper');
 var msg = require('./message');
 
-var processPrologMessage = function (id, message, robot, app, room) {
+var processPrologMessage = function(id, message, robot, app, room) {
 
     var text = message.message;
     var prop = message.prop;
 
     var ep = new EventProxy();
-    if (typeof room == 'undefined' || room == null) {
+    if (typeof room === 'undefined' || room === null) {
         room = id;
     }
 
     logger.debug('deliver message to room===' + room + ' with ID===' + id);
     logger.debug('deliver message ===' + text);
 
-    ep.fail(function (err) {
+    ep.fail(function(err) {
         logger.error('Failed to retreive data from Redis server', err);
     });
 
     //get session info from the Redis cache server
-    cache.get(id, function (err, value) {
+    cache.get(id, function(err, value) {
         if (value) {
-            cache.get('ss'+value.sessionId, function (err, sessionData) {
+            cache.get('ss' + value.sessionId, function(err, sessionData) {
                 if (sessionData) {
                     ep.emit('sessionDataReturn', sessionData);
                 } else {
@@ -47,7 +47,7 @@ var processPrologMessage = function (id, message, robot, app, room) {
         }
     });
 
-    ep.all('sessionDataReturn', function (value) {
+    ep.all('sessionDataReturn', function(value) {
 
         logger.debug('cached session value=' + JSON.stringify(value));
 
@@ -62,44 +62,44 @@ var processPrologMessage = function (id, message, robot, app, room) {
                 dispatcher.emit(robot.adapter.profile.id + 'engageleave', prop);
                 return;
             }
-            cache.get(robot.adapter.profile.id, function (err, c_value) {
+            cache.get(robot.adapter.profile.id, function(err, c_value) {
                 if (_.isEmpty(c_value)) {
                     logger.error('Can not get shadow user session data');
                     return;
                 }
-                cache.get('ss'+c_value.sessionId, function (err, value) {
+                cache.get('ss' + c_value.sessionId, function(err, value) {
                     var msgFrom = c_value[id];
                     if (msgFrom === 'AGENT') { //Message came from agent to app
                         logger.debug('Message to shadow customer `came from =' + msgFrom);
                         // check if agent try to set engagement mode
                         if (cmHelper.check3Way(prop, text, value)) {
-                            if(_.isEmpty(text)) {
+                            if (_.isEmpty(text)) {
                                 return;
                             }
                         }
                         // check if agent trys to foward message, pass the whole prop to APP for dispatching
                         if (prop && prop.fwd_to) {
-                            return msg.sendMessage(robot, c_value.appChannelId, id, {message: text, prop: prop}, 'MM');
+                            return msg.sendMessage(robot, c_value.appChannelId, id, { message: text, prop: prop }, 'MM');
                         }
-                        msg.sendMessage(robot, c_value.appChannelId, id, {message: text}, 'MM');
-                    } else {  // message come from App to agent
+                        msg.sendMessage(robot, c_value.appChannelId, id, { message: text }, 'MM');
+                    } else { // message come from App to agent
                         //if real customer request logout, foward the whole message to agent
                         if (prop && prop.msg_type === 'cust_leave') {
                             return msg.sendMessage(robot, c_value.agentChannelId, id, message, 'MM');
                         }
 
-                        if(text.indexOf('@@CUS@@') === 0) {
+                        if (text.indexOf('@@CUS@@') === 0) {
                             text = text.substring('@@CUS@@'.length);
                             // return robot.messageRoom(c_value.agentChannelId, {message: text, prop: {msg_from: 'CUST'}});
-                            var new_prop = _.merge(prop, {msg_from: 'CUST'});
-                            return msg.sendMessage(robot, c_value.agentChannelId, id, {message: text, prop: new_prop}, 'MM');
+                            var new_prop = _.merge(prop, { msg_from: 'CUST' });
+                            return msg.sendMessage(robot, c_value.agentChannelId, id, { message: text, prop: new_prop }, 'MM');
                         }
 
-                        if(text.indexOf('@@APP@@') === 0) {
+                        if (text.indexOf('@@APP@@') === 0) {
                             text = text.substring('@@APP@@'.length);
                             // return robot.messageRoom(c_value.agentChannelId, {message: text, prop: {msg_from: 'APP'}});
-                            var new_prop = _.merge(prop, {msg_from: 'APP'});
-                            return msg.sendMessage(robot, c_value.agentChannelId, id, {message: text, prop: new_prop}, 'MM');
+                            var new_prop = _.merge(prop, { msg_from: 'APP' });
+                            return msg.sendMessage(robot, c_value.agentChannelId, id, { message: text, prop: new_prop }, 'MM');
                         }
                     }
                 });
@@ -111,7 +111,7 @@ var processPrologMessage = function (id, message, robot, app, room) {
 
             //if agent requests back on engagement answer to APP, app emit to engageAction
             if (!_.isEmpty(prop) && prop.msg_type && prop.session_id) {
-                if (prop.msg_type === 'engage_request_answer' ) {
+                if (prop.msg_type === 'engage_request_answer') {
                     logger.debug('Emit engagement event sessinos=' + room + prop.session_id + 'engagerequest');
                     dispatcher.emit(room + prop.session_id + 'engagerequest', prop);
                     return;
@@ -128,7 +128,7 @@ var processPrologMessage = function (id, message, robot, app, room) {
             // for each message to appAndShadowChannelId(APP to shadow user), we add message_from prefix and add it to props in client.coffee
             if (!_.isEmpty(value)) {
                 //if message came from agent and intends to send customer directly
-                cache.get(id, function (err, c_value) {
+                cache.get(id, function(err, c_value) {
                     logger.debug('user id session=' + JSON.stringify(c_value));
                     if (err || _.isEmpty(c_value)) {
                         logger.debug('Failed to get incoming id session data');
@@ -139,23 +139,23 @@ var processPrologMessage = function (id, message, robot, app, room) {
                         return cmHelper.appToAgent(text, prop, value, c_value.type, robot);
                     }
                     if (prop && prop.fwd_to === 'CUST') {
-                        return msg.sendMessage(robot, value.realChannelId, id, {message: text, sessionid: value.sessionId}, app);
+                        return msg.sendMessage(robot, value.realChannelId, id, { message: text, sessionid: value.sessionId }, app);
                     }
 
                     //3 way conversation
-                    if (c_value.type === 'SHADOW') {  // from agent/shadow user to app
+                    if (c_value.type === 'SHADOW') { // from agent/shadow user to app
                         switch (value.TO) {
-                            case 'CUSTOMER' :
-                                msg.sendMessage(robot, value.realChannelId, id, {message: text, sessionid: value.sessionId}, app);
+                            case 'CUSTOMER':
+                                msg.sendMessage(robot, value.realChannelId, id, { message: text, sessionid: value.sessionId }, app);
                                 break;
-                            case 'AGENT' :
+                            case 'AGENT':
                                 cmHelper.appToAgent(id, text, prop, value, c_value.type, robot);
                                 break;
-                            case 'ALL' :
+                            case 'ALL':
                                 cmHelper.appToAll(id, text, prop, value, c_value.type, robot);
                                 break;
                         }
-                    } else {  // from real customer to app
+                    } else { // from real customer to app
                         if (value.engagement) {
                             // Real customer logout/close browser
                             if (prop && prop.msg_type === 'cust_leave') {
@@ -163,14 +163,14 @@ var processPrologMessage = function (id, message, robot, app, room) {
                                 return msg.sendMessage(robot, value.appAndShadowChannelId, id, message, 'MM');
                             }
                             switch (value.TO) {
-                                case 'CUSTOMER' :
-                                    var new_prop = _.merge(prop, {msg_to: 'TOAGENT'});
-                                    msg.sendMessage(robot, value.appAndShadowChannelId, id, {message: '@@CUS@@' + text, prop: new_prop}, 'MM');
+                                case 'CUSTOMER':
+                                    var new_prop = _.merge(prop, { msg_to: 'TOAGENT' });
+                                    msg.sendMessage(robot, value.appAndShadowChannelId, id, { message: '@@CUS@@' + text, prop: new_prop }, 'MM');
                                     break;
-                                case 'AGENT' :
-                                    cmHelper.appToAgent(id, text, prop, value, c_value.type, robot);  // if type is from real customer, send text and app answer to agent
+                                case 'AGENT':
+                                    cmHelper.appToAgent(id, text, prop, value, c_value.type, robot); // if type is from real customer, send text and app answer to agent
                                     break;
-                                case 'ALL' :
+                                case 'ALL':
                                     cmHelper.appToAll(id, text, prop, value, c_value.type, robot);
                                     break;
                             }
