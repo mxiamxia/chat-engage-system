@@ -4,11 +4,15 @@
 
 var cmListener = require('./cmListenter');
 var ivrListenr = require('./ivrListener');
-var init = function () {
+var Promise = require('bluebird');
+
+var init = function() {
     //init robot instance
-    require('../bots/botInstance')(process.env.MATTERMOST_USER, process.env.MATTERMOST_PASSWORD, 'APP', function () {});
-    cmListener.init();
-    ivrListenr.init();
-}
+    Promise.join(
+        require('../bots/botInstance')(process.env.MATTERMOST_USER, process.env.MATTERMOST_PASSWORD, 'APP', function() {}),
+        cmListener.init(),
+        ivrListenr.init()
+    );
+};
 
 exports.init = init;
