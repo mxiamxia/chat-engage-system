@@ -18,7 +18,11 @@ var msg = require('./message');
 var processPrologMessage = function(id, message, robot, app, room) {
 
     var text = message.message;
-    var prop = message.prop;
+    var prop = message.props;
+
+    if (typeof prop === 'string') {
+        prop = JSON.parse(prop);
+    }
 
     var ep = new EventProxy();
     if (typeof room === 'undefined' || room === null) {
@@ -175,6 +179,10 @@ var processPrologMessage = function(id, message, robot, app, room) {
                                     break;
                             }
                         } else {
+                            if (prop && prop.msg_type === 'cust_leave') {
+                                cmHelper.cleanCache('', 'quit', value, robot, app);
+                                return;
+                            }
                             cmHelper.sendMsgToAppQ(id, value, 'REAL', prop, text);
                         }
                     }

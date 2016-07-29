@@ -24,7 +24,7 @@ var msg_template = {
     user_id: "ejS6b2eY@cyberobject.com"
 };
 
-var sendMessage = function (robot, room, id, message, app) {
+var sendMessage = function(robot, room, id, message, app) {
     switch (app) {
         case 'MM':
             robot.messageRoom(room, message);
