@@ -26,7 +26,7 @@ var processPrologMessage = function(id, message, robot, app, room) {
     }
 
     logger.debug('deliver message to room===' + room + ' with ID===' + id);
-    logger.debug('deliver message ===' + text);
+    logger.debug('deliver message ===' + JSON.stringify(message));
 
     ep.fail(function(err) {
         logger.error('Failed to retreive data from Redis server', err);

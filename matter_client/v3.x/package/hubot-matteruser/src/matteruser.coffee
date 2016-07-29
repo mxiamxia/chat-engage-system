@@ -123,9 +123,9 @@ class Matteruser extends Adapter
         text = mmPost.message
         #TODO: add prop field here
         if mmPost.props
-            text = {message: text, prop: mmPost.props}
+            text = {message: text, props: mmPost.props}
         else
-            text = {message: text, prop: {}}
+            text = {message: text, props: {}}
         text = JSON.stringify text
 
         text = "#{@robot.name} #{text}" if msg.props.channel_type == 'D' and !///^#{@robot.name} ///i.test(text) # Direct message

@@ -310,7 +310,7 @@ class Client extends EventEmitter
       }
     }
     options.headers['Authorization'] = 'BEARER ' + @token if @token
-        @logger.debug "#{method} #{path}"
+    @logger.debug "#{method} #{path}"
 
     request options, (error, res, value) ->
 # console.log 'api call body==' + JSON.stringify value
