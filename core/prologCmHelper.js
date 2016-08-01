@@ -37,16 +37,20 @@ exports.check3Way = check3Way;
 
 var sendMsgToAppQ = function (id, value, type, prop, sentence) {
     var str_prop = JSON.stringify(prop);
-    var input;
-    var audio_url = '';
-    if (prop && prop.audio) {
-        audio_url = prop.audio;
-    }
-    if (type === 'SHADOW') {
-        input = util.format(TEMP.conversationReq, value.sessionId, value.agentId, value.channelType, str_prop, id, sentence, audio_url);
+    var input = '';
+    if (value.channelType === 'ivr') {
+        var audio_url = (prop && prop.audio) ? prop.audio : '';
+        var code = (prop && prop.status) ? prop.status : '';
+        var desc = (prop && prop.statusText) ? prop.statusText : '';
+        input = util.format(TEMP.conversationIvrReq, value.sessionId, value.realId, value.channelType, str_prop, id, sentence, audio_url, code, desc);
     } else {
-        input = util.format(TEMP.conversationReq, value.sessionId, value.realId, value.channelType, str_prop, id, sentence, audio_url);
+        if (type === 'SHADOW') {
+            input = util.format(TEMP.conversationReq, value.sessionId, value.agentId, value.channelType, str_prop, id, sentence);
+        } else {
+            input = util.format(TEMP.conversationReq, value.sessionId, value.realId, value.channelType, str_prop, id, sentence);
+        }
     }
+
     logger.debug('Prolog CM conversation input===' + input);
     msg.sendMessage('', '', '', input, 'cm');
 };
@@ -84,11 +88,14 @@ var cleanCache = function (room, text, value, robot, app) {
                 robotManager.delRobot(shadowCustomerId);
             }
         }
-
+        var quit_msg = "";
+        if (app === 'MM') {
+            quit_msg = 'Session is terminated';
+        }
         if (!_.isEmpty(value)) {
-            msg.sendMessage(robot, room, value.realId, { message: 'Session is terminated', sessionid: value.sessionId }, app);
+            msg.sendMessage(robot, room, value.realId, { message: quit_msg, sessionid: value.sessionId }, app);
         } else {
-            msg.sendMessage(robot, room, room, { message: 'Session is terminated' }, app);
+            msg.sendMessage(robot, room, room, { message: quit_msg }, app);
         }
         return true;
     }
