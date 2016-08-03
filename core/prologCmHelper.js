@@ -107,7 +107,7 @@ exports.cleanCache = cleanCache;
 var appToAgent = function (id, sentence, prop, value, type, robot) {
     if (type === 'REAL') {
         var new_prop = _.merge(prop, { msg_to: 'TOAGENT' });
-        msg.sendMessage(robot, value.appAndShadowChannelId, value.realId, { message: '@@CUS@@' + sentence, prop: new_prop }, 'MM');
+        msg.sendMessage(robot, value.appAndShadowChannelId, value.realId, { message: '@@CUS@@' + sentence, props: new_prop }, 'MM');
     }
     sendMsgToAppQ(id, value, type, prop, sentence);
 };
@@ -117,7 +117,7 @@ exports.appToAgent = appToAgent;
 var appToAll = function (id, sentence, prop, value, type, robot) {
     var new_prop = _.merge(prop, { msg_to: 'TOALL' });
     if (type === 'REAL') {
-        msg.sendMessage(robot, value.appAndShadowChannelId, value.realId, { message: '@@CUS@@' + sentence, prop: new_prop }, 'MM');
+        msg.sendMessage(robot, value.appAndShadowChannelId, value.realId, { message: '@@CUS@@' + sentence, props: new_prop }, 'MM');
     }
     sendMsgToAppQ(id, value, type, prop, sentence);
 };

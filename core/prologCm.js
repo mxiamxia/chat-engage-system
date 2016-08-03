@@ -83,7 +83,7 @@ var processPrologMessage = function(id, message, robot, app, room) {
                         }
                         // check if agent trys to foward message, pass the whole prop to APP for dispatching
                         if (prop && prop.fwd_to) {
-                            return msg.sendMessage(robot, c_value.appChannelId, id, { message: text, prop: prop }, 'MM');
+                            return msg.sendMessage(robot, c_value.appChannelId, id, { message: text, props: prop }, 'MM');
                         }
                         msg.sendMessage(robot, c_value.appChannelId, id, { message: text }, 'MM');
                     } else { // message come from App to agent
@@ -96,14 +96,14 @@ var processPrologMessage = function(id, message, robot, app, room) {
                             text = text.substring('@@CUS@@'.length);
                             // return robot.messageRoom(c_value.agentChannelId, {message: text, prop: {msg_from: 'CUST'}});
                             var new_prop = _.merge(prop, { msg_from: 'CUST' });
-                            return msg.sendMessage(robot, c_value.agentChannelId, id, { message: text, prop: new_prop }, 'MM');
+                            return msg.sendMessage(robot, c_value.agentChannelId, id, { message: text, props: new_prop }, 'MM');
                         }
 
                         if (text.indexOf('@@APP@@') === 0) {
                             text = text.substring('@@APP@@'.length);
                             // return robot.messageRoom(c_value.agentChannelId, {message: text, prop: {msg_from: 'APP'}});
                             var new_prop = _.merge(prop, { msg_from: 'APP' });
-                            return msg.sendMessage(robot, c_value.agentChannelId, id, { message: text, prop: new_prop }, 'MM');
+                            return msg.sendMessage(robot, c_value.agentChannelId, id, { message: text, props: new_prop }, 'MM');
                         }
                     }
                 });
@@ -169,7 +169,7 @@ var processPrologMessage = function(id, message, robot, app, room) {
                             switch (value.TO) {
                                 case 'CUSTOMER':
                                     var new_prop = _.merge(prop, { msg_to: 'TOAGENT' });
-                                    msg.sendMessage(robot, value.appAndShadowChannelId, id, { message: '@@CUS@@' + text, prop: new_prop }, 'MM');
+                                    msg.sendMessage(robot, value.appAndShadowChannelId, id, { message: '@@CUS@@' + text, props: new_prop }, 'MM');
                                     break;
                                 case 'AGENT':
                                     cmHelper.appToAgent(id, text, prop, value, c_value.type, robot); // if type is from real customer, send text and app answer to agent

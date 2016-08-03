@@ -170,6 +170,11 @@ var transferStart = function (input) {
 
                         //First time engagement
                         getAvailableAgentList(appRobot, function (err, list) {
+                            if (err) {
+                                logger.debug(err);
+                                ep.emit(sessionid + 'reject', []);
+                                return;
+                            }
                             logger.debug('Available engagement agent list length=' + list.length);
                             if (list.length === 0) {
                                 logger.debug('No available engagement agent found');
@@ -210,7 +215,7 @@ var sendEngagement = function (list, appRobot, sessionid, ep) {
         var timerId = setEngagementTimer(sessionid, ep);
         ep.all(sessionid + 'timeout', function () {
             logger.debug('Agent does not response engagement in 30 seconds and list=' + list.length + '==' + data.agentIdx + ' = '+ data.agentId);
-            msg.sendMessage(appRobot, data.agentChannelId, 'id', {message:'', prop:{msg_type: 'engage_request_claim', session_id: sessionid, msg_from: 'APP'}}, 'MM');
+            msg.sendMessage(appRobot, data.agentChannelId, 'id', {message:'', props:{msg_type: 'engage_request_claim', session_id: sessionid, msg_from: 'APP'}}, 'MM');
             clearTimeout(timerId);
             ep.unbind(sessionid + 'timeout');
             list.splice(data.agentIdx, 1);
@@ -258,6 +263,9 @@ var getAvailableAgentList = function (appRobot, cb) {
         logger.debug('Available Engagement Agent List=' + result);
         result = JSON.parse(result);
         var members = result.members;
+        if (_.isEmpty(members)) {
+            return cb('no available agent found');
+        }
         members = members.filter(function (member) {
             return appIdList.indexOf(member.id) < 0;
         });
@@ -267,7 +275,7 @@ var getAvailableAgentList = function (appRobot, cb) {
 };
 
 var sendEngageAccept = function (agentChannelId, sessionId, appRobot) {
-    msg.sendMessage(appRobot, agentChannelId, 'id', {message:'', prop:{msg_type: 'engage_request', session_id: sessionId, msg_from: 'APP'}}, 'MM');
+    msg.sendMessage(appRobot, agentChannelId, 'id', {message:'', props:{msg_type: 'engage_request', session_id: sessionId, msg_from: 'APP'}}, 'MM');
 };
 
 

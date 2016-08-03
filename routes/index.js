@@ -3,7 +3,7 @@ var router = express.Router();
 var engageController = require('../controller/engagementController');
 var mattermostController = require('../controller/mattermostController');
 var loadTestController = require('../controller/loadTestController');
-
+var ivrController = require('../controller/ivrTestController');
 
 var filePath = __dirname.replace('routes', 'dist/');
 
@@ -27,6 +27,8 @@ router.get('/api/createMultipleUsers', loadTestController.createMultipleUsers);
 
 router.get('/api/sendMessage/:user/:message', loadTestController.sendMessage);
 router.get('/api/sendAooMessage/:user/:message', loadTestController.sendAppMessage);
+
+router.get('/api/sendivr', ivrController.sendIVRMsg);
 
 
 

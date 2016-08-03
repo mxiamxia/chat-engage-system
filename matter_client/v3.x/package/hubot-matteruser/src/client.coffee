@@ -274,8 +274,8 @@ class Client extends EventEmitter
       postData.message = msg
     else
       postData.message = msg.message
-      if msg.prop
-        postData.props = msg.prop
+      if msg.props
+        postData.props = msg.props
 
     console.log '=======postMessage data =======' + JSON.stringify postData
 
