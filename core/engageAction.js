@@ -64,6 +64,9 @@ var transferStart = function (input) {
                         ep.all(sessionid + 'accept', function (agentId) {
                             logger.debug('Agent accepted the engagement');
                             var shadowName = 'shadow_' + appRobot.adapter.profile.id + '_' + userid;
+                            if (shadowName.indexOf('@') > 0) {
+                                shadowName = shadowName.substring(0, shadowName.indexOf('@'));
+                            }
                             var shadowEmail = shadowName + '@cyberobject.com';
                             createShadowUser(shadowEmail, '123456', shadowName, function (err, response) {
                                 logger.debug('Init new mattermost user' + JSON.stringify(response));
@@ -71,7 +74,7 @@ var transferStart = function (input) {
                                 if ((response.message === 'An account with that username already exists.' || response.message === 'An account with that email already exists.')
                                     || (response.username && (response.username.toLowerCase() === shadowName.toLowerCase()))) {
                                     //Login shadow customer with email and password
-                                    initHubot(shadowEmail, '123456', 'CUSTOMER', function (err, robot) {
+                                    initHubot(shadowEmail.toLowerCase(), '123456', 'CUSTOMER', function (err, robot) {
                                         if(err) {
                                             logger.debug('Init hubot error=' + err);
                                         }
@@ -133,7 +136,7 @@ var transferStart = function (input) {
                                                 });
 
                                                 // robot.messageRoom(agentChannelId, {message:'Leave the engagement chat'});
-                                                msg.sendMessage(robot, agentChannelId, userid, {message:'Leave the engagement chat'}, 'MM');
+                                                msg.sendMessage(robot, agentChannelId, userid, {message:'Leave the engagement chat', props:{msg_type:'cust_leave'}}, 'MM');
 
                                                 //clean session record -- temporary fixing
                                                 sessionEngaged.splice(sessionEngaged.indexOf(sessionid), 1);

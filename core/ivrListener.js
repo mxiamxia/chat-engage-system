@@ -22,6 +22,7 @@ var loopRedisIVRQ = function () {
             var robot = robotManager.getRobot('APP');
             var id = message.user_id;
             var app = message.app.toLowerCase();
+            message.props.sessionid = message.sessionid;
             CM.processPrologMessage(id, message, robot, app, id);
         } catch (err) {
             logger.error('redis process err' + err);

@@ -482,3 +482,74 @@ Tue Aug 02 2016 16:55:36 GMT-0400 (EDT) ctrl-c trigger
 Tue Aug 02 2016 22:37:55 GMT-0400 (EDT) ctrl-c trigger
 Wed Aug 03 2016 13:14:01 GMT-0400 (EDT) ctrl-c trigger
 Wed Aug 03 2016 13:15:49 GMT-0400 (EDT) ctrl-c trigger
+Mon Aug 08 2016 16:58:25 GMT-0400 (EDT) ctrl-c trigger
+Mon Aug 08 2016 17:15:16 GMT-0400 (EDT) ctrl-c trigger
+Mon Aug 08 2016 17:24:23 GMT-0400 (EDT) ctrl-c trigger
+Mon Aug 08 2016 17:32:09 GMT-0400 (EDT) ctrl-c trigger
+Mon Aug 08 2016 17:38:56 GMT-0400 (EDT) ctrl-c trigger
+Mon Aug 08 2016 17:40:43 GMT-0400 (EDT) TypeError: message.message is not a function
+Mon Aug 08 2016 17:50:01 GMT-0400 (EDT) TypeError: Cannot read property 'adapter' of null
+Mon Aug 08 2016 17:50:04 GMT-0400 (EDT) ctrl-c trigger
+Mon Aug 08 2016 17:51:52 GMT-0400 (EDT) TypeError: message.message is not a function
+Mon Aug 08 2016 17:54:27 GMT-0400 (EDT) TypeError: Cannot read property 'adapter' of null
+Mon Aug 08 2016 17:55:21 GMT-0400 (EDT) ctrl-c trigger
+Mon Aug 08 2016 17:56:56 GMT-0400 (EDT) ReferenceError: messagemessage is not defined
+Mon Aug 08 2016 17:57:33 GMT-0400 (EDT) TypeError: Cannot read property 'adapter' of null
+Mon Aug 08 2016 18:01:57 GMT-0400 (EDT) ctrl-c trigger
+Mon Aug 08 2016 18:05:19 GMT-0400 (EDT) ctrl-c trigger
+Mon Aug 08 2016 21:24:34 GMT-0400 (EDT) TypeError: Cannot read property 'adapter' of null
+Mon Aug 08 2016 21:24:34 GMT-0400 (EDT) TypeError: Cannot read property 'adapter' of null
+Mon Aug 08 2016 21:24:39 GMT-0400 (EDT) ctrl-c trigger
+Tue Aug 09 2016 10:30:56 GMT-0400 (EDT) ctrl-c trigger
+Tue Aug 09 2016 10:30:59 GMT-0400 (EDT) TypeError: Cannot read property 'adapter' of null
+Tue Aug 09 2016 11:59:18 GMT-0400 (EDT) ctrl-c trigger
+Tue Aug 09 2016 12:10:05 GMT-0400 (EDT) ctrl-c trigger
+Tue Aug 09 2016 12:10:19 GMT-0400 (EDT) TypeError: Cannot read property 'messageRoom' of null
+Wed Aug 10 2016 12:03:48 GMT-0400 (EDT) ctrl-c trigger
+Wed Aug 10 2016 12:03:54 GMT-0400 (EDT) TypeError: Cannot read property 'messageRoom' of null
+Wed Aug 10 2016 12:03:54 GMT-0400 (EDT) TypeError: Cannot read property 'messageRoom' of null
+Wed Aug 10 2016 12:03:55 GMT-0400 (EDT) TypeError: Cannot read property 'messageRoom' of null
+Wed Aug 10 2016 12:03:55 GMT-0400 (EDT) TypeError: Cannot read property 'messageRoom' of null
+Wed Aug 10 2016 12:03:55 GMT-0400 (EDT) TypeError: Cannot read property 'messageRoom' of null
+Wed Aug 10 2016 12:03:55 GMT-0400 (EDT) TypeError: Cannot read property 'messageRoom' of null
+Wed Aug 10 2016 12:04:21 GMT-0400 (EDT) ctrl-c trigger
+Wed Aug 10 2016 12:07:10 GMT-0400 (EDT) ctrl-c trigger
+Wed Aug 10 2016 12:21:52 GMT-0400 (EDT) TypeError: Cannot read property 'adapter' of null
+Wed Aug 10 2016 12:21:52 GMT-0400 (EDT) TypeError: Cannot read property 'adapter' of null
+Wed Aug 10 2016 12:22:03 GMT-0400 (EDT) ctrl-c trigger
+Wed Aug 10 2016 12:24:11 GMT-0400 (EDT) ctrl-c trigger
+Wed Aug 10 2016 12:24:34 GMT-0400 (EDT) TypeError: Cannot read property 'adapter' of null
+Wed Aug 10 2016 12:24:34 GMT-0400 (EDT) TypeError: Cannot read property 'adapter' of null
+Wed Aug 10 2016 12:24:41 GMT-0400 (EDT) ctrl-c trigger
+Wed Aug 10 2016 13:06:06 GMT-0400 (EDT) ctrl-c trigger
+Wed Aug 10 2016 13:06:48 GMT-0400 (EDT) ctrl-c trigger
+Wed Aug 10 2016 13:15:30 GMT-0400 (EDT) ctrl-c trigger
+Wed Aug 10 2016 16:26:27 GMT-0400 (EDT) ctrl-c trigger
+Thu Aug 11 2016 14:44:07 GMT-0400 (EDT) ctrl-c trigger
+Fri Aug 12 2016 10:37:04 GMT-0400 (EDT) ctrl-c trigger
+Fri Aug 12 2016 10:50:21 GMT-0400 (EDT) ctrl-c trigger
+Fri Aug 12 2016 11:03:32 GMT-0400 (EDT) TypeError: Cannot read property 'adapter' of null
+Fri Aug 12 2016 11:03:32 GMT-0400 (EDT) TypeError: Cannot read property 'adapter' of null
+Fri Aug 12 2016 11:03:54 GMT-0400 (EDT) ctrl-c trigger
+Fri Aug 12 2016 11:13:51 GMT-0400 (EDT) ctrl-c trigger
+Fri Aug 12 2016 11:15:53 GMT-0400 (EDT) ctrl-c trigger
+Fri Aug 12 2016 11:28:53 GMT-0400 (EDT) TypeError: Cannot read property 'adapter' of null
+Fri Aug 12 2016 11:28:53 GMT-0400 (EDT) TypeError: Cannot read property 'adapter' of null
+Fri Aug 12 2016 11:28:56 GMT-0400 (EDT) TypeError: Cannot read property 'messageRoom' of null
+Fri Aug 12 2016 11:28:56 GMT-0400 (EDT) TypeError: Cannot read property 'messageRoom' of null
+Fri Aug 12 2016 16:20:41 GMT-0400 (EDT) ctrl-c trigger
+Fri Aug 12 2016 16:29:28 GMT-0400 (EDT) ctrl-c trigger
+Fri Aug 12 2016 16:33:12 GMT-0400 (EDT) ctrl-c trigger
+Fri Aug 12 2016 16:33:20 GMT-0400 (EDT) TypeError: Cannot read property 'messageRoom' of null
+Fri Aug 12 2016 16:33:21 GMT-0400 (EDT) TypeError: Cannot read property 'messageRoom' of null
+Sun Aug 14 2016 22:37:28 GMT-0400 (EDT) ctrl-c trigger
+Mon Aug 15 2016 17:23:10 GMT-0400 (EDT) ctrl-c trigger
+Tue Aug 16 2016 18:21:19 GMT-0400 (EDT) ctrl-c trigger
+Thu Aug 18 2016 16:23:54 GMT-0400 (EDT) ctrl-c trigger
+Thu Aug 18 2016 16:48:16 GMT-0400 (EDT) ctrl-c trigger
+Thu Aug 18 2016 16:48:47 GMT-0400 (EDT) ctrl-c trigger
+Thu Aug 18 2016 16:55:15 GMT-0400 (EDT) ctrl-c trigger
+Thu Aug 18 2016 16:56:03 GMT-0400 (EDT) ctrl-c trigger
+Thu Aug 18 2016 16:56:32 GMT-0400 (EDT) ctrl-c trigger
+Wed Aug 24 2016 22:25:34 GMT-0400 (EDT) ctrl-c trigger
+Thu Aug 25 2016 13:27:00 GMT-0400 (EDT) ctrl-c trigger

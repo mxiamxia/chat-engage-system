@@ -10,6 +10,8 @@ var robotManager = require('../core/robotManager');
 var logger = require('../common/logger');
 var _ = require('lodash');
 var config = require('../config');
+var TEMP = require('../common/template');
+var util = require('util');
 
 var msg_template = {
     app: "IVR",
@@ -27,7 +29,19 @@ var msg_template = {
 var sendMessage = function(robot, room, id, message, app) {
     switch (app) {
         case 'MM':
-            robot.messageRoom(room, message);
+            logger.debug('send ivr message to agent1=' + JSON.stringify(message));
+            if (message.props && message.props.audio && message.props.audio !== '$audio' && message.message.indexOf('@@CUS@@') === 0) {
+                var text = message.message;
+                text = text.substring('@@CUS@@'.length);
+                var url = message.props.audio;
+                var sessionid = message.props.sessionid;
+                var audioCard = util.format(TEMP.audioCard, sessionid, id, id, sessionid, url, text);
+                message.message = '@@CUS@@' + audioCard;
+                logger.debug('send ivr message to agent=' + JSON.stringify(message));
+                robot.messageRoom(room, message);
+            } else {
+                robot.messageRoom(room, message);
+            }
             break;
         case 'ivr':
             var msg = _.clone(msg_template);

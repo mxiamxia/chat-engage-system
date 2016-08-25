@@ -14,6 +14,7 @@ var engageAction = require('./engageAction');
 var dispatcher = require('../event/dispatchEvent').pubsub;
 var cmHelper = require('./prologCmHelper');
 var msg = require('./message');
+var robotManager = require('./robotManager');
 
 var processPrologMessage = function(id, message, robot, app, room) {
 
@@ -89,7 +90,9 @@ var processPrologMessage = function(id, message, robot, app, room) {
                     } else { // message come from App to agent
                         //if real customer request logout, foward the whole message to agent
                         if (prop && prop.msg_type === 'cust_leave') {
-                            return msg.sendMessage(robot, c_value.agentChannelId, id, message, 'MM');
+                            msg.sendMessage(robot, c_value.agentChannelId, id, message, 'MM');
+                            var appRobot = robotManager.getRobot('APP');
+                            return cmHelper.cleanCache('', 'quit', value, appRobot, app);
                         }
 
                         if (text.indexOf('@@CUS@@') === 0) {
@@ -97,12 +100,13 @@ var processPrologMessage = function(id, message, robot, app, room) {
                             // return robot.messageRoom(c_value.agentChannelId, {message: text, prop: {msg_from: 'CUST'}});
                             var new_prop = _.merge(prop, { msg_from: 'CUST' });
                             return msg.sendMessage(robot, c_value.agentChannelId, id, { message: text, props: new_prop }, 'MM');
-                        }
-
-                        if (text.indexOf('@@APP@@') === 0) {
+                        } else if (text.indexOf('@@APP@@') === 0) {
                             text = text.substring('@@APP@@'.length);
                             // return robot.messageRoom(c_value.agentChannelId, {message: text, prop: {msg_from: 'APP'}});
                             var new_prop = _.merge(prop, { msg_from: 'APP' });
+                            return msg.sendMessage(robot, c_value.agentChannelId, id, { message: text, props: new_prop }, 'MM');
+                        } else {
+                            logger.error('no msg from was defined');
                             return msg.sendMessage(robot, c_value.agentChannelId, id, { message: text, props: new_prop }, 'MM');
                         }
                     }
@@ -163,8 +167,8 @@ var processPrologMessage = function(id, message, robot, app, room) {
                         if (value.engagement) {
                             // Real customer logout/close browser
                             if (prop && prop.msg_type === 'cust_leave') {
-                                cmHelper.cleanCache('', 'quit', value, robot, app);
                                 return msg.sendMessage(robot, value.appAndShadowChannelId, id, message, 'MM');
+                                // return cmHelper.cleanCache('', 'quit', value, robot, app);
                             }
                             switch (value.TO) {
                                 case 'CUSTOMER':

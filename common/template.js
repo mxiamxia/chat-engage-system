@@ -9,9 +9,10 @@ var TEMP = {
     loginReq: '<message> <header> <action value="login" /> <userid value="%s" /> <sessionid value="%s" /> <orgid value="cyberobject" /> <appid value="ntelagent" /> <debugid value="" /> <app value="%s" /> <channel value="%s" /> <queue value="%s" /></header> <body> <usertype value="customer" /> <channel value="CCSA" /> </body> </message>',
     conversationReq: "<message><header><action value='conversation' /><sessionid value='%s' /><userid value='%s'/><debug id=''/><app value='%s' /><prop value='%s' /><from value='%s' /></header><body><message><![CDATA[%s]]></message></body></message>",
     conversationIvrReq: "<message><header><action value='conversation' /><sessionid value='%s' /><userid value='%s'/><debug id=''/><app value='%s' /><prop value='%s' /><from value='%s' /></header><body><message><![CDATA[%s]]></message><audio src='%s'></audio></body><status> <code value='%s' /> <text value='%s' /> </status></message>",
-
     transferAcceptReq: '<message> <header> <action value="transfer_accept" /> <sessionid value="%s" /> <userid value="%s" /> </header> </message>',
     engageLeave: '<message> <header> <action value="transfer_leave" /> <sessionid value="%s" /> <userid value="%s"/> </header> <body></body> </message>',
+
+    audioCard: '<?xml version="1.0" encoding="UTF-8"?> <response> <header> <action value="conversation"/> <sessionid value="%s"/> <userid value="%s"/> <debug id=""/> <app value="ivr"/> <prop value="{}"/> <from value="%s"/> </header> <body> <statement> <xul> <audio_card typeof="AUDIO" xmlns="http://www.cyberobject.com/2012/12/term/ui#" xmlns:s="http://www.cyberobject.com/2012/12/session#%s/ui" xmlns:term="http://www.cyberobject.com/2012/12/term#"> <audio id="s:x424203559" src="%s">%s</audio> </audio_card> </xul> </statement> </body> </response>',
 
     cmLogin: {
         "header": {

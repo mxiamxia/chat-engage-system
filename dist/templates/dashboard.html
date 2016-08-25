@@ -1,29 +1,28 @@
 <div class="row">
-	<div class="col-lg-6 col-md-6 col-xs-12">
-		<rd-widget>
-			<rd-widget-body>
-				<div class="widget-icon green pull-left">
-					<i class="fa fa-users"></i>
-				</div>
-				<div class="title">{{sessionOfToday}}<a class="btn" ng-click="getSessionOfToday()"><i class="fa fa-refresh"></i></a></div>
-				<div class="comment">Conversations Today</div>
-			</rd-widget-body>
-		</rd-widget>
-	</div>
+    <div class="col-lg-6 col-md-6 col-xs-12">
+        <rd-widget>
+            <rd-widget-body>
+                <div class="widget-icon green pull-left">
+                    <i class="fa fa-users"></i>
+                </div>
+                <div class="title">{{sessionOfToday}}<a class="btn" ng-click="getSessionOfToday()"><i class="fa fa-refresh"></i></a></div>
+                <div class="comment">Conversations Today</div>
+            </rd-widget-body>
+        </rd-widget>
+    </div>
 
-	<div class="col-lg-6 col-md-6 col-xs-12">
-		<rd-widget>
-			<rd-widget-body>
-				<div class="widget-icon blue pull-left">
-					<i class="fa fa-support"></i>
-				</div>
-				<div class="title">{{engageOfToday}}<a class="btn" ng-click="getEngageOfToday()"><i class="fa fa-refresh"></i></a></div>
-				<div class="comment">Engagements Today</div>
-			</rd-widget-body>
-		</rd-widget>
-	</div>
+    <div class="col-lg-6 col-md-6 col-xs-12">
+        <rd-widget>
+            <rd-widget-body>
+                <div class="widget-icon blue pull-left">
+                    <i class="fa fa-support"></i>
+                </div>
+                <div class="title">{{engageOfToday}}<a class="btn" ng-click="getEngageOfToday()"><i class="fa fa-refresh"></i></a></div>
+                <div class="comment">Engagements Today</div>
+            </rd-widget-body>
+        </rd-widget>
+    </div>
 </div>
-
 
 <div class="row">
     <div class="col-lg-12">
@@ -44,17 +43,17 @@
                 <div ng-if="currentSession.length > 0" class="table-responsive">
                     <table class="table table-fixed">
                         <thead>
-                        <tr>
-                            <th><i class="fa fa-table" aria-hidden="true"></i> Session ID</th>
-                            <th><i class="fa fa-table" aria-hidden="true"></i> Delete</th>
-                        </tr>
+                            <tr>
+                                <th><i class="fa fa-table" aria-hidden="true"></i> Session ID</th>
+                                <th><i class="fa fa-table" aria-hidden="true"></i> Delete</th>
+                            </tr>
                         </thead>
                         <tbody>
-                        <tr pagination-id="current" dir-paginate="id in currentSession | filter:search.text | itemsPerPage:4">
-                            <td>{{id}}</td>
-                            <!--<td><button class="btn btn-sm btn-primary" ng-click="deleteSession(id)">Delete</button></td>-->
-                            <td> <a class="btn btn-danger" href="" ng-click="deleteSession(id)"><i class="fa fa-trash-o fa-lg"></i> Delete</a> </td>
-                        </tr>
+                            <tr pagination-id="current" dir-paginate="id in currentSession | filter:search.text | itemsPerPage:4">
+                                <td>{{id}}</td>
+                                <!--<td><button class="btn btn-sm btn-primary" ng-click="deleteSession(id)">Delete</button></td>-->
+                                <td> <a class="btn btn-danger" href="" ng-click="deleteSession(id)"><i class="fa fa-trash-o fa-lg"></i> Delete</a> </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -80,26 +79,26 @@
                 <div class="table-responsive">
                     <table class="table table-fixed">
                         <thead>
-                        <tr>
-                            <th>Session ID</th>
-                            <th>Customer ID</th>
-                            <th>Engaged</th>
-                            <th>Engage Success</th>
-                            <th>Agent ID</th>
-                            <th>Start Time</th>
-                        </tr>
+                            <tr>
+                                <th>Session ID</th>
+                                <th>Customer ID</th>
+                                <th>Engaged</th>
+                                <th>Engage Success</th>
+                                <th>Agent ID</th>
+                                <th>Start Time</th>
+                            </tr>
                         </thead>
                         <tbody>
-                        <tr dir-paginate="session in sessionData | filter:searchText.text | itemsPerPage:5" pagination-id="history">
-                            <td>{{session.sessionId}}</td>
-                            <td>{{session.customerId}}</td>
-                            <td><span class="text-success"><i ng-class="{'fa fa-check':session.engage, 'fa fa-close':!session.engage}"></i></span>
-                            </td>
-                            <td><span class="text-success"><i ng-class="{'fa fa-check':session.engage_accept, 'fa fa-close':!session.engage_accept}"></i></span>
-                            </td>
-                            <td>{{session.agentId}}</td>
-                            <td>{{session.create_at | date:'yyyy-MM-dd HH:mm:ss EST'}}</td>
-                        </tr>
+                            <tr dir-paginate="session in sessionData | filter:searchText.text | itemsPerPage:5" pagination-id="history">
+                                <td>{{session.sessionId}}</td>
+                                <td>{{session.customerId}}</td>
+                                <td><span class="text-success"><i ng-class="{'fa fa-check':session.engage, 'fa fa-close':!session.engage}"></i></span>
+                                </td>
+                                <td><span class="text-success"><i ng-class="{'fa fa-check':session.engage_accept, 'fa fa-close':!session.engage_accept}"></i></span>
+                                </td>
+                                <td>{{session.agentId}}</td>
+                                <td>{{session.create_at | date:'yyyy-MM-dd HH:mm:ss EST'}}</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>

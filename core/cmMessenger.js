@@ -39,7 +39,7 @@ var process = function (message) {
                 case 'transfer_leave':
                     break;
                 default:
-                //
+                    logger.debug('no valid action found=' + action);
             }
         } catch (err) { }
     });
