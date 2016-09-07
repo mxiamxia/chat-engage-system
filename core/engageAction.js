@@ -39,7 +39,8 @@ var transferStart = function (input) {
                 if (action === 'transfer_start') {
                     var sessionid = result.message.header[0].sessionid[0].$.value;
                     var userid = result.message.header[0].userid[0].$.value;
-                    cache.getSessionById(userid, function (err, sessionData) {
+                    // cache.getSessionById(userid, function (err, sessionData) {
+                    cache.get('ss' + sessionid, function (err, sessionData) {
                         if (err || _.isEmpty(sessionData)) {
                             logger.error('Engagement failed, session data is not found');
                             return;
@@ -59,7 +60,8 @@ var transferStart = function (input) {
                         }
 
                         var ep = new EventProxy();
-                        var appRobot = robotManager.getRobot('APP');
+                        var application = sessionData.application;
+                        var appRobot = robotManager.getRobot('APP_' + application);
 
                         ep.all(sessionid + 'accept', function (agentId) {
                             logger.debug('Agent accepted the engagement');
@@ -74,7 +76,7 @@ var transferStart = function (input) {
                                 if ((response.message === 'An account with that username already exists.' || response.message === 'An account with that email already exists.')
                                     || (response.username && (response.username.toLowerCase() === shadowName.toLowerCase()))) {
                                     //Login shadow customer with email and password
-                                    initHubot(shadowEmail.toLowerCase(), '123456', 'CUSTOMER', function (err, robot) {
+                                    initHubot(shadowEmail.toLowerCase(), '123456', 'CUSTOMER', application, function (err, robot) {
                                         if(err) {
                                             logger.debug('Init hubot error=' + err);
                                         }
@@ -114,7 +116,7 @@ var transferStart = function (input) {
                                             sessionData.appAndShadowChannelId = appChannelId;
                                             sessionData.engagement = true;
                                             //cache.pipeline().set(robot.adapter.profile.id, customerShadowCache, config.redis_expire).set(sessionid, sessionData, config.redis_expire).exec();
-                                            cache.set(robot.adapter.profile.id, customerShadowCache, config.redis_expire);
+                                            cache.set(robot.adapter.profile.id+sessionData.application, customerShadowCache, config.redis_expire);
                                             cache.set('ss'+sessionid, sessionData, config.redis_expire);
                                             robotManager.setRobot(sessionData.shadowCustId, robot);
                                             ep.unbind();

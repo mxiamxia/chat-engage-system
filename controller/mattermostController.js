@@ -12,7 +12,9 @@ var robotManager = require('../core/robotManager');
 var cache = require('../common/cache');
 var cmHelper = require('../core/prologCmHelper');
 var pg_userDao = require('../pg/userDao');
-var bcrypt = require('bcrypt');
+// var bcrypt = require('bcrypt');
+
+var bcrypt = require('bcrypt-nodejs');
 
 //http://localhost:4012/api/createUser?email=cust_test@cyberobject.com&name=cust_test&password=123456
 var createUser = function (req, res, next) {
@@ -69,11 +71,11 @@ var deleteSession = function (req, res) {
     var result = {};
     logger.debug('delete session id=' + JSON.stringify(req.body));
     var sessionId = req.body.sessionId;
-    var robot = robotManager.getRobot('APP');
     cache.get(sessionId, function (err, value) {
        if (err || _.isEmpty(value)) {
            result.code = 9999;
        }
+        var robot = robotManager.getRobot('APP'+value.application);
         cmHelper.cleanCache('', 'quit', value, robot, 'MM');
         result.code = 1000;
         result.id = sessionId;

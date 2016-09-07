@@ -553,3 +553,83 @@ Thu Aug 18 2016 16:56:03 GMT-0400 (EDT) ctrl-c trigger
 Thu Aug 18 2016 16:56:32 GMT-0400 (EDT) ctrl-c trigger
 Wed Aug 24 2016 22:25:34 GMT-0400 (EDT) ctrl-c trigger
 Thu Aug 25 2016 13:27:00 GMT-0400 (EDT) ctrl-c trigger
+Wed Aug 31 2016 21:57:23 GMT-0400 (EDT) TypeError: Cannot read property 'adapter' of null
+Wed Aug 31 2016 21:57:23 GMT-0400 (EDT) TypeError: Cannot read property 'adapter' of null
+Wed Aug 31 2016 21:57:23 GMT-0400 (EDT) TypeError: Cannot read property 'adapter' of null
+Wed Aug 31 2016 21:57:23 GMT-0400 (EDT) TypeError: Cannot read property 'adapter' of null
+Wed Aug 31 2016 21:57:23 GMT-0400 (EDT) TypeError: Cannot read property 'adapter' of null
+Wed Aug 31 2016 21:57:23 GMT-0400 (EDT) TypeError: Cannot read property 'adapter' of null
+Wed Aug 31 2016 21:57:34 GMT-0400 (EDT) ctrl-c trigger
+Wed Aug 31 2016 22:01:23 GMT-0400 (EDT) ctrl-c trigger
+Wed Aug 31 2016 22:01:42 GMT-0400 (EDT) ctrl-c trigger
+Tue Sep 06 2016 14:57:58 GMT-0400 (EDT) ctrl-c trigger
+Tue Sep 06 2016 15:03:43 GMT-0400 (EDT) ctrl-c trigger
+Tue Sep 06 2016 15:07:50 GMT-0400 (EDT) ctrl-c trigger
+Tue Sep 06 2016 15:11:45 GMT-0400 (EDT) ctrl-c trigger
+Tue Sep 06 2016 15:13:39 GMT-0400 (EDT) ctrl-c trigger
+Tue Sep 06 2016 15:25:48 GMT-0400 (EDT) ctrl-c trigger
+Tue Sep 06 2016 15:28:46 GMT-0400 (EDT) ctrl-c trigger
+Tue Sep 06 2016 15:51:44 GMT-0400 (EDT) TypeError: Cannot read property 'messageRoom' of null
+Tue Sep 06 2016 15:54:56 GMT-0400 (EDT) ctrl-c trigger
+Tue Sep 06 2016 15:56:02 GMT-0400 (EDT) TypeError: Cannot read property 'application' of null
+Tue Sep 06 2016 15:59:55 GMT-0400 (EDT) ctrl-c trigger
+Tue Sep 06 2016 16:00:39 GMT-0400 (EDT) ctrl-c trigger
+Tue Sep 06 2016 16:08:04 GMT-0400 (EDT) ctrl-c trigger
+Tue Sep 06 2016 16:11:00 GMT-0400 (EDT) ctrl-c trigger
+Tue Sep 06 2016 16:11:48 GMT-0400 (EDT) TypeError: Cannot read property 'application' of null
+Tue Sep 06 2016 16:14:26 GMT-0400 (EDT) TypeError: Cannot read property 'application' of null
+Tue Sep 06 2016 16:18:42 GMT-0400 (EDT) ctrl-c trigger
+Tue Sep 06 2016 16:26:37 GMT-0400 (EDT) ctrl-c trigger
+Tue Sep 06 2016 16:28:58 GMT-0400 (EDT) ctrl-c trigger
+Tue Sep 06 2016 16:29:11 GMT-0400 (EDT) TypeError: Cannot read property 'messageRoom' of null
+Tue Sep 06 2016 16:32:10 GMT-0400 (EDT) TypeError: Cannot read property 'messageRoom' of null
+Tue Sep 06 2016 16:35:14 GMT-0400 (EDT) ctrl-c trigger
+Tue Sep 06 2016 16:35:50 GMT-0400 (EDT) ctrl-c trigger
+Tue Sep 06 2016 16:44:20 GMT-0400 (EDT) ctrl-c trigger
+Wed Sep 07 2016 10:27:39 GMT-0400 (EDT) ctrl-c trigger
+Wed Sep 07 2016 10:50:11 GMT-0400 (EDT) ctrl-c trigger
+Wed Sep 07 2016 10:50:47 GMT-0400 (EDT) ctrl-c trigger
+Wed Sep 07 2016 10:51:49 GMT-0400 (EDT) ctrl-c trigger
+Wed Sep 07 2016 10:53:04 GMT-0400 (EDT) ctrl-c trigger
+Wed Sep 07 2016 11:01:15 GMT-0400 (EDT) ctrl-c trigger
+Wed Sep 07 2016 11:01:23 GMT-0400 (EDT) ctrl-c trigger
+Wed Sep 07 2016 11:02:27 GMT-0400 (EDT) ctrl-c trigger
+Wed Sep 07 2016 11:03:06 GMT-0400 (EDT) ctrl-c trigger
+Wed Sep 07 2016 11:03:15 GMT-0400 (EDT) ctrl-c trigger
+Wed Sep 07 2016 11:03:58 GMT-0400 (EDT) ctrl-c trigger
+Wed Sep 07 2016 11:06:54 GMT-0400 (EDT) ctrl-c trigger
+Wed Sep 07 2016 11:10:23 GMT-0400 (EDT) ctrl-c trigger
+Wed Sep 07 2016 11:12:40 GMT-0400 (EDT) ctrl-c trigger
+Wed Sep 07 2016 11:15:30 GMT-0400 (EDT) ctrl-c trigger
+Wed Sep 07 2016 11:19:12 GMT-0400 (EDT) ctrl-c trigger
+Wed Sep 07 2016 11:19:21 GMT-0400 (EDT) ctrl-c trigger
+Wed Sep 07 2016 11:21:34 GMT-0400 (EDT) ctrl-c trigger
+Wed Sep 07 2016 11:24:25 GMT-0400 (EDT) ctrl-c trigger
+Wed Sep 07 2016 11:26:39 GMT-0400 (EDT) ctrl-c trigger
+Wed Sep 07 2016 11:28:50 GMT-0400 (EDT) ctrl-c trigger
+Wed Sep 07 2016 11:29:03 GMT-0400 (EDT) ctrl-c trigger
+Wed Sep 07 2016 12:11:23 GMT-0400 (EDT) ctrl-c trigger
+Wed Sep 07 2016 12:12:47 GMT-0400 (EDT) ctrl-c trigger
+Wed Sep 07 2016 12:14:27 GMT-0400 (EDT) ctrl-c trigger
+Wed Sep 07 2016 12:15:43 GMT-0400 (EDT) ctrl-c trigger
+Wed Sep 07 2016 12:17:20 GMT-0400 (EDT) ctrl-c trigger
+Wed Sep 07 2016 12:19:42 GMT-0400 (EDT) ctrl-c trigger
+Wed Sep 07 2016 12:28:31 GMT-0400 (EDT) ctrl-c trigger
+Wed Sep 07 2016 12:30:28 GMT-0400 (EDT) ctrl-c trigger
+Wed Sep 07 2016 12:30:49 GMT-0400 (EDT) ctrl-c trigger
+Wed Sep 07 2016 12:33:00 GMT-0400 (EDT) ctrl-c trigger
+Wed Sep 07 2016 12:33:44 GMT-0400 (EDT) ctrl-c trigger
+Wed Sep 07 2016 12:35:21 GMT-0400 (EDT) ctrl-c trigger
+Wed Sep 07 2016 12:38:53 GMT-0400 (EDT) ctrl-c trigger
+Wed Sep 07 2016 12:39:53 GMT-0400 (EDT) ctrl-c trigger
+Wed Sep 07 2016 12:44:44 GMT-0400 (EDT) ctrl-c trigger
+Wed Sep 07 2016 12:45:27 GMT-0400 (EDT) ctrl-c trigger
+Wed Sep 07 2016 12:49:50 GMT-0400 (EDT) ctrl-c trigger
+Wed Sep 07 2016 12:51:47 GMT-0400 (EDT) ctrl-c trigger
+Wed Sep 07 2016 12:52:28 GMT-0400 (EDT) ctrl-c trigger
+Wed Sep 07 2016 12:53:10 GMT-0400 (EDT) ctrl-c trigger
+Wed Sep 07 2016 13:38:25 GMT-0400 (EDT) ctrl-c trigger
+Wed Sep 07 2016 13:39:28 GMT-0400 (EDT) ctrl-c trigger
+Wed Sep 07 2016 13:40:02 GMT-0400 (EDT) ctrl-c trigger
+Wed Sep 07 2016 13:49:09 GMT-0400 (EDT) ctrl-c trigger
+Wed Sep 07 2016 13:54:10 GMT-0400 (EDT) ctrl-c trigger

@@ -38,7 +38,7 @@ var processPrologMessage = function(id, message, robot, app, room) {
     });
 
     //get session info from the Redis cache server
-    cache.get(id, function(err, value) {
+    cache.get(id+robot.adapter.profile.appId, function(err, value) {
         if (value) {
             cache.get('ss' + value.sessionId, function(err, sessionData) {
                 if (sessionData) {
@@ -67,7 +67,7 @@ var processPrologMessage = function(id, message, robot, app, room) {
                 dispatcher.emit(robot.adapter.profile.id + 'engageleave', prop);
                 return;
             }
-            cache.get(robot.adapter.profile.id, function(err, c_value) {
+            cache.get(robot.adapter.profile.id+robot.adapter.profile.appId, function(err, c_value) {
                 if (_.isEmpty(c_value)) {
                     logger.error('Can not get shadow user session data');
                     return;
@@ -91,7 +91,8 @@ var processPrologMessage = function(id, message, robot, app, room) {
                         //if real customer request logout, foward the whole message to agent
                         if (prop && prop.msg_type === 'cust_leave') {
                             msg.sendMessage(robot, c_value.agentChannelId, id, message, 'MM');
-                            var appRobot = robotManager.getRobot('APP');
+                            var appId = value.application;
+                            var appRobot = robotManager.getRobot('APP_' + appId);
                             return cmHelper.cleanCache('', 'quit', value, appRobot, app);
                         }
 
@@ -127,8 +128,9 @@ var processPrologMessage = function(id, message, robot, app, room) {
             }
 
             // login Prolog CM if session is not established
-            if (_.isEmpty(value) || (prop && prop.msg_type === 'login')) {
-                cmHelper.loginAppQ(id, room, app, message);
+            if (_.isEmpty(value) || (prop && prop.msg_type === 'login') || value.application !== robot.adapter.profile.appId) {
+                var appid = robot.adapter.profile.appId;
+                cmHelper.loginAppQ(id, room, app, appid, message);
                 return;
             }
 
@@ -136,7 +138,7 @@ var processPrologMessage = function(id, message, robot, app, room) {
             // for each message to appAndShadowChannelId(APP to shadow user), we add message_from prefix and add it to props in client.coffee
             if (!_.isEmpty(value)) {
                 //if message came from agent and intends to send customer directly
-                cache.get(id, function(err, c_value) {
+                cache.get(id+value.application, function(err, c_value) {
                     logger.debug('user id session=' + JSON.stringify(c_value));
                     if (err || _.isEmpty(c_value)) {
                         logger.debug('Failed to get incoming id session data');
@@ -187,7 +189,7 @@ var processPrologMessage = function(id, message, robot, app, room) {
                                 cmHelper.cleanCache('', 'quit', value, robot, app);
                                 return;
                             }
-                            cmHelper.sendMsgToAppQ(id, value, 'REAL', prop, text);
+                            cmHelper.sendMsgToAppQ(id, value, 'REAL', robot.adapter.profile.appId, prop, text);
                         }
                     }
                 });

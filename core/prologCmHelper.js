@@ -13,6 +13,7 @@ var TEMP = require('../common/template');
 var robotManager = require('./robotManager');
 var engageAction = require('./engageAction');
 var msg = require('./message');
+var uuid = require('node-uuid');
 
 // only when engagement setup, allow agent to set engagement mode
 var check3Way = function (prop, text, value) {
@@ -35,19 +36,19 @@ var check3Way = function (prop, text, value) {
 };
 exports.check3Way = check3Way;
 
-var sendMsgToAppQ = function (id, value, type, prop, sentence) {
+var sendMsgToAppQ = function (id, value, type, appId, prop, sentence) {
     var str_prop = JSON.stringify(prop);
     var input = '';
     if (value.channelType === 'ivr') {
         var audio_url = (prop && prop.audio) ? prop.audio : '';
         var code = (prop && prop.status) ? prop.status : '';
         var desc = (prop && prop.statusText) ? prop.statusText : '';
-        input = util.format(TEMP.conversationIvrReq, value.sessionId, value.realId, value.channelType, str_prop, id, sentence, audio_url, code, desc);
+        input = util.format(TEMP.conversationIvrReq, value.sessionId, value.realId, value.channelType, appId, str_prop, id, sentence, audio_url, code, desc);
     } else {
         if (type === 'SHADOW') {
-            input = util.format(TEMP.conversationReq, value.sessionId, value.agentId, value.channelType, str_prop, id, sentence);
+            input = util.format(TEMP.conversationReq, value.sessionId, value.agentId, value.channelType, appId, str_prop, id, sentence);
         } else {
-            input = util.format(TEMP.conversationReq, value.sessionId, value.realId, value.channelType, str_prop, id, sentence);
+            input = util.format(TEMP.conversationReq, value.sessionId, value.realId, value.channelType, appId, str_prop, id, sentence);
         }
     }
 
@@ -57,12 +58,13 @@ var sendMsgToAppQ = function (id, value, type, prop, sentence) {
 
 exports.sendMsgToAppQ = sendMsgToAppQ;
 
-var loginAppQ = function (id, room, app, message) {
+var loginAppQ = function (id, room, app, appId, message) {
     var prologLogin = TEMP.loginReq;
     if (_.isEmpty(message.sessionid)) {
-        prologLogin = util.format(prologLogin, id, '', app, room, config.APPCM);
+        var sessionid = uuid.v1();
+        prologLogin = util.format(prologLogin, id, sessionid+'_'+appId, appId, app, room, config.APPCM);
     } else {
-        prologLogin = util.format(prologLogin, id, message.sessionid, app, room, config.APPCM);
+        prologLogin = util.format(prologLogin, id, message.sessionid+'_'+appId, appId, app, room, config.APPCM);
     }
     logger.debug('login input=' + prologLogin);
     msg.sendMessage('', '', '', prologLogin, 'cm');
@@ -75,10 +77,10 @@ var cleanCache = function (room, text, value, robot, app) {
             var sessionId = value.sessionId;
             var customerId = value.realId;
             cache.remove('ss' + sessionId);
-            cache.remove(customerId);
+            cache.remove(customerId+value.application);
             if (value.engagement) {
                 var shadowCustomerId = value.shadowCustId;
-                cache.remove(shadowCustomerId);
+                cache.remove(shadowCustomerId+value.application);
                 var shadowRobot = robotManager.getRobot(shadowCustomerId);
                 if (shadowRobot) {
                     engageAction.logoutShadowUser(shadowRobot, function (err, body) {
@@ -91,6 +93,9 @@ var cleanCache = function (room, text, value, robot, app) {
         var quit_msg = "";
         if (app === 'MM') {
             quit_msg = 'Session is terminated';
+        }
+        if (_.isEmpty(room)) {
+            return true;
         }
         if (!_.isEmpty(value)) {
             msg.sendMessage(robot, room, value.realId, { message: quit_msg, sessionid: value.sessionId }, app);
@@ -109,7 +114,7 @@ var appToAgent = function (id, sentence, prop, value, type, robot) {
         var new_prop = _.merge(prop, { msg_to: 'TOAGENT' });
         msg.sendMessage(robot, value.appAndShadowChannelId, value.realId, { message: '@@CUS@@' + sentence, props: new_prop }, 'MM');
     }
-    sendMsgToAppQ(id, value, type, prop, sentence);
+    sendMsgToAppQ(id, value, type, value.application, prop, sentence);
 };
 exports.appToAgent = appToAgent;
 
@@ -119,6 +124,6 @@ var appToAll = function (id, sentence, prop, value, type, robot) {
     if (type === 'REAL') {
         msg.sendMessage(robot, value.appAndShadowChannelId, value.realId, { message: '@@CUS@@' + sentence, props: new_prop }, 'MM');
     }
-    sendMsgToAppQ(id, value, type, prop, sentence);
+    sendMsgToAppQ(id, value, type, value.application, prop, sentence);
 };
 exports.appToAll = appToAll;

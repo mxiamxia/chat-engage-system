@@ -11,7 +11,7 @@ var logger = require('../common/logger');
 var robotManager = require('../core/robotManager');
 var EventProxy = require('eventproxy');
 
-var initHubot = function (id, password, type, cb) {
+var initHubot = function (id, password, type, appId, cb) {
     var ep = new EventProxy();
     //robot = Hubot.loadBot undefined, Options.adapter, Options.enableHttpd, Options.name, Options.alias
     var robot = hubot.loadBot(undefined, "matteruser", false, "", false);
@@ -31,17 +31,17 @@ var initHubot = function (id, password, type, cb) {
         robot.load(scriptsPath);
     };
 
-    robot.adapter.once('userProfile', function (user) {
+    robot.adapter.on('userProfile', function (user) {
         logger.debug('The current profile= ' + JSON.stringify(user));
         if (user && user.id) {
             var userId = user.id;
-            robot.adapter.profile = {'id': userId, 'type': type};
-            storeRobot(userId, robot, type);
+            robot.adapter.profile = {id: userId, type: type, appId: appId};
+            storeRobot(userId, robot, type, appId);
         }
         ep.emit('doneProfile', 'done');
     });
 
-    robot.adapter.once('userChannel', function () {
+    robot.adapter.on('userChannel', function () {
         logger.debug('The current profile channel is ready');
         ep.emit('doneChannel', 'done');
         //dispatcher.emit('refreshChannel', 'done');
@@ -58,10 +58,10 @@ var initHubot = function (id, password, type, cb) {
 };
 
 //type value could be "APP" or "CUSTOMER"
-var storeRobot = function (id, robot, type) {
+var storeRobot = function (id, robot, type, appId) {
     if (type === 'APP') {
-        robotManager.setRobot('APP', robot);
+        robotManager.setRobot(type + '_' +appId, robot);
     }
 };
 
-module.exports = initHubot;
+exports.initHubot = initHubot;

@@ -52,9 +52,10 @@ var loginProcess = function (message, result) {
     var id = result.response.header[0].userid[0].$.value;
     var app = result.response.header[0].app[0].$.value;
     var channel = result.response.header[0].channel[0].$.value;
+    var appId = result.response.header[0].appid[0].$.value;
 
     logger.debug('Prolog CM login output=' + JSON.stringify(result));
-    var robot = robotManager.getRobot('APP');
+    var robot = robotManager.getRobot('APP_' + appId);
     var session = sessionid;
     var customCache = { sessionId: session, type: 'REAL' };
     var sessionInfo = {
@@ -62,12 +63,13 @@ var loginProcess = function (message, result) {
         'realId': id,
         'realChannelId': channel,
         'appId': robot.adapter.profile.id,
-        'channelType': app
+        'channelType': app,
+        'application': appId
     };
     sessionDao.newAndSave(session, robot.adapter.profile.id, id, app, function (err, session) {
         logger.debug('Create new session info into mongo db=' + JSON.stringify(session));
     });
-    cache.set(id, customCache, config.redis_expire);
+    cache.set(id+appId, customCache, config.redis_expire);
     cache.set('ss' + session, sessionInfo, config.redis_expire);
     var new_prop = { msg_type: 'login' };
     msg.sendMessage(robot, channel, id, { message: message, props: new_prop, sessionid: session }, app);
@@ -80,17 +82,18 @@ var conversationProcess = function (message, result) {
     var app_h = result.response.header[0].app[0].$.value;
     var prop = result.response.header[0].prop[0].$.value;
     var from = result.response.header[0].from[0].$.value;
-    var robot = robotManager.getRobot('APP');
+    var appId = result.response.header[0].appid[0].$.value;
+    var robot = robotManager.getRobot('APP_' + appId);
     cache.pget('ss' + sessionid)
         .then(function (value) {
             if (_.isEmpty(value)) {
-                return cmHelper.loginAppQ(id, app_h, message);
+                return cmHelper.loginAppQ(id, '', app_h, message);
             }
             var app = value.channelType;
             if (app_h !== app) {
                 logger.error('Conversation message is not matched with session data');
             }
-            cache.pget(from)
+            cache.pget(from+appId)
                 .then(function (c_value) {
                     //3 way conversation
                     if (c_value.type === 'SHADOW') { // from agent/shadow user to app

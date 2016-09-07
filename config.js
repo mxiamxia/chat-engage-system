@@ -12,7 +12,7 @@ var config = {
 
     //mongodb && redis
     mongodb: 'mongodb://localhost/co_engage',
-    redis_host: 'localhost',
+    redis_host: '192.168.254.196',
     redis_port: 6379,
     redis_db: 0,
     redis_expire: 168 * 60 * 60, // four hours
@@ -39,8 +39,8 @@ var config = {
     houndy_url: 'https://api.houndify.com/v1/text?query=',
 
     //app id in the agent group
-    APPLIST: ['wgwwqx5ei789fngx86osp6bzmo', 'gqupp5deapyy9q1gitmxzu1aho'],
-
+    // APPLIST: ['wgwwqx5ei789fngx86osp6bzmo', 'gqupp5deapyy9q1gitmxzu1aho'],
+    APPLIST: [],
     //websocket
     jwtSecret: 'cyber engagement',
 
@@ -57,8 +57,8 @@ var config = {
     LOAD_TEST: false
 };
 
-process.env.MATTERMOST_HOST = 'http://192.168.0.55:8065';
-// process.env.MATTERMOST_HOST = 'http://192.168.254.199:8065';
+// process.env.MATTERMOST_HOST = 'http://192.168.0.55:8065';
+process.env.MATTERMOST_HOST = 'http://www.cyberobject.com.cn:8084';
 process.env.MATTERMOST_GROUP = 'cyber';
 process.env.MATTERMOST_USER = 'dev_test@cyberobject.com';
 // process.env.MATTERMOST_USER = 'mxia@cyberobject.com';

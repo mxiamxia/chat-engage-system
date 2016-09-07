@@ -19,7 +19,8 @@ var loopRedisIVRQ = function () {
         logger.debug('received message=' + message[1]);
         try {
             message = JSON.parse(message[1]);
-            var robot = robotManager.getRobot('APP');
+            var appId = message.appId;
+            var robot = robotManager.getRobot('APP_' + appId);
             var id = message.user_id;
             var app = message.app.toLowerCase();
             message.props.sessionid = message.sessionid;

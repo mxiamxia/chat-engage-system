@@ -8,7 +8,7 @@ var config = require('../config');
 var TextEncoder = require('text-encoding');
 var logger = require('../common/logger');
 var robotManager = require('../core/robotManager');
-
+var Promise = require('bluebird');
 
 //http://192.168.0.55:8065/api/v3/users/create?d=&iid=ikfb5ynuhfrtjpfi1u9hi948ur
 var createUser = function (email, password, name, cb) {
@@ -47,6 +47,12 @@ var logoutUser = function (token, cb) {
 
 }
 exports.logoutUser = logoutUser;
+
+var getAppUsers = function (cb) {
+    var path = '/appb-user-admin/api/app/list';
+    apiCall('GET', path, null, null, cb);
+};
+exports.getAppUsers = Promise.promisify(getAppUsers);
 
 
 var apiCall = function (method, path, data, token, cb) {
