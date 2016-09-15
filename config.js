@@ -45,8 +45,8 @@ var config = {
     jwtSecret: 'cyber engagement',
 
     //redis queue
-    WORKFLOW: 'workflow',
-    APPCM: 'app.cm',
+    WORKFLOW: 'workflow.xx',
+    APPCM: 'app.cm.nx',
 
     IVRCHANNEL: 'ivr',
     APPIVR: 'app.ivr',

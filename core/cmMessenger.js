@@ -41,7 +41,9 @@ var process = function (message) {
                 default:
                     logger.debug('no valid action found=' + action);
             }
-        } catch (err) { }
+        } catch (err) {
+            logger.error('process message error=' + err);
+        }
     });
 };
 
@@ -66,11 +68,27 @@ var loginProcess = function (message, result) {
         'channelType': app,
         'application': appId
     };
-    sessionDao.newAndSave(session, robot.adapter.profile.id, id, app, function (err, session) {
-        logger.debug('Create new session info into mongo db=' + JSON.stringify(session));
+    sessionDao.getSessionById(session, function (err, session) {
+        if (!err && session) {
+            return;
+        } else {
+            sessionDao.newAndSave(session, robot.adapter.profile.id, id, app, function (err, session) {
+                logger.debug('Create new session info into mongo db=' + JSON.stringify(session));
+            });
+        }
     });
-    cache.set(id+appId, customCache, config.redis_expire);
-    cache.set('ss' + session, sessionInfo, config.redis_expire);
+
+    cache.pget('ss' + session)
+        .then(function (value) {
+            if (_.isEmpty(value)) {
+                cache.set(id+appId, customCache, config.redis_expire);
+                cache.set('ss' + session, sessionInfo, config.redis_expire);
+            }
+        })
+        .catch(function (err) {
+            logger('cache errout=' + err);
+        });
+
     var new_prop = { msg_type: 'login' };
     msg.sendMessage(robot, channel, id, { message: message, props: new_prop, sessionid: session }, app);
     //TODO: send original text to app

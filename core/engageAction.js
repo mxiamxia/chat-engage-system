@@ -76,7 +76,7 @@ var transferStart = function (input) {
                                 if ((response.message === 'An account with that username already exists.' || response.message === 'An account with that email already exists.')
                                     || (response.username && (response.username.toLowerCase() === shadowName.toLowerCase()))) {
                                     //Login shadow customer with email and password
-                                    initHubot(shadowEmail.toLowerCase(), '123456', 'CUSTOMER', application, function (err, robot) {
+                                    initHubot.initHubot(shadowEmail.toLowerCase(), '123456', 'CUSTOMER', application, function (err, robot) {
                                         if(err) {
                                             logger.debug('Init hubot error=' + err);
                                         }

@@ -28,7 +28,11 @@ var init = function() {
                         (function (idx) {
                             var app = apps[idx].userName;
                             config.APPLIST.push(apps[idx].userId);
-                            fnArray.push(function(cb){bot.initHubot(app, '123456', 'APP', applist[idx], cb)});
+                            if (app === 'dev_cm') {
+                                fnArray.push(function(cb){bot.initHubot(app, '123456', 'APP', 'ntelagent', cb)});
+                            } else {
+                                fnArray.push(function(cb){bot.initHubot(app, '123456', 'APP', app, cb)});
+                            }
                         })(i);
                     }
                 }
@@ -38,16 +42,6 @@ var init = function() {
                 logger.debug('init robots numbers=' + robots.length)
             });
 
-
-            // var initBot = Promise.promisify(bot.initHubot);
-            // initBot(process.env.MATTERMOST_USER, process.env.MATTERMOST_PASSWORD, 'APP', 'ntelagent')
-            //     .then(function (robot1) {
-            //         logger.debug('Current APP Robot1=' + robot1.adapter.profile.type);
-            //         initBot('cyber_wmx', process.env.MATTERMOST_PASSWORD, 'APP', 'ntelagent')
-            //             .then(function (robot2) {
-            //                 logger.debug('Current APP Robot2=' + robot2.adapter.profile.type);
-            //             })
-            //     });
             Promise.join(
                 // bot.initHubot(process.env.MATTERMOST_USER, process.env.MATTERMOST_PASSWORD, 'APP', 'ntelagent', function() {}),
                 // bot.initHubot('cyber_wmx', process.env.MATTERMOST_PASSWORD, 'APP', 'ntelagent', function() {}),
