@@ -15,7 +15,11 @@ var engage = function (req, res) {
     logger.debug('engagement query=' + JSON.stringify(querystring.parse(resOjb.query)));
     var response = querystring.parse(resOjb.query).request;
     if (!_.isEmpty(response)) {
-        engageAction.transferStart(response);
+        try {
+            engageAction.transferStart(response);
+        } catch (err) {
+            logger.debug('Engagement failed=' + err);
+        }
     }
     res.send('engagement successful');
 }

@@ -12,6 +12,7 @@ var robotManager = require('../core/robotManager');
 var cache = require('../common/cache');
 var cmHelper = require('../core/prologCmHelper');
 var pg_userDao = require('../pg/userDao');
+var bot = require('../bots/botInstance');
 // var bcrypt = require('bcrypt');
 
 var bcrypt = require('bcrypt-nodejs');
@@ -32,6 +33,31 @@ var createUser = function (req, res, next) {
 }
 
 exports.createUser = createUser;
+
+var createApp = function (req, res, next) {
+    logger.debug('CreateApp input= ' + JSON.stringify(req.body));
+    if (req.body.userName && req.body.password) {
+        var user = req.body.userName;
+        var password = req.body.password;
+        bot.initHubot(user, password, 'APP', user, function (err, robots) {
+            res.send("Created App user successfully");
+        });
+    } else {
+        res.status(500).send("Invalid input")
+    }
+};
+exports.createApp = createApp;
+
+var deleteApp = function (req, res, next) {
+    logger.debug('DeleteApp input= ' + JSON.stringify(req.body));
+    if (req.body.userName) {
+        var user = req.body.userName;
+        // logout app user
+    } else {
+        res.status(500).send("Invalid input")
+    }
+};
+exports.deleteApp = deleteApp;
 
 var getSessionByRange = function (req, res) {
     sessionDao.getSessionByRange('', function (err, sessions) {

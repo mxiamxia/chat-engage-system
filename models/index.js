@@ -2,6 +2,8 @@ var mongoose = require('mongoose');
 var config = require('../config');
 var logger = require('../common/logger');
 
+mongoose.Promise = require('bluebird');
+
 mongoose.connect(config.mongodb, {
     server: {poolSize: 20}
 }, function (err) {

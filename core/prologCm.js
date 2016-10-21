@@ -130,7 +130,7 @@ var processPrologMessage = function(id, message, robot, app, room) {
             // login Prolog CM if session is not established
             if (_.isEmpty(value) || (prop && prop.msg_type === 'login') || value.application !== robot.adapter.profile.appId) {
                 var appid = robot.adapter.profile.appId;
-                cmHelper.loginAppQ(id, room, app, appid, message);
+                cmHelper.loginAppQ(id, room, app, appid, message, prop);
                 return;
             }
 
@@ -178,7 +178,9 @@ var processPrologMessage = function(id, message, robot, app, room) {
                                     msg.sendMessage(robot, value.appAndShadowChannelId, id, { message: '@@CUS@@' + text, props: new_prop }, 'MM');
                                     break;
                                 case 'AGENT':
-                                    cmHelper.appToAgent(id, text, prop, value, c_value.type, robot); // if type is from real customer, send text and app answer to agent
+                                    var new_prop = _.merge(prop, { msg_to: 'TOAGENT' });
+                                    msg.sendMessage(robot, value.appAndShadowChannelId, id, { message: '@@CUS@@' + text, props: new_prop }, 'MM'); // when engage set to CM, customer will only send message to agent but not CM
+                                     // cmHelper.appToAgent(id, text, prop, value, c_value.type, robot); // if type is from real customer, send text and app answer to agent
                                     break;
                                 case 'ALL':
                                     cmHelper.appToAll(id, text, prop, value, c_value.type, robot);

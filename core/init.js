@@ -43,9 +43,6 @@ var init = function() {
             });
 
             Promise.join(
-                // bot.initHubot(process.env.MATTERMOST_USER, process.env.MATTERMOST_PASSWORD, 'APP', 'ntelagent', function() {}),
-                // bot.initHubot('cyber_wmx', process.env.MATTERMOST_PASSWORD, 'APP', 'ntelagent', function() {}),
-                // require('../bots/botInstance')(process.env.MATTERMOST_USER, process.env.MATTERMOST_PASSWORD, 'APP', 'maingui', function() {}),
                 cmListener.init(),
                 ivrListenr.init()
             );

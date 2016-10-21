@@ -633,3 +633,47 @@ Wed Sep 07 2016 13:39:28 GMT-0400 (EDT) ctrl-c trigger
 Wed Sep 07 2016 13:40:02 GMT-0400 (EDT) ctrl-c trigger
 Wed Sep 07 2016 13:49:09 GMT-0400 (EDT) ctrl-c trigger
 Wed Sep 07 2016 13:54:10 GMT-0400 (EDT) ctrl-c trigger
+Fri Oct 14 2016 12:59:45 GMT-0400 (EDT) Error: Cannot find module 'supertest'
+Fri Oct 14 2016 12:59:45 GMT-0400 (EDT) Error: ENOENT: no such file or directory, open 'logs/co-engagement.log'
+Fri Oct 14 2016 12:59:45 GMT-0400 (EDT) Error: ENOENT: no such file or directory, open 'logs/co-engagement_err.log'
+Fri Oct 14 2016 13:00:36 GMT-0400 (EDT) ctrl-c trigger
+Fri Oct 14 2016 13:00:54 GMT-0400 (EDT) Error: Cannot find module 'supertest'
+Fri Oct 14 2016 13:00:54 GMT-0400 (EDT) Error: ENOENT: no such file or directory, open 'logs/co-engagement.log'
+Fri Oct 14 2016 13:00:54 GMT-0400 (EDT) Error: ENOENT: no such file or directory, open 'logs/co-engagement_err.log'
+Fri Oct 14 2016 13:01:32 GMT-0400 (EDT) ctrl-c trigger
+Fri Oct 14 2016 13:03:09 GMT-0400 (EDT) Error: Cannot find module 'supertest'
+Fri Oct 14 2016 13:03:09 GMT-0400 (EDT) Error: ENOENT: no such file or directory, open 'logs/co-engagement.log'
+Fri Oct 14 2016 13:03:09 GMT-0400 (EDT) Error: ENOENT: no such file or directory, open 'logs/co-engagement_err.log'
+Fri Oct 14 2016 13:03:14 GMT-0400 (EDT) ctrl-c trigger
+Fri Oct 14 2016 13:03:36 GMT-0400 (EDT) Error: Cannot find module 'supertest'
+Fri Oct 14 2016 13:04:17 GMT-0400 (EDT) ctrl-c trigger
+Fri Oct 14 2016 13:06:11 GMT-0400 (EDT) ctrl-c trigger
+Fri Oct 14 2016 13:06:15 GMT-0400 (EDT) ctrl-c trigger
+Fri Oct 14 2016 13:06:19 GMT-0400 (EDT) Error: Cannot find module 'supertest'
+Fri Oct 14 2016 13:06:19 GMT-0400 (EDT) Error: ENOENT: no such file or directory, open 'logs/co-engagement.log'
+Fri Oct 14 2016 13:06:19 GMT-0400 (EDT) Error: ENOENT: no such file or directory, open 'logs/co-engagement_err.log'
+Fri Oct 14 2016 13:06:55 GMT-0400 (EDT) ctrl-c trigger
+Fri Oct 14 2016 13:12:05 GMT-0400 (EDT) ctrl-c trigger
+Fri Oct 14 2016 13:20:32 GMT-0400 (EDT) ctrl-c trigger
+Fri Oct 14 2016 13:30:58 GMT-0400 (EDT) ctrl-c trigger
+Fri Oct 14 2016 13:31:33 GMT-0400 (EDT) Error: Cannot find module 'supertest'
+Fri Oct 14 2016 13:31:33 GMT-0400 (EDT) Error: ENOENT: no such file or directory, open 'logs/co-engagement.log'
+Fri Oct 14 2016 13:31:33 GMT-0400 (EDT) Error: ENOENT: no such file or directory, open 'logs/co-engagement_err.log'
+Fri Oct 14 2016 13:31:53 GMT-0400 (EDT) ctrl-c trigger
+Fri Oct 14 2016 13:32:45 GMT-0400 (EDT) Error: Cannot find module 'supertest'
+Fri Oct 14 2016 13:32:45 GMT-0400 (EDT) Error: ENOENT: no such file or directory, open 'logs/co-engagement.log'
+Fri Oct 14 2016 13:32:45 GMT-0400 (EDT) Error: ENOENT: no such file or directory, open 'logs/co-engagement_err.log'
+Fri Oct 14 2016 13:33:15 GMT-0400 (EDT) ctrl-c trigger
+Fri Oct 14 2016 13:35:36 GMT-0400 (EDT) Error: ENOENT: no such file or directory, open 'logs/co-engagement.log'
+Fri Oct 14 2016 13:35:36 GMT-0400 (EDT) Error: ENOENT: no such file or directory, open 'logs/co-engagement_err.log'
+Fri Oct 14 2016 13:35:36 GMT-0400 (EDT) AssertionError: expected 500 to be 200
+Fri Oct 14 2016 13:36:22 GMT-0400 (EDT) Error: ENOENT: no such file or directory, open 'logs/co-engagement.log'
+Fri Oct 14 2016 13:36:22 GMT-0400 (EDT) Error: ENOENT: no such file or directory, open 'logs/co-engagement_err.log'
+Fri Oct 14 2016 13:36:44 GMT-0400 (EDT) Error: ENOENT: no such file or directory, open 'logs/co-engagement.log'
+Fri Oct 14 2016 13:36:44 GMT-0400 (EDT) Error: ENOENT: no such file or directory, open 'logs/co-engagement_err.log'
+Fri Oct 21 2016 12:01:34 GMT-0400 (EDT) ctrl-c trigger
+Fri Oct 21 2016 12:13:51 GMT-0400 (EDT) Error: ENOENT: no such file or directory, open 'logs/co-engagement.log'
+Fri Oct 21 2016 12:13:51 GMT-0400 (EDT) Error: ENOENT: no such file or directory, open 'logs/co-engagement_err.log'
+Fri Oct 21 2016 12:16:40 GMT-0400 (EDT) ctrl-c trigger
+Fri Oct 21 2016 12:17:49 GMT-0400 (EDT) ctrl-c trigger
+Fri Oct 21 2016 12:20:38 GMT-0400 (EDT) ctrl-c trigger

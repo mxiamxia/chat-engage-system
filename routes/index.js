@@ -17,6 +17,10 @@ router.get('/about', function (req, res, next) {
 //receive engagement request from prolog cm
 router.get('/engagement', engageController.index);
 
+//create app user
+router.post('/createapp', mattermostController.createApp);
+router.post('/deleteeapp', mattermostController.deleteApp);
+
 // testing
 router.get('/engagement/accept', engageController.engageAccept);
 router.get('/engagement/reject', engageController.engageReject);

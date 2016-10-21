@@ -68,12 +68,12 @@ var loginProcess = function (message, result) {
         'channelType': app,
         'application': appId
     };
-    sessionDao.getSessionById(session, function (err, session) {
-        if (!err && session) {
+    sessionDao.getSessionById(session, function (err, sessionRecord) {
+        if (!err && sessionRecord) {
             return;
         } else {
-            sessionDao.newAndSave(session, robot.adapter.profile.id, id, app, function (err, session) {
-                logger.debug('Create new session info into mongo db=' + JSON.stringify(session));
+            sessionDao.newAndSave(session, robot.adapter.profile.id, id, app, function (err, sessionRecord) {
+                logger.debug('Create new session info into mongo db=' + JSON.stringify(sessionRecord));
             });
         }
     });
@@ -102,10 +102,12 @@ var conversationProcess = function (message, result) {
     var from = result.response.header[0].from[0].$.value;
     var appId = result.response.header[0].appid[0].$.value;
     var robot = robotManager.getRobot('APP_' + appId);
+    
     cache.pget('ss' + sessionid)
         .then(function (value) {
             if (_.isEmpty(value)) {
-                return cmHelper.loginAppQ(id, '', app_h, message);
+                var propObj = JSON.parse(prop);
+                return cmHelper.loginAppQ(id, '', app_h, message, propObj);
             }
             var app = value.channelType;
             if (app_h !== app) {

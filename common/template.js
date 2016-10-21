@@ -6,7 +6,7 @@ var moment = require('moment');
 
 var TEMP = {
 
-    loginReq: '<message> <header> <action value="login" /> <userid value="%s" /> <sessionid value="%s" /> <orgid value="cyberobject" /> <appid value="%s" /> <debugid value="" /> <app value="%s" /> <channel value="%s" /> <queue value="%s" /></header> <body> <usertype value="customer" /> <channel value="CCSA" /> </body> </message>',
+    loginReq: '<message> <header> <action value="login" /> <userid value="%s" /> <sessionid value="%s" /> <orgid value="cyberobject" /> <appid value="%s" /> <debugid value="" /> <app value="%s" /> <channel value="%s" /> <queue value="%s" /></header> <body> <usertype value="%s" /> <channel value="CCSA" /> </body> </message>',
     conversationReq: "<message><header><action value='conversation' /><sessionid value='%s' /><userid value='%s'/><debug id=''/><app value='%s' /><appid value='%s' /><prop value='%s' /><from value='%s' /></header><body><message><![CDATA[%s]]></message></body></message>",
     conversationIvrReq: "<message><header><action value='conversation' /><sessionid value='%s' /><userid value='%s'/><debug id=''/><app value='%s' /><appid value='%s' /><prop value='%s' /><from value='%s' /></header><body><message><![CDATA[%s]]></message><audio src='%s'></audio></body><status> <code value='%s' /> <text value='%s' /> </status></message>",
     transferAcceptReq: '<message> <header> <action value="transfer_accept" /> <sessionid value="%s" /> <userid value="%s" /> </header> </message>',

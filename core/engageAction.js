@@ -121,6 +121,7 @@ var transferStart = function (input) {
                                             robotManager.setRobot(sessionData.shadowCustId, robot);
                                             ep.unbind();
 
+                                            
                                             sessionDao.updateSession(sessionid, true, true, agentId, function (err, session) {
                                                 logger.debug('Update the session info mongodb');
                                             });
