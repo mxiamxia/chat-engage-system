@@ -56,7 +56,8 @@ var config = {
     LOAD_TEST: false
 };
 
-process.env.MATTERMOST_HOST = 'http://192.168.254.199:8065';
+// process.env.MATTERMOST_HOST = 'http://192.168.254.199:8065';
+process.env.MATTERMOST_HOST = 'https://www.cyberobject.com:4000';
 process.env.MATTERMOST_GROUP = 'cyber';
 process.env.MATTERMOST_USER = 'dev_cm@cyberobject.com';
 process.env.MATTERMOST_PASSWORD = '123456';

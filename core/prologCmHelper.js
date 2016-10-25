@@ -61,7 +61,7 @@ exports.sendMsgToAppQ = sendMsgToAppQ;
 var loginAppQ = function (id, room, app, appId, message, prop) {
     var prologLogin = TEMP.loginReq;
     var custType = 'customer';
-    if (prop && prop.cust_type === 'AGENT') {
+    if (prop && prop.user_type === 'AGENT') {
         custType = 'agent';
     }
 
