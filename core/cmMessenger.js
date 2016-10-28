@@ -180,7 +180,7 @@ var transferAccept = function (message, result) {
         id = result.response.header[0].userid[0].$.value;
     }
     console.log('transfer app1');
-    if (result.response.header[0].app) {
+    if (result.response.header[0].hasOwnProperty('app')) {
         console.log('transfer app2');
         app_h = result.response.header[0].app[0].$.value;
     }
