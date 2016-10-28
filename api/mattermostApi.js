@@ -31,11 +31,12 @@ var createChannelId = function (id, token, teamId, cb) {
 exports.createChannelId = createChannelId;
 
 //http://192.168.0.55:8065/api/v3/teams/j3fpncofhpncbdm8c197qumynr/channels/f45kjodj37g3tgmqj47i9h1nph/extra_info
-
+//https://www.cyberobject.com:4000/appb-user-admin/api/agent/list
 var getEngagementAgentList = function (teamId, token, cb) {
-    var groupId = process.env.MATTERMOST_AGENT_GROUP;
-    var path = '/api/v3/teams/' + teamId + '/channels/' + groupId + '/extra_info';
-    apiCall('GET', path, null, token, cb);
+    // var groupId = process.env.MATTERMOST_AGENT_GROUP;
+    // var path = '/api/v3/teams/' + teamId + '/channels/' + groupId + '/extra_info';
+    var path = '/appb-user-admin/api/agent/list';
+    apiCall('GET', path, null, null, cb);
 
 };
 exports.getEngagementAgentList = getEngagementAgentList;
