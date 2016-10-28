@@ -7,7 +7,7 @@ var config = {
     //DEV
     CM: 'PROLOG', //or 'PROLOG'
     CM_URL: 'http://192.168.254.196:18011/ntelagent-chat-web-mobile/HttpService',
-    CM_PROLOG: 'http://192.168.254.116:3030/cm',
+    CM_PROLOG: 'http://192.168.254.199:3030/cm',
 
     //mongodb && redis
     mongodb: 'mongodb://localhost/co_engage',
@@ -44,7 +44,7 @@ var config = {
     jwtSecret: 'cyber engagement',
 
     //redis queue
-    WORKFLOW: 'workflow.xx',
+    WORKFLOW: 'workflow.199',
     APPCM: 'app.cm.nx',
 
     IVRCHANNEL: 'ivr',

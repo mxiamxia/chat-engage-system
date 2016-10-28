@@ -268,7 +268,8 @@ var getAvailableAgentList = function (appRobot, cb) {
     getAgentList(appRobot, function (err, result) {
         logger.debug('Available Engagement Agent List=' + result);
         result = JSON.parse(result);
-        var members = result.members;
+        // var members = result.members;
+        var members = result.body.agents;
         if (_.isEmpty(members)) {
             return cb('no available agent found');
         }
@@ -297,7 +298,8 @@ var getAvailableAgent = function (callback) {
     getAgentList(robotManager.getRobot('APP'), function (err, result) {
         logger.debug('Available Engagement Agent List=' + result);
         result = JSON.parse(result);
-        var members = result.members;
+        // var members = result.members;
+        var members = result.body.agents;
         if (members.length > 0) {
             var availAgentId = getMember(members);
             logger.debug('Available Engagement Agent id=' + availAgentId);

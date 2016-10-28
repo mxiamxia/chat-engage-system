@@ -58,21 +58,23 @@ var sendMsgToAppQ = function (id, value, type, appId, prop, sentence) {
 
 exports.sendMsgToAppQ = sendMsgToAppQ;
 
-var loginAppQ = function (id, room, app, appId, message, prop) {
+var loginAppQ = function (id, room, app, appId, message, prop, cb) {
     var prologLogin = TEMP.loginReq;
     var custType = 'customer';
     if (prop && prop.user_type === 'AGENT') {
         custType = 'agent';
     }
-
+    var sessionid = uuid.v1();
     if (_.isEmpty(message.sessionid)) {
-        var sessionid = uuid.v1();
-        prologLogin = util.format(prologLogin, id, sessionid+'_'+appId, appId, app, room, config.APPCM, custType);
+        sessionid = sessionid+'_'+appId;
+        prologLogin = util.format(prologLogin, id, sessionid, appId, app, room, config.APPCM, custType);
     } else {
-        prologLogin = util.format(prologLogin, id, message.sessionid+'_'+appId, appId, app, room, config.APPCM, custType);
+        sessionid = message.sessionid+'_'+appId;
+        prologLogin = util.format(prologLogin, id, sessionid, appId, app, room, config.APPCM, custType);
     }
     logger.debug('login input=' + prologLogin);
     msg.sendMessage('', '', '', prologLogin, 'cm');
+    cb(null, sessionid);
 };
 exports.loginAppQ = loginAppQ;
 
