@@ -276,7 +276,7 @@ var getAvailableAgentList = function (appRobot, cb) {
         members = members.filter(function (member) {
             return appIdList.indexOf(member.id) < 0;
         });
-        logger.debug('Available Engagement Agent List after filter=' + result.length);
+        logger.debug('Available Engagement Agent List after filter=' + members.length);
         cb(null, members);
     });
 };

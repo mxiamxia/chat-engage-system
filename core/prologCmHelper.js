@@ -45,13 +45,19 @@ var sendMsgToAppQ = function (id, value, type, appId, prop, sentence) {
         var desc = (prop && prop.statusText) ? prop.statusText : '';
         input = util.format(TEMP.conversationIvrReq, value.sessionId, value.realId, value.channelType, appId, str_prop, id, sentence, audio_url, code, desc);
     } else {
+        var userId = value.realId;
         if (type === 'SHADOW') {
-            input = util.format(TEMP.conversationReq, value.sessionId, value.agentId, value.channelType, appId, str_prop, id, sentence);
+            userId = value.agentId;
+        }
+        if (prop && prop.audio) {
+            var audio_url = (prop && prop.audio) ? prop.audio : '';
+            var code = (prop && prop.status) ? prop.status : '';
+            var desc = (prop && prop.statusText) ? prop.statusText : '';
+            input = util.format(TEMP.conversationIvrReq, value.sessionId, value.realId, value.channelType, appId, str_prop, id, sentence, audio_url, code, desc);
         } else {
-            input = util.format(TEMP.conversationReq, value.sessionId, value.realId, value.channelType, appId, str_prop, id, sentence);
+            input = util.format(TEMP.conversationReq, value.sessionId, userId, value.channelType, appId, str_prop, id, sentence);
         }
     }
-
     logger.debug('Prolog CM conversation input===' + input);
     msg.sendMessage('', '', '', input, 'cm');
 };
