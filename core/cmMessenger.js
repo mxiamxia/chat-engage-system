@@ -164,9 +164,7 @@ var transferAccept = function (message, result) {
 
     console.log('transfer result=' + JSON.stringify(result));
 
-    var header = result.response.header[0];
-
-    if (!header.sessionid) {
+    if (!result.response.header[0].sessionid) {
         logger.error('session id is not returned');
         return;
     }
@@ -181,7 +179,9 @@ var transferAccept = function (message, result) {
     if (result.response.header[0].userid) {
         id = result.response.header[0].userid[0].$.value;
     }
+    console.log('transfer app1');
     if (result.response.header[0].app) {
+        console.log('transfer app2');
         app_h = result.response.header[0].app[0].$.value;
     }
 
