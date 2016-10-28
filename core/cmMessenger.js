@@ -107,7 +107,7 @@ var conversationProcess = function (message, result) {
         .then(function (value) {
             if (_.isEmpty(value)) {
                 var propObj = JSON.parse(prop);
-                return cmHelper.loginAppQ(id, '', app_h, message, propObj, function(err, sessionId){});
+                return cmHelper.loginAppQ(id, '', app_h, appId, message, propObj, function(err, sessionId){});
             }
             var app = value.channelType;
             if (app_h !== app) {
