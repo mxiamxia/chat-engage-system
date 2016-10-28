@@ -162,7 +162,8 @@ var conversationProcess = function (message, result) {
 
 var transferAccept = function (message, result) {
 
-    logger.debug('transger message=' + JSON.stringify(result));
+    logger.debug('transger message=' + result);
+    logger.debug('transger session=' + result.response.header[0].sessionid[0].$.value);
 
     var header = result.response.header[0];
 
