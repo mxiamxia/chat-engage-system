@@ -162,7 +162,7 @@ var conversationProcess = function (message, result) {
 
 var transferAccept = function (message, result) {
 
-    var header = result.response.header;
+    var header = result.response.header[0];
 
     if (!header.sessionid) {
         logger.error('session id is not returned');
