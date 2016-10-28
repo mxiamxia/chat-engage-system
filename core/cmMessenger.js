@@ -162,12 +162,9 @@ var conversationProcess = function (message, result) {
 
 var transferAccept = function (message, result) {
 
-    logger.debug('transger message=' + result);
-    logger.debug('transger session=' + result.response.header[0].sessionid[0].$.value);
+    var header = result.response.header;
 
-    var header = result.response.header[0];
-
-    if (!header.sessionid[0]) {
+    if (!header.sessionid) {
         logger.error('session id is not returned');
         return;
     }
@@ -179,20 +176,20 @@ var transferAccept = function (message, result) {
     var from;
     var appId;
 
-    if (result.response.header[0].userid[0]) {
+    if (result.response.header[0].userid) {
         id = result.response.header[0].userid[0].$.value;
     }
-    if (result.response.header[0].app[0]) {
+    if (result.response.header[0].app) {
         app_h = result.response.header[0].app[0].$.value;
     }
 
-    if (result.response.header[0].prop[0]) {
+    if (result.response.header[0].prop) {
         prop = result.response.header[0].prop[0].$.value;
     }
-    if (result.response.header[0].from[0]) {
+    if (result.response.header[0].from) {
         from = result.response.header[0].from[0].$.value;
     }
-    if (result.response.header[0].appid[0]) {
+    if (result.response.header[0].appid) {
         appId = result.response.header[0].appid[0].$.value;
     }
 
