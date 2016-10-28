@@ -199,7 +199,12 @@ var transferAccept = function (message, result) {
     cache.pget('ss' + sessionid)
         .then(function (value) {
             if (value.engagement) {
-                var new_prop = _.merge(JSON.parse(prop), { msg_to: 'TOALL' });
+                var new_prop;
+                if (prop) {
+                    new_prop = _.merge(JSON.parse(prop), { msg_to: 'TOALL' });
+                } else {
+                    new_prop = { msg_to: 'TOALL' };
+                }
                 msg.sendMessage(robot, value.appAndShadowChannelId, value.realId, { message: '@@APP@@' + message, props: new_prop }, 'MM');
             } else {
                 logger.error('tranfer accept failed, session is not engaged');
