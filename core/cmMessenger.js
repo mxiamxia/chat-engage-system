@@ -162,6 +162,7 @@ var conversationProcess = function (message, result) {
 
 var transferAccept = function (message, result) {
 
+    logger.debug('transger message start');
     logger.debug('transger message=' + JSON.stringify(message));
 
     var header = result.response.header[0];
