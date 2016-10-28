@@ -162,6 +162,8 @@ var conversationProcess = function (message, result) {
 
 var transferAccept = function (message, result) {
 
+    console.log('transfer result=' + JSON.stringify(result));
+
     var header = result.response.header[0];
 
     if (!header.sessionid) {
