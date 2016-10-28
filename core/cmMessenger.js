@@ -161,12 +161,40 @@ var conversationProcess = function (message, result) {
 }
 
 var transferAccept = function (message, result) {
+
+
+
+    var header = result.response.header[0];
+
+    if (!header.sessionid[0]) {
+        logger.error('session id is not returned');
+        return;
+    }
     var sessionid = result.response.header[0].sessionid[0].$.value;
-    var id = result.response.header[0].userid[0].$.value;
-    var app_h = result.response.header[0].app[0].$.value;
-    var prop = result.response.header[0].prop[0].$.value;
-    var from = result.response.header[0].from[0].$.value;
-    var appId = result.response.header[0].appid[0].$.value;
+
+    var id;
+    var app_h;
+    var prop;
+    var from;
+    var appId;
+
+    if (result.response.header[0].userid[0]) {
+        id = result.response.header[0].userid[0].$.value;
+    }
+    if (result.response.header[0].app[0]) {
+        app_h = result.response.header[0].app[0].$.value;
+    }
+
+    if (result.response.header[0].prop[0]) {
+        prop = result.response.header[0].prop[0].$.value;
+    }
+    if (result.response.header[0].from[0]) {
+        from = result.response.header[0].from[0].$.value;
+    }
+    if (result.response.header[0].appid[0]) {
+        appId = result.response.header[0].appid[0].$.value;
+    }
+
     var robot = robotManager.getRobot('APP_' + appId);
     cache.pget('ss' + sessionid)
         .then(function (value) {
