@@ -35,6 +35,7 @@ var process = function (message) {
                     engageAction.transferStart(message);
                     break;
                 case 'transfer_accept':
+                    transferAccept(message, result);
                     break;
                 case 'transfer_leave':
                     break;
@@ -157,4 +158,26 @@ var conversationProcess = function (message, result) {
             logger.error(err);
         });
 
+}
+
+var transferAccept = function (message, result) {
+    var sessionid = result.response.header[0].sessionid[0].$.value;
+    var id = result.response.header[0].userid[0].$.value;
+    var app_h = result.response.header[0].app[0].$.value;
+    var prop = result.response.header[0].prop[0].$.value;
+    var from = result.response.header[0].from[0].$.value;
+    var appId = result.response.header[0].appid[0].$.value;
+    var robot = robotManager.getRobot('APP_' + appId);
+    cache.pget('ss' + sessionid)
+        .then(function (value) {
+            if (value.engagement) {
+                var new_prop = _.merge(JSON.parse(prop), { msg_to: 'TOALL' });
+                msg.sendMessage(robot, value.appAndShadowChannelId, value.realId, { message: '@@APP@@' + message, props: new_prop }, 'MM');
+            } else {
+                logger.error('tranfer accept failed, session is not engaged');
+            }
+        })
+        .catch(function (err) {
+            logger.error(err);
+        })
 }

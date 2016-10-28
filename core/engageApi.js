@@ -6,6 +6,7 @@ var util = require('util');
 var request = require('request');
 var config = require('../config');
 var logger = require('../common/logger');
+var msg = require('./message');
 
 var engageLeave = function (sessionId, agentId, cb) {
     var req = util.format(template.engageLeave, sessionId, agentId);
@@ -13,10 +14,15 @@ var engageLeave = function (sessionId, agentId, cb) {
     apiCall('POST', req, cb);
 };
 
-var engageAccept = function (sessionId, agentId, cb) {
+var engageAcceptHttp= function (sessionId, agentId, cb) {
     var req = util.format(template.transferAcceptReq, sessionId, agentId);
     apiCall('POST', req, cb);
 };
+
+var engageAccept = function (sessionId, agentId) {
+    var input = util.format(template.transferAcceptReq, sessionId, agentId);
+    msg.sendMessage('', '', '', input, 'cm')
+}
 
 var apiCall = function(method, data, cb) {
     logger.debug('Request sent to Prolog CM=' + data);

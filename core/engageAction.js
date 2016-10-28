@@ -93,14 +93,16 @@ var transferStart = function (input) {
                                             }
                                             var agentChannelId = results[0];
                                             var appChannelId = results[1];
-                                            engageApi.engageAccept(sessionid, agentId, function (err, res_value) {
-                                                if (err) {
-                                                    sendEngagementMessages('Failed to retrieve engagement message from CM', agentChannelId, robot);
-                                                } else {
-                                                    logger.debug('Engagement Accepted result= ' + res_value);
-                                                    sendEngagementMessages(res_value, agentChannelId, robot);
-                                                }
-                                            });
+
+
+                                            // engageApi.engageAccept(sessionid, agentId, function (err, res_value) {
+                                            //     if (err) {
+                                            //         sendEngagementMessages('Failed to retrieve engagement message from CM', agentChannelId, robot);
+                                            //     } else {
+                                            //         logger.debug('Engagement Accepted result= ' + res_value);
+                                            //         sendEngagementMessages(res_value, agentChannelId, robot);
+                                            //     }
+                                            // });
                                             var customerShadowCache = {
                                                 'sessionId': sessionid,
                                                 'agentChannelId': agentChannelId,
@@ -118,6 +120,7 @@ var transferStart = function (input) {
                                             //cache.pipeline().set(robot.adapter.profile.id, customerShadowCache, config.redis_expire).set(sessionid, sessionData, config.redis_expire).exec();
                                             cache.set(robot.adapter.profile.id+sessionData.application, customerShadowCache, config.redis_expire);
                                             cache.set('ss'+sessionid, sessionData, config.redis_expire);
+                                            engageApi.engageAccept(sessionid, agentId);  // send transfer_accept to CM
                                             robotManager.setRobot(sessionData.shadowCustId, robot);
                                             ep.unbind();
 
