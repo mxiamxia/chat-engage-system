@@ -196,6 +196,7 @@ var transferAccept = function (message, result) {
     }
 
     var robot = robotManager.getRobot('APP_' + appId);
+
     cache.pget('ss' + sessionid)
         .then(function (value) {
             if (value.engagement) {
@@ -204,6 +205,9 @@ var transferAccept = function (message, result) {
                     new_prop = _.merge(JSON.parse(prop), { msg_to: 'TOALL' });
                 } else {
                     new_prop = { msg_to: 'TOALL' };
+                }
+                if (!robot) {
+                    robot = robotManager.getRobot('APP_' + value.application);
                 }
                 msg.sendMessage(robot, value.appAndShadowChannelId, value.realId, { message: '@@APP@@' + message, props: new_prop }, 'MM');
             } else {
