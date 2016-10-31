@@ -30,11 +30,12 @@ var sendMessage = function(robot, room, id, message, app) {
     switch (app) {
         case 'MM':
             logger.debug('send ivr message to agent1=' + JSON.stringify(message));
-            if (message.props && message.props.audio && message.props.audio !== '$audio' && message.message.indexOf('@@CUS@@') === 0) {
+            var prop = message.props;
+            if (prop && prop.audio && prop.audio !== '$audio' && message.message.indexOf('@@CUS@@') === 0) {
                 var text = message.message;
                 text = text.substring('@@CUS@@'.length);
-                var url = message.props.audio;
-                var sessionid = message.props.sessionid;
+                var url = prop.audio;
+                var sessionid = prop.sessionid;
                 var audioCard = util.format(TEMP.audioCard, sessionid, id, id, sessionid, url, text);
                 message.message = '@@CUS@@' + audioCard;
                 logger.debug('send ivr message to agent=' + JSON.stringify(message));

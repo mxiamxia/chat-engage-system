@@ -209,7 +209,7 @@ var transferAccept = function (message, result) {
                 if (!robot) {
                     robot = robotManager.getRobot('APP_' + value.application);
                 }
-                msg.sendMessage(robot, value.appAndShadowChannelId, value.realId, { message: '@@CUS@@' + message, props: new_prop }, 'MM');
+                msg.sendMessage(robot, value.appAndShadowChannelId, value.realId, { message: '@@CUS@@' + message, sessionid: sessionid, props: new_prop }, 'MM');
             } else {
                 logger.error('tranfer accept failed, session is not engaged');
             }
