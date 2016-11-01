@@ -233,10 +233,10 @@ var sendTransferMessage = function (robot, room, id, message) {
         var url = prop.audio;
         var sessionid = message.sessionid || prop.sessionid;
         if ($.is('xul')) {
-            otherCard = $.('xul').text();
+            otherCard = $('xul').text();
             var statement = "";
             if ($.is('statement')) {
-                statement = $.('statement').text();
+                statement = $('statement').text();
             }
             transferMsg = util.format(TEMP.audioCard, sessionid, id, id, sessionid, otherCard, url, statement);
         } else {
