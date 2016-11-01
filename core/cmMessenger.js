@@ -15,6 +15,7 @@ var config = require('../config');
 var cmHelper = require('./prologCmHelper');
 var engageAction = require('./engageAction');
 var cheerio = require('cheerio');
+var util = require('util');
 
 var process = function (message) {
     if (_.isEmpty(message)) {
