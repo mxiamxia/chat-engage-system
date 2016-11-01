@@ -14,6 +14,7 @@ var sessionDao = require('../dao/').Session;
 var config = require('../config');
 var cmHelper = require('./prologCmHelper');
 var engageAction = require('./engageAction');
+var cheerio = require('cheerio');
 
 var process = function (message) {
     if (_.isEmpty(message)) {
@@ -209,7 +210,7 @@ var transferAccept = function (message, result) {
                 if (!robot) {
                     robot = robotManager.getRobot('APP_' + value.application);
                 }
-                msg.sendMessage(robot, value.appAndShadowChannelId, value.realId, { message: '@@CUS@@' + message, sessionid: sessionid, props: new_prop }, 'MM');
+                sendTransferMessage(robot, value.appAndShadowChannelId, value.realId, { message: '@@CUS@@' + message, sessionid: sessionid, props: new_prop });
             } else {
                 logger.error('tranfer accept failed, session is not engaged');
             }
@@ -217,4 +218,34 @@ var transferAccept = function (message, result) {
         .catch(function (err) {
             logger.error(err);
         })
+}
+
+var sendTransferMessage = function (robot, room, id, message) {
+    logger.debug('send transfer message to agent=' + JSON.stringify(message));
+    var prop = message.props;
+    if (prop && prop.audio && prop.audio !== '$audio' && message.message.indexOf('@@CUS@@') === 0) {
+        var text = message.message;
+        text = text.substring('@@CUS@@'.length);
+        text = text.replace(/(\r\n|\n|\\n|\r)/gm, '');
+        $ = cheerio.load(text);
+        var otherCard = "";
+        var transferMsg;
+        var url = prop.audio;
+        var sessionid = message.sessionid || prop.sessionid;
+        if ($.is('xul')) {
+            otherCard = $.('xul').text();
+            var statement = "";
+            if ($.is('statement')) {
+                statement = $.('statement').text();
+            }
+            transferMsg = util.format(TEMP.audioCard, sessionid, id, id, sessionid, otherCard, url, statement);
+        } else {
+            transferMsg = util.format(TEMP.audioCard, sessionid, id, id, sessionid, otherCard, url, text);
+        }
+        logger.debug('Send out the transfer message=' + transferMsg);
+        message.message = '@@CUS@@' + transferMsg;
+        robot.messageRoom(room, message);
+    } else {
+        robot.messageRoom(room, message);
+    }
 }
