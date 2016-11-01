@@ -235,16 +235,16 @@ var sendTransferMessage = function (robot, room, id, message) {
         if (text.indexOf('xul') > -1) {
             text = text.replace(/(\r\n|\n|\\n|\r)/gm, '');
             $ = cheerio.load(text);
-            otherCard = $('xul').text();
+            otherCard = $('xul').html();
             logger.debug('Send out the otherCard message=' + otherCard);
             var statement = "";
             if ($('xul').has('statement')) {
                 statement = $('statement').text();
                 logger.debug('Send out the statement message=' + statement);
             }
-            transferMsg = util.format(TEMP.audioCard, sessionid, id, id, sessionid, otherCard, url, statement);
+            transferMsg = util.format(TEMP.audioCard, sessionid, id, id, otherCard, sessionid, url, statement);
         } else {
-            transferMsg = util.format(TEMP.audioCard, sessionid, id, id, sessionid, otherCard, url, text);
+            transferMsg = util.format(TEMP.audioCard, sessionid, id, id, otherCard, sessionid, url, text);
         }
         logger.debug('Send out the transfer message=' + transferMsg);
         message.message = '@@CUS@@' + transferMsg;
