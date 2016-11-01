@@ -226,16 +226,16 @@ var sendTransferMessage = function (robot, room, id, message) {
     if (prop && prop.audio && prop.audio !== '$audio' && message.message.indexOf('@@CUS@@') === 0) {
         var text = message.message;
         text = text.substring('@@CUS@@'.length);
-        text = text.replace(/(\r\n|\n|\\n|\r)/gm, '');
-        $ = cheerio.load(text);
         var otherCard = "";
         var transferMsg;
         var url = prop.audio;
         var sessionid = message.sessionid || prop.sessionid;
-        if ($.is('xul')) {
+        if (text.indexOf('xul') > -1) {
+            text = text.replace(/(\r\n|\n|\\n|\r)/gm, '');
+            $ = cheerio.load(text);
             otherCard = $('xul').text();
             var statement = "";
-            if ($.is('statement')) {
+            if ($('xul').has('statement')) {
                 statement = $('statement').text();
             }
             transferMsg = util.format(TEMP.audioCard, sessionid, id, id, sessionid, otherCard, url, statement);
