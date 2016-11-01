@@ -25,10 +25,10 @@ var processPrologMessage = function(id, message, robot, app, room) {
         prop = JSON.parse(prop);
     }
 
-    if (_.isEmpty(text)) {
-        logger.debug('the input text is empty');
-        return;
-    }
+    // if (_.isEmpty(text)) {
+    //     logger.debug('the input text is empty');
+    //     return;
+    // }
 
     var ep = new EventProxy();
     if (typeof room === 'undefined' || room === null) {
