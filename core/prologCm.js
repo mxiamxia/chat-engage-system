@@ -25,7 +25,7 @@ var processPrologMessage = function(id, message, robot, app, room) {
         prop = JSON.parse(prop);
     }
 
-    if (prop && prop.audio && _.isEmpty(prop.audio) && _.isEmpty(text)) {
+    if (prop && prop.audio && !_.isEmpty(prop.audio) && _.isEmpty(text)) {
         logger.debug('the input text is empty');
         return;
     }
