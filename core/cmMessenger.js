@@ -242,9 +242,9 @@ var sendTransferMessage = function (robot, room, id, message) {
                 statement = $('statement').text();
                 logger.debug('Send out the statement message=' + statement);
             }
-            transferMsg = util.format(TEMP.audioCard, sessionid, id, id, otherCard, sessionid, url, statement);
+            transferMsg = util.format(TEMP.engageAudioCard, sessionid, id, id, otherCard, sessionid, url, statement);
         } else {
-            transferMsg = util.format(TEMP.audioCard, sessionid, id, id, otherCard, sessionid, url, text);
+            transferMsg = util.format(TEMP.engageAudioCard, sessionid, id, id, otherCard, sessionid, url, text);
         }
         logger.debug('Send out the transfer message=' + transferMsg);
         message.message = '@@CUS@@' + transferMsg;
