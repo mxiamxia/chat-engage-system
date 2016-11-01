@@ -236,9 +236,11 @@ var sendTransferMessage = function (robot, room, id, message) {
             text = text.replace(/(\r\n|\n|\\n|\r)/gm, '');
             $ = cheerio.load(text);
             otherCard = $('xul').text();
+            logger.debug('Send out the otherCard message=' + otherCard);
             var statement = "";
             if ($('xul').has('statement')) {
                 statement = $('statement').text();
+                logger.debug('Send out the statement message=' + statement);
             }
             transferMsg = util.format(TEMP.audioCard, sessionid, id, id, sessionid, otherCard, url, statement);
         } else {
