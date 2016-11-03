@@ -142,7 +142,7 @@ var transferStart = function (input) {
                                                 });
 
                                                 // robot.messageRoom(agentChannelId, {message:'Leave the engagement chat'});
-                                                msg.sendMessage(robot, agentChannelId, userid, {message:'Leave the engagement chat', props:{msg_type:'cust_leave'}}, 'MM');
+                                                msg.sendMessage(robot, agentChannelId, userid, {message:'', props:{msg_type:'cust_leave'}}, 'MM');
 
                                                 //clean session record -- temporary fixing
                                                 sessionEngaged.splice(sessionEngaged.indexOf(sessionid), 1);
