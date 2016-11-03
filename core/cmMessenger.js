@@ -42,6 +42,8 @@ var process = function (message) {
                     break;
                 case 'transfer_leave':
                     break;
+                case 'session_clean':
+                    break;
                 default:
                     logger.debug('no valid action found=' + action);
             }

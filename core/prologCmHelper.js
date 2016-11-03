@@ -14,6 +14,7 @@ var robotManager = require('./robotManager');
 var engageAction = require('./engageAction');
 var msg = require('./message');
 var uuid = require('node-uuid');
+var template = require('../common/template');
 
 // only when engagement setup, allow agent to set engagement mode
 var check3Way = function (prop, text, value) {
@@ -112,6 +113,9 @@ var cleanCache = function (room, text, value, robot, app) {
         }
         if (!_.isEmpty(value)) {
             msg.sendMessage(robot, room, value.realId, { message: quit_msg, sessionid: value.sessionId }, app);
+            //send clean session message to cm
+            var input = util.format(template.cleanSession, sessionId, value.realId);
+            msg.sendMessage('', '', '', input, 'cm')
         } else {
             msg.sendMessage(robot, room, room, { message: quit_msg }, app);
         }
