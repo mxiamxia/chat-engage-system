@@ -108,12 +108,13 @@ var conversationProcess = function (message, result) {
     var from = result.response.header[0].from[0].$.value;
     var appId = result.response.header[0].appid[0].$.value;
     var robot = robotManager.getRobot('APP_' + appId);
+    var channel = result.response.header[0].channelid[0].$.value;
     
     cache.pget('ss' + sessionid)
         .then(function (value) {
             if (_.isEmpty(value)) {
                 var propObj = JSON.parse(prop);
-                return cmHelper.loginAppQ(id, '', app_h, appId, message, propObj, function(err, sessionId){});
+                return cmHelper.loginAppQ(id, channel, app_h, appId, message, propObj, function(err, sessionId){});
             }
             var app = value.channelType;
             if (app_h !== app) {

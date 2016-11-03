@@ -44,7 +44,7 @@ var sendMsgToAppQ = function (id, value, type, appId, prop, sentence) {
         var audio_url = (prop && prop.audio) ? prop.audio : '';
         var code = (prop && prop.status) ? prop.status : '';
         var desc = (prop && prop.statusText) ? prop.statusText : '';
-        input = util.format(TEMP.conversationIvrReq, value.sessionId, value.realId, value.channelType, appId, str_prop, id, sentence, audio_url, code, desc);
+        input = util.format(TEMP.conversationIvrReq, value.sessionId, value.realId, value.channelType, appId, str_prop, id, value.realChannelId, sentence, audio_url, code, desc);
     } else {
         var userId = value.realId;
         if (type === 'SHADOW') {
@@ -54,9 +54,9 @@ var sendMsgToAppQ = function (id, value, type, appId, prop, sentence) {
             var audio_url = (prop && prop.audio) ? prop.audio : '';
             var code = (prop && prop.status) ? prop.status : '';
             var desc = (prop && prop.statusText) ? prop.statusText : '';
-            input = util.format(TEMP.conversationIvrReq, value.sessionId, value.realId, value.channelType, appId, str_prop, id, sentence, audio_url, code, desc);
+            input = util.format(TEMP.conversationIvrReq, value.sessionId, value.realId, value.channelType, appId, str_prop, id, value.realChannelId, sentence, audio_url, code, desc);
         } else {
-            input = util.format(TEMP.conversationReq, value.sessionId, userId, value.channelType, appId, str_prop, id, sentence);
+            input = util.format(TEMP.conversationReq, value.sessionId, userId, value.channelType, appId, str_prop, id, value.realChannelId, sentence);
         }
     }
     logger.debug('Prolog CM conversation input===' + input);
