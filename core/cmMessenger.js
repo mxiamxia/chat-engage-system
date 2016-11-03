@@ -108,7 +108,11 @@ var conversationProcess = function (message, result) {
     var from = result.response.header[0].from[0].$.value;
     var appId = result.response.header[0].appid[0].$.value;
     var robot = robotManager.getRobot('APP_' + appId);
-    var channel = result.response.header[0].channelid[0].$.value;
+
+    var channel = '';
+    if (result.response.header[0].channelid) {
+        channel = result.response.header[0].channelid[0].$.value;
+    }
     
     cache.pget('ss' + sessionid)
         .then(function (value) {
