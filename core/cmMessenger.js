@@ -113,12 +113,15 @@ var conversationProcess = function (message, result) {
     if (result.response.header[0].channelid) {
         channel = result.response.header[0].channelid[0].$.value;
     }
-    
+
     cache.pget('ss' + sessionid)
         .then(function (value) {
             if (_.isEmpty(value)) {
                 var propObj = JSON.parse(prop);
-                return cmHelper.loginAppQ(id, channel, app_h, appId, message, propObj, function(err, sessionId){});
+                logger.debug('Conversation session lost, login again');
+                logger.error('Conversation session lost, login again');
+                return;
+                // return cmHelper.loginAppQ(id, channel, app_h, appId, {}, propObj, function(err, sessionId){});
             }
             var app = value.channelType;
             if (app_h !== app) {
