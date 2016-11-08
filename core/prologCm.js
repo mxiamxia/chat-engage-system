@@ -136,7 +136,7 @@ var processPrologMessage = function(id, message, robot, app, room) {
             if (_.isEmpty(value) || (prop && prop.msg_type === 'login') || value.application !== robot.adapter.profile.appId) {
                 var appid = robot.adapter.profile.appId;
                 cmHelper.loginAppQ(id, room, app, appid, message, prop, function (err, sessionId) {
-                    cmHelper.sendMsgToAppQ(id, {realId: id, sessionId: sessionId, channelType: app}, 'REAL', robot.adapter.profile.appId, prop, text);
+                    // cmHelper.sendMsgToAppQ(id, {realId: id, sessionId: sessionId, channelType: app}, 'REAL', robot.adapter.profile.appId, prop, text);
                 });
                 return;
             }
