@@ -153,7 +153,7 @@ var processPrologMessage = function(id, message, robot, app, room) {
                     }
                     // foward message
                     if (prop && prop.fwd_to === 'CM') {
-                        return cmHelper.appToAgent(text, prop, value, c_value.type, robot);
+                        return cmHelper.appToAgent(id, text, prop, value, c_value.type, robot);
                     }
                     if (prop && prop.fwd_to === 'CUST') {
                         return msg.sendMessage(robot, value.realChannelId, id, { message: text, sessionid: value.sessionId }, app);
