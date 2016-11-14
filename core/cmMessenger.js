@@ -135,6 +135,9 @@ var conversationProcess = function (message, result) {
                             case 'CUSTOMER':
                                 // message sent before pushing to Q, nothing to do here
                                 logger.debug('fwd message from CM in customer222');
+                                var new_prop = _.merge(JSON.parse(prop), { msg_to: 'TOAGENT' });
+                                msg.sendMessage(robot, value.appAndShadowChannelId, value.realId, { message: '@@APP@@' + message, props: new_prop }, 'MM');
+
                                 break;
                             case 'AGENT':
                                 var new_prop = _.merge(JSON.parse(prop), { msg_to: 'TOAGENT' });
@@ -151,8 +154,8 @@ var conversationProcess = function (message, result) {
                             switch (value.TO) {
                                 case 'CUSTOMER':
                                     logger.debug('fwd message from CM in customer');
-                                    var new_prop = _.merge(JSON.parse(prop), { msg_to: 'TOAGENT' });
-                                    msg.sendMessage(robot, value.appAndShadowChannelId, value.realId, { message: '@@APP@@' + message, props: new_prop }, 'MM');
+                                    // var new_prop = _.merge(JSON.parse(prop), { msg_to: 'TOAGENT' });
+                                    // msg.sendMessage(robot, value.appAndShadowChannelId, value.realId, { message: '@@APP@@' + message, props: new_prop }, 'MM');
                                     break;
                                 case 'AGENT':
                                     var new_prop = _.merge(JSON.parse(prop), { msg_to: 'TOAGENT' });
