@@ -149,6 +149,8 @@ var conversationProcess = function (message, result) {
                         if (value.engagement) {
                             switch (value.TO) {
                                 case 'CUSTOMER':
+                                    var new_prop = _.merge(JSON.parse(prop), { msg_to: 'TOAGENT' });
+                                    msg.sendMessage(robot, value.appAndShadowChannelId, value.realId, { message: '@@APP@@' + message, props: new_prop }, 'MM');
                                     break;
                                 case 'AGENT':
                                     var new_prop = _.merge(JSON.parse(prop), { msg_to: 'TOAGENT' });
