@@ -34,6 +34,9 @@ var process = function (message) {
                 case 'conversation':
                     conversationProcess(message, result);
                     break;
+                case 'logoff':
+                    logoffSession(message, result);
+                    break;
                 case 'transfer_start':
                     engageAction.transferStart(message);
                     break;
@@ -178,7 +181,43 @@ var conversationProcess = function (message, result) {
             logger.error(err);
         });
 
-}
+};
+
+var logoffSession = function (message, result) {
+
+    var sessionid = result.response.header[0].sessionid[0].$.value;
+    var id = result.response.header[0].userid[0].$.value;
+    var app_h = result.response.header[0].app[0].$.value;
+    var prop = result.response.header[0].prop[0].$.value;
+    var from = result.response.header[0].from[0].$.value;
+    var appId = result.response.header[0].appid[0].$.value;
+    var robot = robotManager.getRobot('APP_' + appId);
+
+    cache.pget('ss' + sessionid)
+        .then(function (value) {
+            if (!_.isEmpty(value)) {
+                robot.messageRoom(value.realChannelId, message);
+                var sessionId = value.sessionId;
+                var customerId = value.realId;
+                cache.remove('ss' + sessionId);
+                cache.remove(id+value.application);
+                if (value.engagement) {
+                    var shadowCustomerId = value.shadowCustId;
+                    cache.remove(shadowCustomerId+value.application);
+                    var shadowRobot = robotManager.getRobot(shadowCustomerId);
+                    if (shadowRobot) {
+                        engageAction.logoutShadowUser(shadowRobot, function (err, body) {
+                            logger.debug('Logout shadow user response from quit action=' + JSON.stringify(body));
+                        });
+                    }
+                    robotManager.delRobot(shadowCustomerId);
+                }
+            }
+        })
+        .catch(function (err) {
+            logger.error(err);
+        })
+};
 
 var transferAccept = function (message, result) {
 
